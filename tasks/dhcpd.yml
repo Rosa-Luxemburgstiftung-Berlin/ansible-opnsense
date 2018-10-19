@@ -1,0 +1,12 @@
+---
+- name: dhcpd
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/dhcpd/{{ item.0.if }}/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_dhcpd | default([]) }}"
+    - settings
+...

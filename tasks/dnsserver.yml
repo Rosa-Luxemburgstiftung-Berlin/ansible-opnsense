@@ -1,0 +1,21 @@
+---
+- name: Count dnsservers set
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/system/dnsserver
+    count: yes
+  register: dnsservercount
+
+- name: Dnsservers
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/system
+    add_children: 
+      - dnsserver: "{{ item }}"
+    pretty_print: yes
+  when: dnsservercount.count == 0
+  with_items: 
+    "{{ dnsserver }}"
+...

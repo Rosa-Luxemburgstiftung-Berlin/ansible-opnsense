@@ -1,0 +1,12 @@
+---
+- name: vlans
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/vlans/vlan[tag/text()="{{ item.0.tag }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_vlans }}"
+    - settings
+...

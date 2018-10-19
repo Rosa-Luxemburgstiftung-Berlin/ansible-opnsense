@@ -1,0 +1,37 @@
+---
+- name: groups
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/system/group[name/text()="{{ item.0.name }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  when: item.1.key is defined
+  with_subelements:
+    - "{{ opn_group }}"
+    - settings
+
+- name: Count member nodes
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/system/group/member
+    count: yes
+  register: membercount
+
+- debug:
+    var: membercount.count
+
+- name: Add users to groups
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/system/group[name/text()="{{ item.0.name }}"]
+    add_children:
+      - member: "{{ item.1.member }}"
+    pretty_print: yes
+  when: item.1.member is defined and membercount.count <= 1
+  with_subelements:
+    - "{{ opn_group }}"
+    - settings
+...

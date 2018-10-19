@@ -1,0 +1,74 @@
+---
+#- name: Download OPNsense XML sample config
+#  get_url:
+#    url: https://raw.githubusercontent.com/opnsense/core/master/src/etc/config.xml.sample
+#    dest: /tmp/config.xml
+
+- name: fetch
+  fetch:
+    src: /conf/config.xml
+    dest: /tmp/config-{{ inventory_hostname }}.xml
+    flat: yes
+    backup: yes
+
+- name: dnsserver
+  include: dnsserver.yml
+  tags: dnsserver
+
+- name: user
+  include: user.yml
+  tags: user
+  
+- name: group
+  include: group.yml
+  tags: group
+
+- name: general
+  include: general.yml
+  tags: general
+
+- name: interfaces
+  include: interfaces.yml
+  tags: interfaces
+  
+- name: vlans
+  include: vlans.yml
+  tags: vlans
+  
+- name: virtualip
+  include: virtualip.yml
+  tags: virtualip
+
+- name: alias
+  include: alias.yml
+  tags: alias
+
+- name: filter
+  include: filter.yml
+  tags: filter
+  
+- name: gateways
+  include: gateways.yml
+  when: prod | default([])
+  tags: gateways 
+
+- name: dhcpd
+  include: dhcpd.yml
+  tags: dhcpd
+
+- name: copy
+  copy:
+    src: /tmp/config-{{ inventory_hostname }}.xml
+    dest: /conf/config.xml
+    backup: yes
+  register: config
+  tags: copy
+
+- name: reload
+  command: "{{ item }}"
+  with_items:
+    - configctl service reload all
+    - configctl webgui restart
+  when: config.changed
+  tags: reload
+...

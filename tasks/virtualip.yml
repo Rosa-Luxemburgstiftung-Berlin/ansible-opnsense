@@ -1,0 +1,12 @@
+---
+- name: virtualips
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/virtualip/vip[vhid/text()="{{ item.0.vhid }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_virtualip | default([]) }}"
+    - settings
+...
