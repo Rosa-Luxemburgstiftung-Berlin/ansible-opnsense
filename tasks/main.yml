@@ -52,6 +52,10 @@
   when: prod | default([])
   tags: gateways 
 
+- name: hasync
+  include: hasync.yml
+  tags: hasync
+
 - name: dhcpd
   include: dhcpd.yml
   tags: dhcpd
