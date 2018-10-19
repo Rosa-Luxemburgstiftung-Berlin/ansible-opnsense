@@ -1,0 +1,17 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: rudi.broekhuizen
+  description: Ansible role for OPNSense deployment on appliances
+  company: Naturalis Biodiversity Center
+  license: Apache2
+  min_ansible_version: 2.5
+  platforms:
+  - name: FreeBSD
+    versions:
+    - all
+  galaxy_tags:
+    - opnsense
+    - firewall
+    - freebsd
