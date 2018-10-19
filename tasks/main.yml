@@ -60,6 +60,10 @@
   include: dhcpd.yml
   tags: dhcpd
 
+- name: syslog
+  include: syslog.yml
+  tags: syslog
+
 - name: copy
   copy:
     src: /tmp/config-{{ inventory_hostname }}.xml
