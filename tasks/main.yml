@@ -46,7 +46,7 @@
   
 - name: gateways
   include: gateways.yml
-  when: prod | default([])
+  #when: prod | default([])
   tags: gateways 
 
 - name: hasync
