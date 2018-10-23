@@ -1,5 +1,5 @@
 ---
-- name: vlans
+- name: key value settings
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -9,4 +9,26 @@
   with_subelements:
     - "{{ opn_vlans }}"
     - settings
+
+  - name: setting if
+    delegate_to: localhost
+    xml:
+      path: /tmp/config-{{ inventory_hostname }}.xml
+      xpath: /opnsense/vlans/vlan/{{ item.0.tag }}/if
+      value: "{{ opn_vlan_parent_interface }}_vlan{{ item.0.tag }}"
+      pretty_print: yes
+    with_subelements:
+      - "{{ opn_vlans }}"
+      - settings
+
+  - name: setting vlanif
+    delegate_to: localhost
+    xml:
+      path: /tmp/config-{{ inventory_hostname }}.xml
+      xpath: /opnsense/vlans/vlan/{{ item.0.tag }}/vlanif
+      value: "{{ opn_vlan_parent_interface }}_vlan{{ item.0.tag }}"
+      pretty_print: yes
+    with_subelements:
+      - "{{ opn_vlans }}"
+      - settings
 ...
