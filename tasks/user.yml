@@ -1,5 +1,5 @@
 ---
-- name: Users
+- name: user
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
