@@ -24,9 +24,9 @@
   include: general.yml
   tags: general
 
-- name: physical interfaces
-  include: physical_interfaces.yml
-  tags: physical_interfaces
+- name: interfaces
+  include: interfaces.yml
+  tags: interfaces
 
 - name: vlan_interfaces
   include: vlan_interfaces.yml
