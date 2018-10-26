@@ -7,6 +7,6 @@
     value: "{{ item.1.value }}"
     pretty_print: yes
   with_subelements:
-    - "{{ opn_physical_interface }}"
+    - "{{ opn_physical_interfaces }}"
     - settings
 ...
