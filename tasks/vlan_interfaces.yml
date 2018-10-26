@@ -1,0 +1,12 @@
+---
+- name: vlan interfaces
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/interfaces/{{ item.0.interface }}/if
+    value: "{{ opn_vlan_parent_interface }}_vlan{{ item.0.vlan }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_vlan_interfaces_common + opn_vlan_interfaces_specific}}"
+    - settings
+...
