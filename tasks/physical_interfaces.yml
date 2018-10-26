@@ -1,0 +1,12 @@
+---
+- name: physical interface
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_physical_interfaces }}"
+    - settings
+...
