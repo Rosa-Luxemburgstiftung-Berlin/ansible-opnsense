@@ -7,6 +7,6 @@
     value: "{{ item.1.value }}"
     pretty_print: yes
   with_subelements:
-    - "{{ opn_virtualip | default([]) + opn_virtualip_b | default([]) }}"
+    - "{{ opn_virtualip | default([]) + opn_vlan_virtualip | default([]) }}"
     - settings
 ...
