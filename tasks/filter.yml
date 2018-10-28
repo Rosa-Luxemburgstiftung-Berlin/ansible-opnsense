@@ -7,6 +7,6 @@
     value: "{{ item.1.value }}"
     pretty_print: yes
   with_subelements:
-    - "{{ opn_filter | default([]) }}"
+    - "{{ opn_filter | default([]) + opn_vlan_filter | default([]) }}"
     - settings
 ...
