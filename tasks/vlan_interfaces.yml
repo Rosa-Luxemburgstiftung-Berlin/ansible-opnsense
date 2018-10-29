@@ -10,7 +10,7 @@
     - "{{ opn_vlan_interfaces_common }}"
     - settings
     
-- name: specific
+- name: set vlan specific interface settings
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
