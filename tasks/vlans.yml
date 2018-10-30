@@ -1,4 +1,4 @@
-- name: key value settings
+- name: vlans: create
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -9,7 +9,7 @@
     - "{{ opn_vlans }}"
     - settings
 
-- name: setting if
+- name: vlans: setting if
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -20,7 +20,7 @@
     - "{{ opn_vlans }}"
     - settings
 
-- name: setting vlanif
+- name: vlans: setting vlanif
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
