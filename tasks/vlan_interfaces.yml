@@ -1,5 +1,5 @@
 ---
-- name: set vlan parent interface
+- name: vlan_interfaces: set vlan parent interface
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -10,7 +10,7 @@
     - "{{ opn_vlan_interfaces_common }}"
     - settings
     
-- name: set vlan specific interface settings
+- name: vlan_interfaces: set vlan specific interface settings
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -18,6 +18,6 @@
     value: "{{ item.1.value }}"
     pretty_print: yes
   with_subelements:
-    - "{{ opn_vlan_interfaces_specific | default([]) }}"
+    - "{{ opn_vlan_interfaces_specific | default([]) + opn_vlan_interfaces_common | default([]) }}"
     - settings
 ...
