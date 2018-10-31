@@ -1,13 +1,15 @@
 ---
+#vars:
+#  opn_general:
+#    - hostname: "firewall-dw2-primary-virtualbox"
+#    - domain: "naturalis.nl"
+
 - name: general
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
-    xpath: "{{ item.0.xpath }}/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    xpath: "/opnsense/system/{{ item.key }}"
+    value: "{{ item.value }}"
     pretty_print: yes
-  with_subelements:
-    - "{{ opn_general }}"
-    #- "{{ opn_general + opn_hasync | default([]) }}"
-    - settings
+  with_dict: "{{ opn_general }}"
 ...
