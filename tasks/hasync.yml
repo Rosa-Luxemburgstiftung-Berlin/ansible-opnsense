@@ -1,8 +1,9 @@
 ---
 #vars:
 #  opn_hasync:
-#    - pfsyncenabled: on
-#    - username: root
+#    - pfsyncenabled: "on"
+#    - username: "root"
+#    - password: "opnsense"
 
 - name: hasync
   delegate_to: localhost
@@ -11,6 +12,5 @@
     xpath: "/opnsense/hasync/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes
-  with_dict:
-    - "{{ opn_hasync }}"
+  with_dict: "{{ opn_hasync }}"
 ...
