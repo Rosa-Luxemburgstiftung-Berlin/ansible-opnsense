@@ -1,5 +1,5 @@
 ---
-- name: interfaces
+- name: interface settings specific for an interface
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -7,6 +7,26 @@
     value: "{{ item.1.value }}"
     pretty_print: yes
   with_subelements:
-    - "{{ opn_interfaces }}"
+    - "{{ opn_interfaces_specific }}"
     - settings
+
+
+
+#vars:
+#  opn_interfaces_all:
+#    - element: "subnet"
+#      value: "32"
+#      interfaces:
+#        - wan
+#        - lan
+
+- name: interface settings that apply to all interfaces
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: "/opnsense/interfaces/{{ item.1 }}/{{ item.0.element }}"
+    value: "{{ item.0.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_interfaces_all }}"
+    - interfaces
 ...
