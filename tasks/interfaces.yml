@@ -7,18 +7,8 @@
     value: "{{ item.1.value }}"
     pretty_print: yes
   with_subelements:
-    - "{{ opn_interfaces }}"
+    - "{{ opn_interfaces_specific }}"
     - settings
-
-
-
-#vars:
-#  opn_interfaces_all:
-#    - element: "subnet"
-#      value: "32"
-#      interfaces:
-#        - wan
-#        - lan
 
 - name: interface settings that apply to all interfaces
   delegate_to: localhost
