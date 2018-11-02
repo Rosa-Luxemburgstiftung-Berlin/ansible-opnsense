@@ -1,5 +1,5 @@
 ---
-- name: interface settings specific for an interface
+- name: interfaces - settings specific for an interface
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -21,13 +21,6 @@
     - "{{ opn_interfaces_all }}"
     - interfaces
 
-
-
-
-
-
-
-
 - name: interfaces - set vlan parent interface
   delegate_to: localhost
   xml:
@@ -36,17 +29,6 @@
     value: "{{ opn_vlan_parent_interface }}_vlan{{ item.0.vlan }}"
     pretty_print: yes
   with_subelements:
-    - "{{ opn_vlan_interfaces_common }}"
-    - settings
-    
-- name: interfaces - set vlan specific interface settings
-  delegate_to: localhost
-  xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
-    xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
-    value: "{{ item.1.value }}"
-    pretty_print: yes
-  with_subelements:
-    - "{{ opn_vlan_interfaces_specific | default([]) + opn_vlan_interfaces_common | default([]) }}"
+    - "{{ opn_interfaces_vlan }}"
     - settings
 ...
