@@ -1,4 +1,4 @@
-- name: vlans - create
+- name: vlans - create vlans
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
