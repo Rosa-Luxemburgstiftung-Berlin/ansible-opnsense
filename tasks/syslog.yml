@@ -3,10 +3,8 @@
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
-    xpath: "/opnsense/syslog/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    xpath: "/opnsense/syslog/{{ item.key }}"
+    value: "{{ item.value }}"
     pretty_print: yes
-  with_subelements:
-    - "{{ opn_syslog | default([]) }}"
-    - settings
+  with_dict: "{{ opn_syslog }}"
 ...
