@@ -1,5 +1,6 @@
 ---
 - name: virtualip settings that apply to all interfaces
+  delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
     xpath: /opnsense/virtualip/vip[vhid/text()="{{ item.1 }}"]/{{ item.0.key }}
