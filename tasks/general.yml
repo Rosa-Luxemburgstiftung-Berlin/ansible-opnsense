@@ -4,7 +4,7 @@
 #    - system/hostname: "firewall-dw2-primary-virtualbox"
 #    - system/domain: "naturalis.nl"
 
-- name: general
+- name: set
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -12,4 +12,12 @@
     value: "{{ item.value }}"
     pretty_print: yes
   with_dict: "{{ opn_general }}"
+
+- name: unset
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: "/opnsense/{{ item }}"
+    state: absent
+  with_items: "{{ opn_unset }}"
 ...
