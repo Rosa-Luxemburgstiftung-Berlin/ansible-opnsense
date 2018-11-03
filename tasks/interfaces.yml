@@ -23,7 +23,7 @@
 
 - name: interfaces - set vlan parent interface
   delegate_to: localhost
-  when: vlan is defined
+  when: item.0.vlan is defined
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
     xpath: /opnsense/interfaces/{{ item.0.interface }}/if
