@@ -8,7 +8,7 @@
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
-    xpath: "/opnsense/system/{{ item.key }}"
+    xpath: "/opnsense/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes
   with_dict: "{{ opn_general }}"
