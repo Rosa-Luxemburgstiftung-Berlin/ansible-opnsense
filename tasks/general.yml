@@ -1,8 +1,8 @@
 ---
 #vars:
 #  opn_general:
-#    - hostname: "firewall-dw2-primary-virtualbox"
-#    - domain: "naturalis.nl"
+#    - system/hostname: "firewall-dw2-primary-virtualbox"
+#    - system/domain: "naturalis.nl"
 
 - name: general
   delegate_to: localhost
