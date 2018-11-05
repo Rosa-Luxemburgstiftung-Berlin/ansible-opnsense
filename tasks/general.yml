@@ -1,9 +1,4 @@
 ---
-#vars:
-#  opn_general:
-#    - system/hostname: "firewall-dw2-primary-virtualbox"
-#    - system/domain: "naturalis.nl"
-
 - name: general - set
   delegate_to: localhost
   xml:
