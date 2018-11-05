@@ -4,7 +4,7 @@
 #    - system/hostname: "firewall-dw2-primary-virtualbox"
 #    - system/domain: "naturalis.nl"
 
-- name: set
+- name: general - set
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -13,7 +13,7 @@
     pretty_print: yes
   with_dict: "{{ opn_general }}"
 
-- name: unset
+- name: general - unset
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
