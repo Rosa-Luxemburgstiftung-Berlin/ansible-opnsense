@@ -28,10 +28,6 @@
   include: interfaces.yml
   tags: interfaces
 
-- name: vlan_interfaces
-  include: vlan_interfaces.yml
-  tags: vlan_interfaces
-  
 - name: vlans
   include: vlans.yml
   tags: vlans

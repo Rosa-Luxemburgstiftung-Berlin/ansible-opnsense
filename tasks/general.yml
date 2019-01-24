@@ -1,13 +1,18 @@
 ---
-- name: general
+- name: general - set
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
-    xpath: "{{ item.0.xpath }}/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    xpath: "/opnsense/{{ item.key }}"
+    value: "{{ item.value }}"
     pretty_print: yes
-  with_subelements:
-    - "{{ opn_general }}"
-    #- "{{ opn_general + opn_hasync | default([]) }}"
-    - settings
+  with_dict: "{{ opn_general }}"
+
+- name: general - unset
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: "/opnsense/{{ item }}"
+    state: absent
+  with_items: "{{ opn_unset }}"
 ...

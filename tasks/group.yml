@@ -1,5 +1,5 @@
 ---
-- name: groups: create
+- name: groups - create
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -11,7 +11,7 @@
     - "{{ opn_group }}"
     - settings
 
-- name: groups: count member nodes
+- name: groups - count member nodes
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -22,7 +22,7 @@
 #- debug:
 #    var: membercount.count
 
-- name: groups: add users to groups
+- name: groups - add users to groups
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml

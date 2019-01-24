@@ -1,12 +1,16 @@
 ---
+#vars:
+#  opn_hasync:
+#    - pfsyncenabled: "on"
+#    - username: "root"
+#    - password: "opnsense"
+
 - name: hasync
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
-    xpath: "/opnsense/hasync/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    xpath: "/opnsense/hasync/{{ item.key }}"
+    value: "{{ item.value }}"
     pretty_print: yes
-  with_subelements:
-    - "{{ opn_hasync | default([]) }}"
-    - settings
+  with_dict: "{{ opn_hasync | default([]) }}"
 ...

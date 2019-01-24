@@ -1,4 +1,4 @@
-- name: vlans: create
+- name: vlans - create vlans
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -9,23 +9,23 @@
     - "{{ opn_vlans }}"
     - settings
 
-- name: vlans: setting if
+- name: vlans - setting if
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
     xpath: /opnsense/vlans/vlan[tag/text()="{{ item.0.tag }}"]/if
-    value: "{{ opn_vlan_parent_interface }}"
+    value: "{{ opn_interfaces_vlan_parent_interface }}"
     pretty_print: yes
   with_subelements:
     - "{{ opn_vlans }}"
     - settings
 
-- name: vlans: setting vlanif
+- name: vlans - setting vlanif
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
     xpath: /opnsense/vlans/vlan[tag/text()="{{ item.0.tag }}"]/vlanif
-    value: "{{ opn_vlan_parent_interface }}_vlan{{ item.0.tag }}"
+    value: "{{ opn_interfaces_vlan_parent_interface }}_vlan{{ item.0.tag }}"
     pretty_print: yes
   with_subelements:
     - "{{ opn_vlans }}"

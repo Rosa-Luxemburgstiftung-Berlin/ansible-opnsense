@@ -1,5 +1,16 @@
 ---
-- name: virtualips
+- name: virtualip settings that apply to all interfaces
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/virtualip/vip[vhid/text()="{{ item.1 }}"]/{{ item.0.key }}
+    value: "{{ item.0.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_virtualip_all | default([]) }}"
+    - vhids
+
+- name: virtualip settings specific for a vhid
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
@@ -7,6 +18,6 @@
     value: "{{ item.1.value }}"
     pretty_print: yes
   with_subelements:
-    - "{{ opn_virtualip | default([]) + opn_vlan_virtualip | default([]) }}"
+    - "{{ opn_virtualip_specific | default([]) }}"
     - settings
 ...
