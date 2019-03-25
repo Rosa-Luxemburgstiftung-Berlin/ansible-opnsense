@@ -27,6 +27,10 @@ Including an example of how to use your role (for instance, with variables passe
       roles:
          - { role: username.rolename, x: 42 }
 
+Ansible command
+---------------
+    ansible-playbook -c paramiko firewalls.yml -l firewall2 -t user,fetch,copy,reload
+
 License
 -------
 
