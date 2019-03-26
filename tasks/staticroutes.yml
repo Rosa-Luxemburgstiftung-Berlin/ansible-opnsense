@@ -1,0 +1,34 @@
+---
+- name: staticroutes
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/     /route[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_staticroutes | default([]) }}"
+    - settings
+
+
+<staticroutes version="1.0.0">
+    <route uuid="20a9db7a-ce9b-4e87-bb0d-d0c225b43519">
+      <network>10.51.0.0/16</network>
+      <gateway>internal_route</gateway>
+      <descr/>
+      <disabled>0</disabled>
+    </route>
+    <route uuid="1d55eaff-36a8-44a3-9d25-cd4d139dda50">
+      <network>172.16.20.0/24</network>
+      <gateway>internal_route</gateway>
+      <descr/>
+      <disabled>0</disabled>
+    </route>
+    <route uuid="953277c1-2cf8-4671-ac1b-d175cf80ea4f">
+      <network>172.16.10.0/24</network>
+      <gateway>internal_route</gateway>
+      <descr/>
+      <disabled>0</disabled>
+    </route>
+  </staticroutes>
+</opnsense>
