@@ -6,7 +6,7 @@
     value: "{{ item.1.value }}"
     pretty_print: yes
   with_subelements:
-    - "{{ opn_vlans | default([]) }}"
+    - "{{ opn_vlans }}"
     - settings
 
 - name: vlans - setting if
@@ -17,7 +17,7 @@
     value: "{{ opn_interfaces_vlan_parent_interface }}"
     pretty_print: yes
   with_subelements:
-    - "{{ opn_vlans | default([]) }}"
+    - "{{ opn_vlans }}"
     - settings
 
 - name: vlans - setting vlanif
@@ -28,6 +28,6 @@
     value: "{{ opn_interfaces_vlan_parent_interface }}_vlan{{ item.0.tag }}"
     pretty_print: yes
   with_subelements:
-    - "{{ opn_vlans | default([]) }}"
+    - "{{ opn_vlans }}"
     - settings
 ...
