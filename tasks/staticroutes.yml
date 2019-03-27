@@ -10,14 +10,13 @@
     - "{{ opn_staticroutes | default([]) }}"
     - settings
 
-  - name: set staticroutes attribute-value
-    xml:
-      path: /tmp/config-{{ inventory_hostname }}.xml
-      xpath: /opnsense/staticroutes
-      attribute: version
-      value: "1.0.0"
-      pretty_print: yes
-    tags: route
+- name: set staticroutes attribute-value
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/staticroutes
+    attribute: version
+    value: "1.0.0"
+    pretty_print: yes
 ...
 
 #<staticroutes version="1.0.0">
