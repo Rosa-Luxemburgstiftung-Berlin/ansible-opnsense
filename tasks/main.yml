@@ -61,6 +61,10 @@
   include: syslog.yml
   tags: syslog
 
+- name: staticroutes
+  include: staticroutes.yml
+  tags: staticroutes
+
 - name: copy
   copy:
     src: /tmp/config-{{ inventory_hostname }}.xml
