@@ -11,6 +11,7 @@
     - settings
 
 - name: set staticroutes attribute-value
+  delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
     xpath: /opnsense/staticroutes
