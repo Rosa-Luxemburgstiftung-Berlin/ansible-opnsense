@@ -65,6 +65,10 @@
   include: staticroutes.yml
   tags: staticroutes
 
+- name: nat
+  include: nat.yml
+  tags: nat
+
 - name: copy
   copy:
     src: /tmp/config-{{ inventory_hostname }}.xml
