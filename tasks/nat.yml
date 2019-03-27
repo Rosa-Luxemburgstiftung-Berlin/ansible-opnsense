@@ -1,4 +1,13 @@
 ---
+- name: nat - settings
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: "/opnsense/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict: "{{ opn_nat_settings | default([]) }}"
+
 - name: nat - rules
   delegate_to: localhost
   xml:
@@ -9,55 +18,4 @@
   with_subelements:
     - "{{ opn_nat | default([]) }}"
     - settings
-    
-- name: nat - settings
-  delegate_to: localhost
-  xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
-    xpath: "/opnsense/{{ item.key }}"
-    value: "{{ item.value }}"
-    pretty_print: yes
-  with_dict: "{{ opn_nat_settings | default([]) }}"
-
-#opn_nat_settings:
-#  - system/nat/outbound/mode: "advanced"
 ...
-
-
-
-
-
-<nat>
-    <outbound>
-      <mode>advanced</mode>
-      <rule>
-        <source>
-          <network>any</network>
-        </source>
-        <destination>
-          <any>1</any>
-        </destination>
-        <descr/>
-        <interface>wan</interface>
-        <tag/>
-        <tagged/>
-        <poolopts/>
-        <poolopts_sourcehashkey/>
-        <ipprotocol>inet</ipprotocol>
-        <target/>
-        <targetip_subnet>0</targetip_subnet>
-        <sourceport/>
-        <log>1</log>
-        <updated>
-          <username>root@10.51.1.2</username>
-          <time>1553633558.1415</time>
-          <description>/firewall_nat_out_edit.php made changes</description>
-        </updated>
-        <created>
-          <username>root@10.51.1.2</username>
-          <time>1553633558.1415</time>
-          <description>/firewall_nat_out_edit.php made changes</description>
-        </created>
-      </rule>
-    </outbound>
-  </nat>
