@@ -10,15 +10,19 @@
     - "{{ opn_staticroutes | default([]) }}"
     - settings
 
-- name: set staticroutes attribute-value
+- name: route attribute uuid
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
-    xpath: /opnsense/staticroutes
-    attribute: version
-    value: "1.0.0"
+    xpath: /opnsense/staticroutes/route[descr/text()="{{ item.0.descr }}"]
+    attribute: uuid
+    value: "{{ item.0.uuid }}"
     pretty_print: yes
+  with_subelements:
+    - "{{ opn_staticroutes | default([]) }}"
+    - settings
 ...
+
 
 #<staticroutes version="1.0.0">
 #    <route uuid="20a9db7a-ce9b-4e87-bb0d-d0c225b43519">
