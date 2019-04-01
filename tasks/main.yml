@@ -31,7 +31,7 @@
 - name: vlans
   include: vlans.yml
   tags: vlans
-  when: opn_vlans is defined
+  when: opn_interfaces_vlan_parent_interface is defined
   
 - name: virtualip
   include: virtualip.yml
