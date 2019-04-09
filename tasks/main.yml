@@ -70,6 +70,10 @@
   include: nat.yml
   tags: nat
 
+- name: laggs
+  include: laggs.yml
+  tags: laggs
+
 - name: copy
   copy:
     src: /tmp/config-{{ inventory_hostname }}.xml
