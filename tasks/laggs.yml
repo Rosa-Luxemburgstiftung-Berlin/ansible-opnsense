@@ -1,0 +1,12 @@
+---
+- name: laggs
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/laggs/lagg[interface/text()="{{ item.0.laggif }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_laggs | default([]) }}"
+    - settings
+...
