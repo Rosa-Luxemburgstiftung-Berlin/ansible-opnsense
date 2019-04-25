@@ -11,7 +11,7 @@ Requirements
 Role Variables
 --------------
 
-https://github.com/naturalis/oss-network-demo/tree/master/ansible/basic
+An example: https://github.com/naturalis/oss-network-demo/tree/master/ansible/basic
 
 Dependencies
 ------------
