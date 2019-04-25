@@ -16,20 +16,24 @@ A description of the settable variables for this role should go here, including 
 Dependencies
 ------------
 
-* None
-
+    sudo pip install lxml
+    
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    ---
+    - hosts: firewalls
+      gather_facts: false
+      become: true
       roles:
-         - { role: username.rolename, x: 42 }
+        - ansible-opnsense
+    ...
 
 Ansible command
 ---------------
-    ansible-playbook -c paramiko firewalls.yml -l firewall2 -t user,fetch,copy,reload
+    ansible-playbook -c paramiko firewalls.yml -l firewall1 -t user,fetch,copy,reload
 
 License
 -------
