@@ -1,0 +1,12 @@
+---
+- name: bridges - settings for a bridge
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/bridges/bridged[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_bridges }}"
+    - settings
+  when: opn_bridges is defined

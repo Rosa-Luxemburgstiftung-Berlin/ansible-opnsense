@@ -32,6 +32,10 @@
   include: vlans.yml
   tags: vlans
   when: opn_interfaces_vlan_parent_interface is defined
+
+- name: bridges
+  include: bridges.yml
+  tags: bridges
   
 - name: virtualip
   include: virtualip.yml
