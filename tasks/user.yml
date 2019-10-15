@@ -18,4 +18,5 @@
     value: "{{ item.value }}"
     pretty_print: yes
   with_dict: "{{ opn_nextid }}"
+  when: opn_nextid is defined
 ...

@@ -9,6 +9,7 @@
   with_subelements:
     - "{{ opn_interfaces_specific }}"
     - settings
+  when: opn_interfaces_specific is defined
 
 - name: interfaces - settings that apply to all interfaces
   delegate_to: localhost
@@ -20,10 +21,11 @@
   with_subelements:
     - "{{ opn_interfaces_all }}"
     - interfaces
+  when: opn_interfaces_all is defined
+
 
 - name: interfaces - set vlan parent interface
   delegate_to: localhost
-  when: item.0.vlan is defined
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
     xpath: /opnsense/interfaces/{{ item.0.interface }}/if
@@ -32,4 +34,6 @@
   with_subelements:
     - "{{ opn_interfaces_specific }}"
     - settings
+  when: opn_interfaces_specific is defined and item.0.vlan is defined
+
 ...

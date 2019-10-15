@@ -6,10 +6,10 @@
     xpath: /opnsense/system/group[name/text()="{{ item.0.name }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
-  when: item.1.key is defined
   with_subelements:
     - "{{ opn_group }}"
     - settings
+  when: opn_group is defined and item.1.key is defined
 
 - name: groups - count member nodes
   delegate_to: localhost
@@ -30,8 +30,9 @@
     add_children:
       - member: "{{ item.1.member }}"
     pretty_print: yes
-  when: item.1.member is defined and membercount.count <= 1
   with_subelements:
     - "{{ opn_group }}"
     - settings
+  when: opn_group is defined and item.1.member is defined and membercount.count <= 1
+
 ...
