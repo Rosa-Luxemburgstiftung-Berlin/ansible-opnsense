@@ -1,0 +1,13 @@
+---
+
+- name: sysctl - system tunables
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/sysctl/item[tunable/text()="{{ item.tunable }}"]/value
+    value: "{{ item.value }}"
+    pretty_print: yes
+  loop: "{{ opn_sysctl }}"
+  when: opn_sysctl is defined
+
+...

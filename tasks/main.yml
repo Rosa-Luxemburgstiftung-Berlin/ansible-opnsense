@@ -24,6 +24,22 @@
   include: general.yml
   tags: general
 
+- name: sysctl
+  include: sysctl.yml
+  tags: sysctl
+
+- name: authservers
+  include: authservers.yml
+  tags: authservers
+
+- name: CAs
+  include: ca.yml
+  tags: ca
+
+- name: VPN
+  include: vpn.yml
+  tags: vpn
+
 - name: interfaces
   include: interfaces.yml
   tags: interfaces
@@ -85,6 +101,11 @@
     backup: yes
   register: config
   tags: copy
+
+- name: clean,safe delete
+  delegate_to: localhost
+  shell: srm /tmp/config-{{ inventory_hostname }}.xml
+  tags: clean
 
 - name: reload
   command: "{{ item }}"
