@@ -1,4 +1,5 @@
 ---
+
 - name: user
   delegate_to: localhost
   xml:
@@ -9,6 +10,19 @@
   with_subelements:
     - "{{ opn_user | default([]) }}"
     - settings
+  when: item.1.value is defined
+
+- name: b64 user fields
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/system/user[name/text()="{{ item.0.name }}"]/{{ item.1.key }}
+    value: "{{ item.1.b64_value | b64encode }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_user | default([]) }}"
+    - settings
+  when: item.1.b64_value is defined
 
 - name: user - nextid
   delegate_to: localhost
