@@ -43,6 +43,6 @@ Apache 2.0
 Author Information
 ------------------
 
-Rudi Broekhuizen - rudi.broekhuizen@naturalis.nl
-Privazio - hello@privaz.io - https://github.com/privazio
-Foppe Pieters - foppe.pieters@naturalis.nl
+- Rudi Broekhuizen - rudi.broekhuizen@naturalis.nl
+- Privazio - hello@privaz.io - https://github.com/privazio
+- Foppe Pieters - foppe.pieters@naturalis.nl
