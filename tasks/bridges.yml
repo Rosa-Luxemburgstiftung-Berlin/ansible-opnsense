@@ -10,3 +10,14 @@
     - "{{ opn_bridges }}"
     - settings
   when: opn_bridges is defined
+
+
+# remove the default empty <bridged/> node remains after configuring the first one
+
+- name: bridges - remove default empty node
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/bridges/bridged[not(node())]
+    state: absent
+  when: opn_bridges is defined
