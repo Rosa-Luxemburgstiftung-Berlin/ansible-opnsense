@@ -89,6 +89,7 @@
 - name: reload
   command: "{{ item }}"
   with_items:
+    - configctl filter sync
     - configctl service reload all
     - configctl webgui restart
   when: config.changed
