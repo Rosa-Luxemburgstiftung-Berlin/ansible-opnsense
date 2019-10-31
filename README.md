@@ -17,6 +17,8 @@ Dependencies
 ------------
 
     sudo pip install lxml
+    sudo pip3 install lxml
+    sudo apt install secure-delete
     
 Example Playbook
 ----------------
