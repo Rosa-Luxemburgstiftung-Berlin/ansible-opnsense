@@ -3,10 +3,24 @@
   delegate_to: localhost
   xml:
     path: /tmp/config-{{ inventory_hostname }}.xml
-    xpath: /opnsense/aliases/alias[name/text()="{{ item.0.name }}"]/{{ item.1.key }}
+    xpath: /opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid="{{ item.0.uuid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
   with_subelements:
     - "{{ opn_alias | default([]) }}"
     - settings
+  when: item.1.value is defined
+
+- name: multivalue aliases
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid="{{ item.0.uuid }}"]/{{ item.1.key }}
+    value: "{{ item.1.list | join('\n') }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_alias | default([]) }}"
+    - settings
+  when: item.1.list is defined
+
 ...
