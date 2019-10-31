@@ -1,4 +1,5 @@
 ---
+
 - name: dhcpd
   delegate_to: localhost
   xml:
@@ -9,4 +10,16 @@
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - settings
+
+- name: dhcpd static map
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/dhcpd/{{ item.0.if }}/staticmap[mac/text()="{{ item.0.mac }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_dhcpd_staticmap | default([]) }}"
+    - settings
+
 ...
