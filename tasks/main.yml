@@ -24,9 +24,9 @@
   include: general.yml
   tags: general
 
-- name: sysctl
-  include: sysctl.yml
-  tags: sysctl
+#- name: sysctl
+#  include: sysctl.yml
+#  tags: sysctl
 
 - name: authservers
   include: authservers.yml
