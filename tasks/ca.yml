@@ -1,0 +1,63 @@
+---
+
+- name: CAs - certificate authorities
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_cas | default([])  }}"
+    - settings
+  when: item.1.value is defined
+
+- name: b64 ca fields
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    value: "{{ item.1.b64_value | b64encode }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_cas | default([]) }}"
+    - settings
+  when: item.1.b64_value is defined
+
+
+# remove the default empty <ca/> node remains after configuring the first one
+
+- name: CAs - remove default empty node
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/ca[not(node())]
+    state: absent
+  when: opn_cas is defined
+
+- name: certificates 
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_certs | default([])  }}"
+    - settings
+  when: item.1.value is defined
+
+- name: b64 certificate fields
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    value: "{{ item.1.b64_value | b64encode }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_certs | default([]) }}"
+    - settings
+  when: item.1.b64_value is defined
+
+
+...
