@@ -1,4 +1,37 @@
 ---
+# example:
+#
+# opn_gateways:
+#   - interface: WAN1
+#     settings:
+#       - key: gateway
+#         value: 192.168.22.1
+#       - key: name
+#         value: GW_WAN1
+#       - key: weight
+#         value: 1
+#       - key: ipprotocol
+#         value: inet
+#   - interface: WAN2
+#     settings:
+#       - key: gateway
+#         value: 192.168.44.1
+#       - key: name
+#         value: GW_WAN2
+#       - key: weight
+#         value: 2
+#       - key: ipprotocol
+#         value: inet
+#
+# opn_gateway_groups:
+#   - name: GW_WAN
+#     settings:
+#       - item: "GW_WAN1|1"
+#       - item: "GW_WAN2|2"
+#       - trigger: down
+#       - descr: WAN gateway group
+#
+
 - name: gateways
   delegate_to: localhost
   xml:
@@ -9,4 +42,22 @@
   with_subelements:
     - "{{ opn_gateways | default([]) }}"
     - settings
+
+- name: gateway groups
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/gateways/gateway_group[name/text()="{{ item.name }}"]
+    pretty_print: yes
+  with_items: "{{ opn_gateway_groups | default([]) }}"
+
+- name: gateway groups settings
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/gateways/gateway_group[name/text()="{{ item.name }}"]
+    set_children: "{{ item.settings  + [ {'name':item.name } ] }}"
+    pretty_print: yes
+  with_items: "{{ opn_gateway_groups | default([]) }}"
+
 ...
