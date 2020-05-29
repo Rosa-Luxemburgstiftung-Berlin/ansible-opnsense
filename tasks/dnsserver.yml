@@ -68,7 +68,7 @@
     xpath: /opnsense/system/dnslocalhost
     value: "1"
     pretty_print: yes
-  when: dnslocalhost | default(True)
+  when: dnslocalhost | default(False)
 
 - name: Do not use the local DNS service as a nameserver for this system
   delegate_to: localhost
@@ -77,5 +77,5 @@
     xpath: /opnsense/system/dnslocalhost
     state: absent
     pretty_print: yes
-  when: not (dnslocalhost | default(True))
+  when: not (dnslocalhost | default(False)
 ...
