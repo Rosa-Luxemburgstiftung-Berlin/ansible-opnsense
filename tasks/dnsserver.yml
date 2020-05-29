@@ -50,5 +50,5 @@
     xpath: /opnsense/system/dnslocalhost
     state: absent
     pretty_print: yes
-  when: not (dnslocalhost | default(False)
+  when: not (dnslocalhost | default(False))
 ...
