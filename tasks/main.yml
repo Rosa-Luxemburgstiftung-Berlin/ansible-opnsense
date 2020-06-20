@@ -94,6 +94,16 @@
   include: laggs.yml
   tags: laggs
 
+- name: trim EOF
+  delegate_to: localhost
+  lineinfile:
+    state: absent
+    insertafter: EOF
+    line: ""
+    path: /tmp/config-{{ inventory_hostname }}.xml
+  changed_when: false
+  tags: trim
+
 - name: copy
   copy:
     src: /tmp/config-{{ inventory_hostname }}.xml
