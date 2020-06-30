@@ -21,7 +21,21 @@
     - settings
   when:
     - opn_interfaces_specific is defined
-    - item.1.key != 'enable' and item.1.value != 0
+    - item.1.key != 'enable'
+
+- name: interfaces - settings specific for enabling interfaces
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_interfaces_specific }}"
+    - settings
+  when:
+    - opn_interfaces_specific is defined
+    - item.1.key == 'enable' and item.1.value == 1
 
 - name: interfaces - settings specific for disabled interfaces
   delegate_to: localhost
