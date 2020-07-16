@@ -97,7 +97,7 @@
 - name: copy
   copy:
     src: /tmp/config-{{ inventory_hostname }}.xml
-    dest: /conf/config.xml
+    dest: "{{ config_path }}"
     backup: yes
   register: config
   tags: copy
