@@ -3,7 +3,7 @@
 - name: OpenVPN Servers
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/openvpn/openvpn-server[vpnid/text()="{{ item.0.vpnid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -15,7 +15,7 @@
 - name: b64 OpenVPN fields
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/openvpn/openvpn-server[vpnid/text()="{{ item.0.vpnid }}"]/{{ item.1.key }}
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: yes
@@ -29,7 +29,7 @@
 - name: OpenVPN Servers - remove default empty node
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/openvpn/openvpn-server[not(node())]
     state: absent
   when: opn_openvpn_servers is defined

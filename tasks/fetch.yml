@@ -2,7 +2,7 @@
 - name: fetch
   fetch:
     src: /conf/config.xml
-    dest: /tmp/config-{{ inventory_hostname }}.xml
+    dest: "{{ local_config_path }}"
     flat: yes
     backup: yes
 ...

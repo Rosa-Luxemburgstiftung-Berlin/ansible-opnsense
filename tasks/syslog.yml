@@ -2,7 +2,7 @@
 - name: syslog
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: "/opnsense/syslog/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes

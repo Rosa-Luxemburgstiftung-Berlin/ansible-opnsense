@@ -2,7 +2,7 @@
 - name: nat - settings
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: "/opnsense/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes
@@ -11,7 +11,7 @@
 - name: nat - rules
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/nat/outbound/rule[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -24,7 +24,7 @@
 - name: nat - remove default empty node
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/nat/outbound/rule[not(node())]
     state: absent
   when: opn_nat is defined
@@ -32,7 +32,7 @@
 - name: nat - port forward
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/nat/rule[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -46,7 +46,7 @@
 - name: nat - remove default empty node
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/nat/rule[not(node())]
     state: absent
   when: opn_nat_port_forward is defined

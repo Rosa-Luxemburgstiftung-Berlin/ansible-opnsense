@@ -2,7 +2,7 @@
 - name: general - set
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: "/opnsense/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes
@@ -12,7 +12,7 @@
 - name: general - unset
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: "/opnsense/{{ item }}"
     state: absent
   with_items: "{{ opn_unset }}"

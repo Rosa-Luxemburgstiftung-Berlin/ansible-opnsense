@@ -2,7 +2,7 @@
 - name: virtualip settings that apply to all interfaces
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/virtualip/vip[vhid/text()="{{ item.1 }}"]/{{ item.0.key }}
     value: "{{ item.0.value }}"
     pretty_print: yes
@@ -13,7 +13,7 @@
 - name: virtualip settings specific for a vhid
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/virtualip/vip[vhid/text()="{{ item.0.vhid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes

@@ -3,7 +3,7 @@
 - name: dhcpd
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.0.if }}/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -14,7 +14,7 @@
 - name: dhcpd static map
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.0.if }}/staticmap[mac/text()="{{ item.0.mac }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes

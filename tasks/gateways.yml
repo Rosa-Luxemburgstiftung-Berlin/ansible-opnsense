@@ -2,7 +2,7 @@
 - name: gateways
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_item[interface/text()="{{ item.0.interface }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
