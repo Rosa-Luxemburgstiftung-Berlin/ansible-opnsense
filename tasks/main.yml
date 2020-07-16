@@ -100,7 +100,7 @@
     state: absent
     insertafter: EOF
     line: ""
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
   changed_when: false
   tags: trim
 
@@ -110,7 +110,7 @@
     line: '<?xml version="1.0"?>'
     regexp: '^<\?xml.*>'
     insertbefore: BOF
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
   changed_when: false
   tags: trim
 

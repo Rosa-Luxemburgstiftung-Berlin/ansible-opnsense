@@ -24,7 +24,7 @@
 - name: virtualip settings except CARPs
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/virtualip/vip[interface/text()="{{ item.0.interface }}" and subnet/text()="{{ item.0.subnet }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes

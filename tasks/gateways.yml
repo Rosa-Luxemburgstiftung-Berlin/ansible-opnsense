@@ -46,7 +46,7 @@
 - name: gateway groups
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_group[name/text()="{{ item.name }}"]
     pretty_print: yes
   with_items: "{{ opn_gateway_groups | default([]) }}"
@@ -54,7 +54,7 @@
 - name: gateway groups settings
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_group[name/text()="{{ item.name }}"]
     set_children: "{{ item.settings  + [ {'name':item.name } ] }}"
     pretty_print: yes
