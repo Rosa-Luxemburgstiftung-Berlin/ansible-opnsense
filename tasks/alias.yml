@@ -2,7 +2,7 @@
 - name: aliases
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid="{{ item.0.uuid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -14,7 +14,7 @@
 - name: multivalue aliases
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid="{{ item.0.uuid }}"]/{{ item.1.key }}
     value: "{{ item.1.list | join('\n') }}"
     pretty_print: yes

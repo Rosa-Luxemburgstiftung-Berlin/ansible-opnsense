@@ -3,7 +3,7 @@
 - name: authservers - authentication servers
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/system/authserver[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -17,7 +17,7 @@
 - name: authserver - remove default empty node
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/system/authserver[not(node())]
     state: absent
   when: opn_authservers is defined

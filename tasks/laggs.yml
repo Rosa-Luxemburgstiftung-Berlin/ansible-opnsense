@@ -2,7 +2,7 @@
 - name: laggs
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/laggs/lagg[laggif/text()="{{ item.0.laggif }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes

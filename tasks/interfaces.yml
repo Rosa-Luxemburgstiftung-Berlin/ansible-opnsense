@@ -12,7 +12,7 @@
 - name: interfaces - settings specific for an interface
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -54,7 +54,7 @@
 - name: interfaces - settings that apply to all interfaces
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: "/opnsense/interfaces/{{ item.1 }}/{{ item.0.key }}"
     value: "{{ item.0.value }}"
     pretty_print: yes
@@ -66,7 +66,7 @@
 - name: interfaces - set vlan parent interface
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/if
     value: "{{ item.0.vlan_parent_interface | default(opn_interfaces_vlan_parent_interface) }}_vlan{{ item.0.vlan }}"
     pretty_print: yes

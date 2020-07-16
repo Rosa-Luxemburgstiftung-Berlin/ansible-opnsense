@@ -3,7 +3,7 @@
 - name: CAs - certificate authorities
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -15,7 +15,7 @@
 - name: b64 ca fields
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: yes
@@ -30,7 +30,7 @@
 - name: CAs - remove default empty node
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/ca[not(node())]
     state: absent
   when: opn_cas is defined
@@ -38,7 +38,7 @@
 - name: certificates 
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -50,7 +50,7 @@
 - name: b64 certificate fields
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: yes
