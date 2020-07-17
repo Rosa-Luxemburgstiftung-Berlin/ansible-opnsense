@@ -126,6 +126,7 @@
   delegate_to: localhost
   shell: srm "{{ local_config_path }}"
   tags: clean
+  when: delete_local_xml_file|default(False)
 
 - name: reload
   command: "{{ item }}"
