@@ -42,6 +42,45 @@
   with_subelements:
     - "{{ opn_gateways | default([]) }}"
     - settings
+  when: item.0.name is not defined
+
+# in order to allow multiple GW definitions per iface
+# use a name per iface (should be the same as in settings
+# opn_gateways:
+#  - interface: fwlink
+#    name: GW_01
+#    settings:
+#      - key: gateway
+#        value: 192.168.0.2
+#      - key: name
+#        value: GW_01
+#      - key: weight
+#        value: 1
+#      - key: ipprotocol
+#        value: inet
+#  - interface: fwlink
+#    name: GW_02
+#    settings:
+#      - key: gateway
+#        value: 192.168.0.3
+#      - key: name
+#        value: GW_02
+#      - key: weight
+#        value: 1
+#      - key: ipprotocol
+#        value: inet
+
+- name: gateways with name per iface
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/gateways/gateway_item[interface/text()="{{ item.0.interface }}" and name/text()="{{ item.0.name }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_gateways | default([]) }}"
+    - settings
+  when: item.0.name is defined
 
 - name: gateway groups
   delegate_to: localhost
