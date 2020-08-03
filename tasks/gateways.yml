@@ -70,10 +70,18 @@
 #      - key: ipprotocol
 #        value: inet
 
+# FIXME: in fact a definition as a dict would make like easier:
+#  - interface: fwlink
+#    name: GW_02
+#    gateway: 192.168.0.3
+#    weight: 1
+#    ipprotocol: inet
+
+
 - name: gateways with name per iface
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_item[interface/text()="{{ item.0.interface }}" and name/text()="{{ item.0.name }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
