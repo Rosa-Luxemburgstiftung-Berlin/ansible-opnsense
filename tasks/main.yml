@@ -95,6 +95,7 @@
   tags: laggs
 
 - name: copy
+  become: yes
   copy:
     src: /tmp/config-{{ inventory_hostname }}.xml
     dest: /conf/config.xml
@@ -108,6 +109,7 @@
   tags: clean
 
 - name: reload
+  become: yes
   command: "{{ item }}"
   with_items:
     - configctl filter sync
