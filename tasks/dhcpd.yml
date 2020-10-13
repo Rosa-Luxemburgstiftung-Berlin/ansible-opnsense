@@ -15,7 +15,7 @@
 - name: count configured dnsserver in dhcpd
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.if }}/dnsserver
     count: yes
   register: dhcpd_configured_dnsserver_count
@@ -37,7 +37,7 @@
 - name: get configured dnsserver in dhcpd
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.if }}/dnsserver
     content: text
   register: dhcpd_configured_dnsserver
@@ -60,7 +60,7 @@
 - name: reset dnsserver dhcpd
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.0.if }}/dnsserver
     state: absent
     pretty_print: yes
@@ -75,7 +75,7 @@
 - name: set dnsserver dhcpd
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.0.if }}
     add_children: "{{ item.1.value | json_query('[].{\"dnsserver\": @}') }}"
     pretty_print: yes
