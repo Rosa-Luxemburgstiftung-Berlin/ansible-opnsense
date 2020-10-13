@@ -10,6 +10,82 @@
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - settings
+  when: item.1.key != 'dnsserver'
+
+- name: count configured dnsserver in dhcpd
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/dhcpd/{{ item.if }}/dnsserver
+    count: yes
+  register: dhcpd_configured_dnsserver_count
+  with_items:
+    - "{{ opn_dhcpd | default([]) }}"
+
+- debug:
+    var: dhcpd_configured_dnsserver_count.results
+    verbosity: 1
+
+- set_fact:
+    dhcp_registered_dnsserver_count: "{{ dhcp_registered_dnsserver_count|default({}) | combine({item.item.if: item.count}) }}"
+  with_items: "{{ dhcpd_configured_dnsserver_count.results }}"
+
+- debug:
+    var: dhcp_registered_dnsserver_count
+    verbosity: 1
+
+- name: get configured dnsserver in dhcpd
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/dhcpd/{{ item.if }}/dnsserver
+    content: text
+  register: dhcpd_configured_dnsserver
+  with_items:
+    - "{{ opn_dhcpd | default([]) }}"
+  when: dhcp_registered_dnsserver_count[item.if] > 0
+
+- debug:
+    var: dhcpd_configured_dnsserver.results
+    verbosity: 1
+
+- set_fact:
+    dhcp_registered_dnsserver: "{{ dhcp_registered_dnsserver|default({}) | combine({item.item.if: item.matches|default({})|map(attribute='dnsserver')|list}) }}"
+  with_items: "{{ dhcpd_configured_dnsserver.results }}"
+
+- debug:
+    var: dhcp_registered_dnsserver
+    verbosity: 1
+
+- name: reset dnsserver dhcpd
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/dhcpd/{{ item.0.if }}/dnsserver
+    state: absent
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_dhcpd | default([]) }}"
+    - settings
+  when:
+    - item.1.key == 'dnsserver'
+    - dhcp_registered_dnsserver[item.0.if]|length > 0
+    - item.1.value|difference(dhcp_registered_dnsserver[item.0.if])|length > 0
+
+- name: set dnsserver dhcpd
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/dhcpd/{{ item.0.if }}
+    add_children: "{{ item.1.value | json_query('[].{\"dnsserver\": @}') }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_dhcpd | default([]) }}"
+    - settings
+  when:
+    - item.1.key == 'dnsserver'
+    - item.1.value|length > 0
+    - item.1.value|difference(dhcp_registered_dnsserver[item.0.if])|length > 0
 
 - name: dhcpd static map
   delegate_to: localhost
