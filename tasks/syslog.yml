@@ -1,11 +1,50 @@
 ---
-- name: syslog
+
+#
+# opn_syslog:
+#   general:
+#     enabled: 1
+#   destinations:
+#     - uuid: ..
+#       settings:
+#         - key: enabled
+#           value: 1
+#         - key: transport
+#           value: udp4
+#         - key: program
+#           value: filterlog[,...]
+#         - key: level
+#           value: info,notice,warn,err,crit,alert,emerg
+#         - key: facility
+#           value: kern,user,mail,daemon,auth,syslog,lpr,news,uucp,cron,authpriv,ftp,ntp,security,console,local0,local1,local2,local3,local4,local5,local6,local7
+#         - key: hostname
+#           value: IP
+#         - key: port
+#           value: 514
+#         - key: description
+#           value: eloquent syslog
+#
+
+- name: syslog general
   delegate_to: localhost
   xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/syslog/{{ item.key }}"
+    xpath: "/opnsense/OPNsense/Syslog/general/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes
-  with_dict: "{{ opn_syslog }}"
+  with_dict: "{{ opn_syslog.general }}"
   when: opn_syslog is defined
+
+- name: syslog destinations
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Syslog/destinations/destination[@uuid=\"{{ item.0.uuid }}\"]/{{ item.1.key }}"
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_syslog.destinations | default([]) }}"
+    - settings
+  when: opn_syslog is defined
+
 ...
