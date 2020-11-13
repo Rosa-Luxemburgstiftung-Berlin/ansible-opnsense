@@ -45,4 +45,37 @@
   when: change_dns | default(False)
   with_items: 
     "{{ dnsserver }}"
+
+- set_fact:
+    dnsallowoverride_state: "present"
+  when: dnsallowoverride | default(True)
+- set_fact:
+    dnsallowoverride_state: "absent"
+  when: not (dnsallowoverride | default(True))
+
+- name: Set dnsallowoverride {{ dnsallowoverride_state }}
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/system/dnsallowoverride
+    state: "{{ dnsallowoverride_state }}"
+    pretty_print: yes
+
+- name: Use the local DNS service as a nameserver for this system
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/system/dnslocalhost
+    value: "1"
+    pretty_print: yes
+  when: dnslocalhost | default(False)
+
+- name: Do not use the local DNS service as a nameserver for this system
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/system/dnslocalhost
+    state: absent
+    pretty_print: yes
+  when: not (dnslocalhost | default(False))
 ...
