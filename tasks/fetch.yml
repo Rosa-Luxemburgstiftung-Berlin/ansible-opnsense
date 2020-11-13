@@ -1,5 +1,6 @@
 ---
 - name: fetch
+  become: yes
   fetch:
     src: "{{ config_path }}"
     dest: /tmp/config-{{ inventory_hostname }}.xml

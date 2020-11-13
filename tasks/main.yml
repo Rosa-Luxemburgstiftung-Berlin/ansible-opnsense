@@ -115,6 +115,7 @@
   tags: trim
 
 - name: copy
+  become: yes
   copy:
     src: /tmp/config-{{ inventory_hostname }}.xml
     dest: "{{ config_path }}"
@@ -128,6 +129,7 @@
   tags: clean
 
 - name: reload
+  become: yes
   command: "{{ item }}"
   with_items:
     - configctl filter sync
