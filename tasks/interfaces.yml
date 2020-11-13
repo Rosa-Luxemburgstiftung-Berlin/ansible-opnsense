@@ -45,4 +45,22 @@
     - settings
   when: opn_interfaces_specific is defined and item.0.vlan is defined
 
+- name: create ifgroups
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/ifgroups
+    state: present
+    pretty_print: yes
+  when: opn_ifgroups is defined
+
+- name: create ifgroupentry
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/ifgroups
+    set_children: "[ {% for ifgroupentry in opn_ifgroups -%}'<ifgroupentry>{% for k,v in ifgroupentry.iteritems() -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</ifgroupentry>',{%- endfor %} ]"
+    input_type: xml
+    pretty_print: yes
+  when: opn_ifgroups is defined
 ...
