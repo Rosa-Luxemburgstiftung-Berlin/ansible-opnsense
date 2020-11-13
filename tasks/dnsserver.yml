@@ -7,6 +7,33 @@
     count: yes
   register: dnsservercount
 
+- name: Get dnsservers set
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/system/dnsserver
+    content: text
+  register: configured_dnsserver
+  when: dnsservercount.count > 0
+
+- set_fact:
+    change_dns: True
+  with_items: "{{ configured_dnsserver.matches }}"
+  when: dnsservercount.count > 0 and ((item.dnsserver not in dnsserver) or (dnsserver|length) != (configured_dnsserver.matches|length))
+
+- set_fact:
+    change_dns: True
+  when: dnsservercount.count == 0 and dnsserver|length > 0
+
+- name: Reset dnsservers
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/system/dnsserver
+    state: absent
+    pretty_print: yes
+  when: change_dns | default(False)
+
 - name: Dnsservers
   delegate_to: localhost
   xml:
@@ -15,7 +42,7 @@
     add_children: 
       - dnsserver: "{{ item }}"
     pretty_print: yes
-  when: dnsservercount.count == 0
+  when: change_dns | default(False)
   with_items: 
     "{{ dnsserver }}"
 ...
