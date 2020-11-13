@@ -1,4 +1,14 @@
 ---
+- name: interfaces - remove interface
+  delegate_to: localhost
+  xml:
+    path: /tmp/config-{{ inventory_hostname }}.xml
+    xpath: /opnsense/interfaces/{{ item }}
+    state: absent
+    pretty_print: yes
+  with_items: "{{ opn_interfaces_remove }}"
+  when: opn_interfaces_remove is defined
+
 - name: interfaces - settings specific for an interface
   delegate_to: localhost
   xml:
@@ -22,7 +32,6 @@
     - "{{ opn_interfaces_all }}"
     - interfaces
   when: opn_interfaces_all is defined
-
 
 - name: interfaces - set vlan parent interface
   delegate_to: localhost
