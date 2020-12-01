@@ -78,7 +78,7 @@
 - name: create ifgroups
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/ifgroups
     state: present
     pretty_print: yes
@@ -87,7 +87,7 @@
 - name: create ifgroupentry
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/ifgroups
     set_children: "[ {% for ifgroupentry in opn_ifgroups -%}'<ifgroupentry>{% for k,v in ifgroupentry.iteritems() -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</ifgroupentry>',{%- endfor %} ]"
     input_type: xml
