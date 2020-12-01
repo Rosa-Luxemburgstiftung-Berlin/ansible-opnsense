@@ -26,7 +26,7 @@
 - name: interfaces - settings specific for enabling interfaces
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -40,7 +40,7 @@
 - name: interfaces - settings specific for disabled interfaces
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     state: absent
     pretty_print: yes
