@@ -117,7 +117,7 @@
 - name: copy
   become: yes
   copy:
-    src: /tmp/config-{{ inventory_hostname }}.xml
+    src: "{{ local_config_path }}"
     dest: "{{ config_path }}"
     backup: yes
   register: config
@@ -125,7 +125,7 @@
 
 - name: clean,safe delete
   delegate_to: localhost
-  shell: srm /tmp/config-{{ inventory_hostname }}.xml
+  shell: srm "{{ local_config_path }}"
   tags: clean
 
 - name: reload
