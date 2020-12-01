@@ -2,7 +2,7 @@
 - name: staticroutes
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/staticroutes/route[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -13,7 +13,7 @@
 - name: route attribute uuid
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/staticroutes/route[descr/text()="{{ item.0.descr }}"]
     attribute: uuid
     value: "{{ item.0.uuid }}"
