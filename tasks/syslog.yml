@@ -28,7 +28,7 @@
 - name: syslog general
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/Syslog/general/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes
@@ -38,7 +38,7 @@
 - name: syslog destinations
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/Syslog/destinations/destination[@uuid=\"{{ item.0.uuid }}\"]/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: yes
@@ -46,5 +46,4 @@
     - "{{ opn_syslog.destinations | default([]) }}"
     - settings
   when: opn_syslog is defined
-
 ...
