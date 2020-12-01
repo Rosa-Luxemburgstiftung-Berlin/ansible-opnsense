@@ -115,7 +115,6 @@
   tags: trim
 
 - name: copy
-  become: yes
   copy:
     src: "{{ local_config_path }}"
     dest: "{{ config_path }}"
@@ -129,7 +128,6 @@
   tags: clean
 
 - name: reload
-  become: yes
   command: "{{ item }}"
   with_items:
     - configctl filter sync
