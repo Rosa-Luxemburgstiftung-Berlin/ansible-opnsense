@@ -1,2 +1,11 @@
+# SPDX-FileCopyrightText: 2021 Robin Schneider <ypid@riseup.net>
+#
+# SPDX-License-Identifier: CC0-1.0
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
 .*.swp
 test/cfg/*.xml
