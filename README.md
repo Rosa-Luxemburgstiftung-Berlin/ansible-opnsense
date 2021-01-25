@@ -22,11 +22,11 @@ We try to provide some example variable definitions in the coresponding task and
 
 ## Dependencies
 
-    sudo apt install python3-lxml
+    sudo apt install python3-lxml python3-defusedxml
 
 or
 
-    pip install lxml
+    pip install lxml defusedxml
 
 
 ### optional
@@ -79,4 +79,4 @@ Apache 2.0
   * Klaus Zerwes - https://github.com/zerwes
   * Jonybat - https://github.com/Jonybat
   * fnateghi - https://github.com/fnateghi
-
+  * Robin Schneider - https://me.ypid.de/
