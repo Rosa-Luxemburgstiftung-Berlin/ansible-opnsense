@@ -25,7 +25,7 @@ We try to provide some example variable definitions in the coresponding task and
 Dependencies
 ------------
 
-    sudo apt install python3-lxml
+    sudo apt install python3-lxml python3-defusedxml
     sudo apt install secure-delete (optional)
     
 Example Playbook
@@ -74,4 +74,4 @@ Author Information
 - Privazio - hello@privaz.io - https://github.com/privazio
 - Foppe Pieters - foppe.pieters@naturalis.nl
 - Klaus Zerwes - https://github.com/zerwes
-
+- Robin Schneider - https://me.ypid.de/

@@ -15,6 +15,15 @@
         - fetch
         - always
 
+- name: template
+  template:
+    src: '{{ opnsense_template }}'
+    dest: '{{ local_config_path }}'
+    validate: 'xmllint --noout %s'
+  delegate_to: localhost
+  when: opnsense_mode == 'xml_template'
+  tags: template
+
 - name: dnsserver
   tags:
     - always
@@ -24,6 +33,7 @@
       tags:
         - dnsserver
         - dns
+  when: opnsense_mode == 'xml_patch'
 
 - name: user
   tags:
@@ -32,6 +42,7 @@
     file: user.yml
     apply:
       tags: user
+  when: opnsense_mode == 'xml_patch'
 
 - name: group
   tags:
@@ -40,6 +51,7 @@
     file: group.yml
     apply:
       tags: group
+  when: opnsense_mode == 'xml_patch'
 
 - name: general
   tags:
@@ -48,6 +60,7 @@
     file: general.yml
     apply:
       tags: general
+  when: opnsense_mode == 'xml_patch'
 
 - name: sysctl
   tags:
@@ -64,6 +77,7 @@
     file: authservers.yml
     apply:
       tags: authservers
+  when: opnsense_mode == 'xml_patch'
 
 - name: CAs
   tags:
@@ -75,6 +89,7 @@
         - ca
         - cert
         - certificates
+  when: opnsense_mode == 'xml_patch'
 
 - name: VPN
   tags:
@@ -85,6 +100,7 @@
       tags:
         - openvpn
         - vpn
+  when: opnsense_mode == 'xml_patch'
 
 - name: IPSec
   tags:
@@ -106,6 +122,7 @@
         - wireguard
   tags:
     - always
+  when: opnsense_mode == 'xml_patch'
 
 - name: interfaces
   tags:
@@ -116,6 +133,7 @@
       tags:
         - interfaces
         - interface
+  when: opnsense_mode == 'xml_patch'
 
 - name: vlans
   tags:
@@ -126,7 +144,7 @@
       tags:
         - vlans
         - vlan
-  when: opn_interfaces_vlan_parent_interface is defined
+  when: opnsense_mode == 'xml_patch' and opn_interfaces_vlan_parent_interface is defined
 
 - name: bridges
   tags:
@@ -137,6 +155,7 @@
       tags:
         - bridges
         - bridge
+  when: opnsense_mode == 'xml_patch'
 
 - name: virtualip
   tags:
@@ -145,6 +164,7 @@
     file: virtualip.yml
     apply:
       tags: virtualip
+  when: opnsense_mode == 'xml_patch'
 
 - name: alias
   tags:
@@ -153,6 +173,7 @@
     file: alias.yml
     apply:
       tags: alias
+  when: opnsense_mode == 'xml_patch'
 
 - name: filter
   tags:
@@ -161,6 +182,7 @@
     file: filter.yml
     apply:
       tags: filter
+  when: opnsense_mode == 'xml_patch'
 
 - name: gateways
   tags:
@@ -171,6 +193,7 @@
       tags:
         - gateways
         - gateway
+  when: opnsense_mode == 'xml_patch'
 
 - name: hasync
   tags:
@@ -179,6 +202,7 @@
     file: hasync.yml
     apply:
       tags: hasync
+  when: opnsense_mode == 'xml_patch'
 
 - name: dhcpd
   tags:
@@ -189,6 +213,7 @@
       tags:
         - dhcpd
         - dhcp
+  when: opnsense_mode == 'xml_patch'
 
 - name: unbound
   tags:
@@ -197,6 +222,7 @@
     file: unbound.yml
     apply:
       tags: unbound
+  when: opnsense_mode == 'xml_patch'
 
 - name: syslog
   tags:
@@ -205,6 +231,7 @@
     file: syslog.yml
     apply:
       tags: syslog
+  when: opnsense_mode == 'xml_patch'
 
 - name: monit
   tags:
@@ -213,6 +240,7 @@
     file: monit.yml
     apply:
       tags: monit
+  when: opnsense_mode == 'xml_patch'
 
 - name: staticroutes
   tags:
@@ -225,6 +253,7 @@
         - routing
         - routes
         - route
+  when: opnsense_mode == 'xml_patch'
 
 - name: nat
   tags:
@@ -233,6 +262,7 @@
     file: nat.yml
     apply:
       tags: nat
+  when: opnsense_mode == 'xml_patch'
 
 - name: laggs
   tags:
@@ -243,6 +273,7 @@
       tags:
         - laggs
         - lagg
+  when: opnsense_mode == 'xml_patch'
 
 - name: haproxy
   tags:
@@ -251,6 +282,7 @@
     file: haproxy.yml
     apply:
       tags: haproxy
+  when: opnsense_mode == 'xml_patch'
 
 - name: trim EOF
   delegate_to: localhost
@@ -260,6 +292,7 @@
     line: ""
     path: "{{ local_config_path }}"
   changed_when: false
+  when: opnsense_mode == 'xml_patch'
   tags: trim
 
 - name: fix xml start tag
@@ -270,6 +303,7 @@
     insertbefore: BOF
     path: "{{ local_config_path }}"
   changed_when: false
+  when: opnsense_mode == 'xml_patch'
   tags: trim
 
 - name: copy
@@ -322,5 +356,21 @@
     - configctl service reload all
     - configctl webgui restart
   when: config.changed
-  tags: reload
+
+- name: reload wireguard
+  ansible.builtin.command: "{{ item.command }}"
+  when: (item.when|bool)
+  with_items:
+    - command: configctl wireguard restart
+      when: '{{ config is changed and
+                lookup("xmlfile", local_config_path_fetch, xpath="opnsense/OPNsense/wireguard") !=
+                lookup("xmlfile", local_config_path, xpath="opnsense/OPNsense/wireguard") }}'
+
+- name: copy
+  copy:
+    src: "{{ local_config_path }}"
+    dest: "{{ local_config_path_fetch }}"
+  register: config
+  delegate_to: localhost
+  tags: copy
 ...
