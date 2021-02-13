@@ -14,6 +14,9 @@ opn_sort_values:
   filter:
     - interface
 
+# Secure remove local config?
+opnsense_local_config_path_secure_remove: True
+
 # `xml_patch` and `xml_template` are supported.
 opnsense_mode: 'xml_patch'
 
