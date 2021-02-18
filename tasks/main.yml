@@ -35,6 +35,10 @@
         - dns
   when: opnsense_mode == 'xml_patch'
 
+- name: dnsmasq
+  include: dnsmasq.yml
+  tags: dnsmasq
+
 - name: user
   tags:
     - always

@@ -47,3 +47,6 @@
   when:
     - config is defined
     - config.changed | bool
+
+- name: Restart dns subsystem
+  command: pluginctl dns
