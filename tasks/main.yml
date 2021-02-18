@@ -54,6 +54,15 @@
       tags:
         - dyndns
 
+- name: dnsmasq
+  tags:
+    - always
+  ansible.builtin.include_tasks:
+    file: dnsmasq.yml
+    apply:
+      tags:
+        - dnsmasq
+
 - name: user
   tags:
     - always
