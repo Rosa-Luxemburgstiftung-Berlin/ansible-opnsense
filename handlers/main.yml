@@ -195,4 +195,8 @@
   when:
     - config is defined
     - config.changed | bool
+
+# dnsmasq
+- name: Restart dns subsystem
+  ansible.builtin.command: pluginctl dns
 ...
