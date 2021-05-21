@@ -5,6 +5,10 @@
 #     url: https://raw.githubusercontent.com/opnsense/core/master/src/etc/config.xml.sample
 #     dest: /tmp/config.xml
 
+- name: import DebOps secret role
+  ansible.builtin.import_role:
+    name: secret
+
 - name: fetch
   tags:
     - always
