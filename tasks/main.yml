@@ -5,6 +5,10 @@
 #     url: https://raw.githubusercontent.com/opnsense/core/master/src/etc/config.xml.sample
 #     dest: /tmp/config.xml
 
+- name: Import DebOps secret role
+  import_role:
+    name: 'secret'
+
 - name: fetch
   tags:
     - always
