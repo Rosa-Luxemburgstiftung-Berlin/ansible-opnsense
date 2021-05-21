@@ -319,6 +319,12 @@
     group: wheel
     mode: "0644"
   register: config
+  notify:
+    - 'Restart webgui'
+    - 'Sync filter'
+    - 'Reload all services'
+    - 'Restart WireGuard'
+    - 'Restart snmpd'
   tags: copy
 
 - name: clean,safe delete  # noqa no-changed-when
@@ -369,6 +375,10 @@
       when: '{{ config is changed and
                 lookup("xmlfile", local_config_path_fetch, xpath="opnsense/OPNsense/wireguard") !=
                 lookup("xmlfile", local_config_path, xpath="opnsense/OPNsense/wireguard") }}'
+
+  # Reload services last as that might kill the ssh connection.
+- name: Execute pending handlers
+  meta: 'flush_handlers'
 
 - name: copy
   copy:
