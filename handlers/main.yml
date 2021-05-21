@@ -199,4 +199,26 @@
 # dnsmasq
 - name: Restart dns subsystem
   ansible.builtin.command: pluginctl dns
+
+- name: restart webgui
+  ansible.builtin.command: configctl webgui restart
+
+- name: sync filter
+  ansible.builtin.command: configctl filter sync
+
+- name: reload all services
+  ansible.builtin.command: configctl service reload all
+
+- name: restart WireGuard
+  ansible.builtin.command: configctl wireguard restart
+  # Needs to be restarted even if it did not change because other service
+  # reloads unset the IP address of the WireGuard interface.
+  when: (lookup("xmlfile", local_config_path, xpath="//opnsense/OPNsense/wireguard") != '')
+
+- name: restart snmpd
+  ansible.builtin.service:
+    name: 'snmpd'
+    state: 'restarted'
+  when: (lookup("xmlfile", local_config_path_fetch, xpath="//opnsense/OPNsense/netsnmp") !=
+         lookup("xmlfile", local_config_path, xpath="//opnsense/OPNsense/netsnmp"))
 ...
