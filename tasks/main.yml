@@ -28,6 +28,10 @@
   when: opnsense_mode == 'xml_template'
   tags: template
 
+- name: packages
+  include: packages.yml
+  tags: packages
+
 - name: dnsserver
   tags:
     - always
