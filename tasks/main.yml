@@ -38,6 +38,15 @@
   delegate_to: localhost
   when: opnsense_mode == 'xml_template'
 
+- name: packages
+  tags:
+    - always
+  ansible.builtin.include_tasks:
+    file: packages.yml
+    apply:
+      tags:
+        - packages
+
 - name: dnsserver
   tags:
     - always
