@@ -32,7 +32,7 @@
     xpath: "/opnsense/OPNsense/Syslog/general/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes
-  with_dict: "{{ opn_syslog.general }}"
+  with_dict: "{{ opn_syslog.general | default({}) }}"
   when: opn_syslog is defined
 
 - name: syslog destinations
