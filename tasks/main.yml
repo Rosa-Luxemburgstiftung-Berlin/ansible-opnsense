@@ -34,7 +34,10 @@
 
 - name: CAs
   include: ca.yml
-  tags: ca
+  tags:
+    - ca
+    - cert
+    - certificates
 
 - name: VPN
   include: vpn.yml
