@@ -28,10 +28,12 @@ Including an example of how to use your role (for instance, with variables passe
     ---
     - hosts: firewalls
       gather_facts: false
-      become: true
+      become: false
       roles:
         - ansible-opnsense
     ...
+
+Become on play level is not needed for XML changes on localhost only for tasks to fetch/push config.xml and restart services on OPNsense.
 
 Ansible command
 ---------------
