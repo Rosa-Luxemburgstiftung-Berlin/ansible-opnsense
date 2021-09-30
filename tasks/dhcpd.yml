@@ -1,3 +1,4 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
 ---
 
 - name: dhcpd
@@ -10,7 +11,8 @@
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - settings
-  when: item.1.key != 'dnsserver'
+  when:
+    - item.1.key != 'dnsserver'
 
 - name: count configured dnsserver in dhcpd
   delegate_to: localhost
@@ -86,6 +88,34 @@
     - item.1.key == 'dnsserver'
     - item.1.value|length > 0
     - item.1.value|difference(dhcp_registered_dnsserver[item.0.if])|length > 0
+
+# opn_dhcpd:
+#  - if: lan
+#    settings: []
+#    numberoptions:
+#          - number: 43
+#            type: string
+#            value: "..."
+- name: set dhcp numberoptions type
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/dhcpd/{{ item.0.if }}/numberoptions/item[number/text()="{{ item.1.number }}"]/type
+    value: "{{item.1.type }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_dhcpd | default([]) }}"
+    - numberoptions
+- name: set dhcp numberoptions value
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/dhcpd/{{ item.0.if }}/numberoptions/item[number/text()="{{ item.1.number }}"]/value
+    value: "{{item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_dhcpd | default([]) }}"
+    - numberoptions
 
 - name: dhcpd static map
   delegate_to: localhost
