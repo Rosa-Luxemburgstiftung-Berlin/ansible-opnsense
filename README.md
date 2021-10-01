@@ -41,7 +41,7 @@ Ansible command
 
 
 Sample Playbook
-...............
+---------------
 
 https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-playbook
 
