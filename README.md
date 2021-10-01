@@ -45,6 +45,11 @@ Sample Playbook
 
 https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-playbook
 
+Other possible usefull ansible roles related to opnsense:
+
+  * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-facts
+  * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-checkmk
+
 
 License
 -------
