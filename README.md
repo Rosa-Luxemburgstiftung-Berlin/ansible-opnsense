@@ -39,9 +39,9 @@ Ansible command
 ---------------
     ansible-playbook -c paramiko firewalls.yml -l firewall1 -t user,fetch,copy,reload
 
+
 Sample Playbook
 ...............
-
 
 https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-playbook
 
