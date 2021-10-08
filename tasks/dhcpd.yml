@@ -106,6 +106,7 @@
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - numberoptions
+    - skip_missing: yes
 - name: set dhcp numberoptions value
   delegate_to: localhost
   xml:
@@ -116,6 +117,7 @@
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - numberoptions
+    - skip_missing: yes
 
 - name: dhcpd static map
   delegate_to: localhost
