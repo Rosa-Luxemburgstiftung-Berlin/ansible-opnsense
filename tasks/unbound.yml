@@ -1,0 +1,65 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
+---
+
+# example definition
+#
+# opn_unbound:
+#   enable: 1
+#   forwarding: 1
+#   active_interface: lan
+#   noreglladdr6: 1
+#   regdhcp: 1
+#   serveexpired: 1
+#   ...
+#   domainoverrides:
+#     - domain: example.xor
+#       ip: 127.0..1.1
+#       descr: xtra domain
+#     ...
+#   acls:
+#     aclname: dnsaclx
+#     aclaction: allow
+#     description: dns acl for xtra
+#     rows:
+#       - acl_network: 172.0.0.0
+#         mask: 24
+#         description: this network
+#       ...
+
+
+- name: unbound general settings
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/{{ item.key }}
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict:
+    - "{{ opn_unbound | default({}) }}"
+  when:
+    - item.key != 'domainoverrides'
+    - item.key != 'acls'
+
+# opnsense uses one or more domainoverrides entries for one forward-zone
+# in unbound multiple entries for the same zone are merged into one forward-zone
+# with multiple forward-addr entries
+# so here we just have one chance: remove all domainoverrides and recreate them in a bulk
+- name: unbound domainoverrides
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/domainoverrides
+    state: absent
+    pretty_print: yes
+  when: opn_unbound.domainoverrides is defined
+- name: unbound domainoverrides
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound
+    add_children: "[  {% for domainoverrides in opn_unbound.domainoverrides -%}'<domainoverrides>{% for k,v in domainoverrides.items()|list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</domainoverrides>', {%- endfor %} ]"
+    input_type: xml
+    pretty_print: yes
+  when: opn_unbound.domainoverrides is defined
+
+...
