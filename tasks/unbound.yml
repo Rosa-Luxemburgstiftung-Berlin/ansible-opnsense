@@ -40,6 +40,77 @@
     - item.key != 'domainoverrides'
     - item.key != 'acls'
 
+- name: count unbound/domainoverrides
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/domainoverrides/domain
+    count: yes
+  register: configured_unbound_domainoverrides_count
+- debug:
+    var: configured_unbound_domainoverrides_count
+
+- name: get unbound/domainoverrides/domain entries
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/domainoverrides/domain
+    content: "text"
+  register: configured_unbound_domainoverrides_domain
+  when: configured_unbound_domainoverrides_count.count > 0
+- debug:
+    var: configured_unbound_domainoverrides_domain
+    verbosity: 1
+
+- name: get unbound/domainoverrides/ip entries
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/domainoverrides/ip
+    content: "text"
+  register: configured_unbound_domainoverrides_ip
+  when: configured_unbound_domainoverrides_count.count > 0
+- debug:
+    var: configured_unbound_domainoverrides_ip
+    verbosity: 1
+
+- name: get unbound/domainoverrides/descr entries
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/domainoverrides/descr
+    content: "text"
+  register: configured_unbound_domainoverrides_descr
+  when: configured_unbound_domainoverrides_count.count > 0
+- debug:
+    var: configured_unbound_domainoverrides_descr
+    verbosity: 1
+
+- name: init configured_unbound_domainoverrides
+  set_fact:
+    configured_unbound_domainoverrides: "[{% for domaindict in configured_unbound_domainoverrides_domain.matches %}{'domain':'{{ domaindict.domain }}','ip':'{{configured_unbound_domainoverrides_ip.matches[loop.index0].ip}}'{% if configured_unbound_domainoverrides_descr.matches[loop.index0].descr is defined and configured_unbound_domainoverrides_descr.matches[loop.index0].descr %},'descr':'{{ configured_unbound_domainoverrides_descr.matches[loop.index0].descr }}'{% endif %}},{% endfor %}]"
+
+- name: debug configured_unbound_domainoverrides
+  debug:
+    var: configured_unbound_domainoverrides
+    verbosity: 1
+- name: debug opn_unbound.domainoverrides
+  debug:
+    var: opn_unbound.domainoverrides|default([])
+    verbosity: 1
+
+- name: compare configured and defined unbound domainoverrides
+  set_fact:
+    unbound_domainoverrides_delta: "{{ configured_unbound_domainoverrides | difference(opn_unbound.domainoverrides|default([])) }}"
+- name: debug delta between configured and defined unbound domainoverrides
+  debug:
+    var: unbound_domainoverrides_delta
+    verbosity: 1
+- name: check if a update of unbound domainoverrides is required
+  set_fact:
+    unbound_domainoverrides_update: True
+  when: unbound_domainoverrides_delta | length > 0
+
 # opnsense uses one or more domainoverrides entries for one forward-zone
 # in unbound multiple entries for the same zone are merged into one forward-zone
 # with multiple forward-addr entries
@@ -51,7 +122,8 @@
     xpath: /opnsense/unbound/domainoverrides
     state: absent
     pretty_print: yes
-  when: opn_unbound.domainoverrides is defined
+  when: unbound_domainoverrides_update|default(False)
+
 - name: unbound domainoverrides
   delegate_to: localhost
   xml:
@@ -60,6 +132,8 @@
     add_children: "[  {% for domainoverrides in opn_unbound.domainoverrides -%}'<domainoverrides>{% for k,v in domainoverrides.items()|list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</domainoverrides>', {%- endfor %} ]"
     input_type: xml
     pretty_print: yes
-  when: opn_unbound.domainoverrides is defined
+  when:
+    - opn_unbound.domainoverrides is defined
+    - unbound_domainoverrides_update|default(False)
 
 ...
