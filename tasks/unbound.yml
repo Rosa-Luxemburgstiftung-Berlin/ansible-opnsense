@@ -14,7 +14,9 @@
 #   domainoverrides:
 #     - domain: example.xor
 #       ip: 127.0..1.1
-#       descr: xtra domain
+#       descr: xtra domain  # descr is optional, but in order to work as expected
+#                           # please do yourself a favor and be consistent and use
+#                           # either in all entries or none of them
 #     ...
 #   acls:
 #     aclname: dnsaclx
@@ -74,21 +76,31 @@
     var: configured_unbound_domainoverrides_ip
     verbosity: 1
 
+# descr is otional
+# FIXME: here the detection is not working in all cases
+# i.e. if you do not use descr in the first element of the
+# domainoverrides list
 - name: get unbound/domainoverrides/descr entries
   delegate_to: localhost
   xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound/domainoverrides/descr
     content: "text"
+  ignore_errors: True
   register: configured_unbound_domainoverrides_descr
   when: configured_unbound_domainoverrides_count.count > 0
 - debug:
-    var: configured_unbound_domainoverrides_descr
+    var: configured_unbound_domainoverrides_descr|default([])
     verbosity: 1
 
 - name: init configured_unbound_domainoverrides
   set_fact:
+    configured_unbound_domainoverrides: []
+
+- name: populate configured_unbound_domainoverrides
+  set_fact:
     configured_unbound_domainoverrides: "[{% for domaindict in configured_unbound_domainoverrides_domain.matches %}{'domain':'{{ domaindict.domain }}','ip':'{{configured_unbound_domainoverrides_ip.matches[loop.index0].ip}}'{% if configured_unbound_domainoverrides_descr.matches[loop.index0].descr is defined and configured_unbound_domainoverrides_descr.matches[loop.index0].descr %},'descr':'{{ configured_unbound_domainoverrides_descr.matches[loop.index0].descr }}'{% endif %}},{% endfor %}]"
+  when: configured_unbound_domainoverrides_count.count > 0
 
 - name: debug configured_unbound_domainoverrides
   debug:
@@ -101,7 +113,7 @@
 
 - name: compare configured and defined unbound domainoverrides
   set_fact:
-    unbound_domainoverrides_delta: "{{ configured_unbound_domainoverrides | difference(opn_unbound.domainoverrides|default([])) }}"
+    unbound_domainoverrides_delta: "{{ configured_unbound_domainoverrides | symmetric_difference(opn_unbound.domainoverrides|default([])) }}"
 - name: debug delta between configured and defined unbound domainoverrides
   debug:
     var: unbound_domainoverrides_delta
