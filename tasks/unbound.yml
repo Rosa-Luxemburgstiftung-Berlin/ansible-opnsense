@@ -193,4 +193,8 @@
 
 # END unbound/acls
 
+- name: unboundplus
+  include_tasks: unboundplus.yml
+  when: opn_unboundplus is defined
+
 ...
