@@ -81,6 +81,10 @@
   include: dhcpd.yml
   tags: dhcpd
 
+- name: unbound
+  include: unbound.yml
+  tags: unbound
+
 - name: syslog
   include: syslog.yml
   tags: syslog
