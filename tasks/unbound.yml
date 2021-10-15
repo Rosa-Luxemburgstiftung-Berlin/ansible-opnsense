@@ -191,20 +191,6 @@
   with_items:
     - "{{ opn_unbound.acls | default([]) }}"
 
-
-#- name: count unbound/acls rows per acl
-#  delegate_to: localhost
-#  xml:
-#    path: "{{ local_config_path }}"
-#    xpath: "/opnsense/unbound/acls[aclname/text()='{{ item.0.aclname }}']/row"
-#    count: yes
-#  register: "configured_unbound_acls_rows_count['{{ item.0.aclname }}']"
-#  with_subelements:
-#    - "{{ opn_unbound.acls | default([]) }}"
-#    - rows
-#- debug:
-#    var: configured_unbound_acls_rows_count
-
 # END unbound/acls
 
 ...
