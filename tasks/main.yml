@@ -40,6 +40,12 @@
   include: vpn.yml
   tags: vpn
 
+- name: IPSec
+  include: ipsec.yml
+  tags:
+    - vpn
+    - ipsec
+
 - name: interfaces
   include: interfaces.yml
   tags: interfaces
