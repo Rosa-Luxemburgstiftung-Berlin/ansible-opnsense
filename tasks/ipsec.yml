@@ -1,0 +1,71 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
+---
+
+# definition:
+#opn_ipsec:
+#  enable: 1
+#  ipsec_asn: 1
+#  ipsec_chd: 1
+#  ... # other globalsettings
+#  ikeids: # dict: ikeid is the key !
+#    1:
+#      phase1: # dict
+#        descr: s2s ...
+#        iketype: ikev1
+#        interface: wan
+#        mode: main
+#        protocol: inet
+#        ...
+#        encryption-algorithm:
+#          name: aes 
+#          keylen: 256
+#      phase2_defaults: # common settings for all phase2 elements in this ikeid
+#        pfsgroup: 2
+#        lifetime: 3600
+#        protocol: esp 
+#        localid:
+#          type: lan 
+#        encryption-algorithm-options: # problematic like in unbound
+#          - name: aes 
+#            keylen: auto
+#          - name: blowfish
+#            keylen: auto
+#          - name: 3des 
+#        hash-algorithm-options:
+#          - hmac_md5
+#          - hmac_sha1
+#      phase2: # dict using the uniqid as key (see: http://php.net/uniqid or https://pypi.org/project/uniqid/)
+#        615472633b5ee:
+#          descr: ...
+#          pinghost: ...
+#          ...
+#          remoteid:
+#            type: network
+#            address: 192.168.0.0
+#            netbits: 24
+#        ...
+# ...
+
+- name: IPSec settings
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict:
+    - "{{ opn_ipsec | default({}) }}"
+  when:
+    - item.key != 'ikeids'
+
+- name: IPSec loop ikeids for phase1 ...
+  include_tasks: ipsecphase1.yml
+  vars:
+    ikeid: "{{ ikeids.key }}"
+    ipsecphasevar: "{{ ikeids.value }}"
+  with_dict:
+    - "{{ opn_ipsec.ikeids | default({}) }}"
+  loop_control:
+    loop_var: ikeids
+
+...
