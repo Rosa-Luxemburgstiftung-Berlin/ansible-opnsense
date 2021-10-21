@@ -39,6 +39,18 @@ Ansible command
 ---------------
     ansible-playbook -c paramiko firewalls.yml -l firewall1 -t user,fetch,copy,reload
 
+
+Sample Playbook
+---------------
+
+https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-playbook
+
+Other possible usefull ansible roles related to opnsense:
+
+  * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-facts
+  * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-checkmk
+
+
 License
 -------
 
@@ -50,3 +62,5 @@ Author Information
 - Rudi Broekhuizen - rudi.broekhuizen@naturalis.nl
 - Privazio - hello@privaz.io - https://github.com/privazio
 - Foppe Pieters - foppe.pieters@naturalis.nl
+- Klaus Zerwes - https://github.com/zerwes
+
