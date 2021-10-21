@@ -1,0 +1,36 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
+---
+
+- name: "IPSec ike phase1 for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase1[ikeid/text()='{{ ikeid }}']/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict:
+    - "{{ ipsecphasevar.phase1 | default({}) }}"
+  when:
+    - not item.key == 'encryption-algorithm'
+
+- name: "IPSec ike phase1 encryption-algorithm for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase1[ikeid/text()='{{ ikeid }}']/encryption-algorithm/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict:
+    - "{{ ipsecphasevar.phase1['encryption-algorithm'] | default({}) }}"
+
+- name: "loop IPSec ike phase2 for ikeid {{ ikeid }}"
+  include_tasks: ipsecphase2.yml
+  vars:
+    uniqid: "{{ p2.key }}"
+    ipsecphasevar2: "{{  ipsecphasevar.phase2 | combine({p2.key: ipsecphasevar.phase2_defaults|default({})}, recursive=true) }}"
+  with_dict:
+    - "{{ ipsecphasevar.phase2 }}"
+  loop_control:
+    loop_var: p2
+
+...

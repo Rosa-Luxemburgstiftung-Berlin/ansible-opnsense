@@ -1,0 +1,100 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
+---
+
+- name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict:
+    - "{{ ipsecphasevar2[uniqid] | default({}) }}"
+  when:
+    - not item.key == 'localid'
+    - not item.key == 'remoteid'
+    - not item.key == 'encryption-algorithm-options'
+    - not item.key == 'hash-algorithm-options'
+
+- name: "IPSec ike phase2 {{ uniqid }} localid for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/localid/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict:
+    - "{{ ipsecphasevar2[uniqid].localid | default({}) }}"
+
+- name: "IPSec ike phase2 {{ uniqid }} remoteid for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/remoteid/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict:
+    - "{{ ipsecphasevar2[uniqid].remoteid | default({}) }}"
+
+- name: "IPSec ike phase2 {{ uniqid }} encryption-algorithm-options for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option[name='{{ item.name }}']/keylen"
+    value: "{{ item.keylen }}"
+    pretty_print: yes
+  with_items:
+    - "{{ ipsecphasevar2[uniqid]['encryption-algorithm-options'] | default([]) }}"
+  when: item.keylen is defined
+
+- name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }} : get hash-algorithm-option count"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option"
+    count: yes
+  register: hashalgopt_count
+
+- name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }} : get hash-algorithm-option elements"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option"
+    content: text
+  register: hashalgopt
+  when: hashalgopt_count.count > 0
+
+- set_fact:
+    change_hashalgopt: True
+  with_items: "{{ hashalgopt.matches }}"
+  when:
+    - hashalgopt_count.count > 0
+    - ((item['hash-algorithm-option'] not in ipsecphasevar2[uniqid]['hash-algorithm-options']) or (ipsecphasevar2[uniqid]['hash-algorithm-options']|length) != (hashalgopt.matches|length))
+
+- set_fact:
+    change_hashalgopt: True
+  when: hashalgopt_count.count == 0 and ipsecphasevar2[uniqid]['hash-algorithm-options']|length > 0
+
+- name: "IPSec ike phase2 {{ uniqid }} reset hash-algorithm-options for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option"
+    state: absent
+    pretty_print: yes
+  when: change_hashalgopt | default(False)
+
+- name: "IPSec ike phase2 {{ uniqid }} hash-algorithm-options for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']"
+    add_children:
+      - hash-algorithm-option: "{{ item }}"
+    pretty_print: yes
+  with_items:
+    - "{{ ipsecphasevar2[uniqid]['hash-algorithm-options'] | default([]) }}"
+  when: change_hashalgopt | default(False)
+
+
+...
