@@ -40,6 +40,12 @@
   include: vpn.yml
   tags: vpn
 
+- name: IPSec
+  include: ipsec.yml
+  tags:
+    - vpn
+    - ipsec
+
 - name: interfaces
   include: interfaces.yml
   tags: interfaces
@@ -77,6 +83,10 @@
 - name: dhcpd
   include: dhcpd.yml
   tags: dhcpd
+
+- name: unbound
+  include: unbound.yml
+  tags: unbound
 
 - name: syslog
   include: syslog.yml

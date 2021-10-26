@@ -2,7 +2,7 @@
 - name: interfaces - remove interface
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item }}
     state: absent
     pretty_print: yes

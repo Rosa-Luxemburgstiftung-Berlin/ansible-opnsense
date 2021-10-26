@@ -42,11 +42,58 @@
   with_subelements:
     - "{{ opn_gateways | default([]) }}"
     - settings
+  when: item.0.name is not defined
+
+# in order to allow multiple GW definitions per iface
+# use a name per iface (should be the same as in settings
+# opn_gateways:
+#  - interface: fwlink
+#    name: GW_01
+#    settings:
+#      - key: gateway
+#        value: 192.168.0.2
+#      - key: name
+#        value: GW_01
+#      - key: weight
+#        value: 1
+#      - key: ipprotocol
+#        value: inet
+#  - interface: fwlink
+#    name: GW_02
+#    settings:
+#      - key: gateway
+#        value: 192.168.0.3
+#      - key: name
+#        value: GW_02
+#      - key: weight
+#        value: 1
+#      - key: ipprotocol
+#        value: inet
+
+# FIXME: in fact a definition as a dict would make like easier:
+#  - interface: fwlink
+#    name: GW_02
+#    gateway: 192.168.0.3
+#    weight: 1
+#    ipprotocol: inet
+
+
+- name: gateways with name per iface
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/gateways/gateway_item[interface/text()="{{ item.0.interface }}" and name/text()="{{ item.0.name }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_gateways | default([]) }}"
+    - settings
+  when: item.0.name is defined
 
 - name: gateway groups
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_group[name/text()="{{ item.name }}"]
     pretty_print: yes
   with_items: "{{ opn_gateway_groups | default([]) }}"
@@ -54,7 +101,7 @@
 - name: gateway groups settings
   delegate_to: localhost
   xml:
-    path: /tmp/config-{{ inventory_hostname }}.xml
+    path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_group[name/text()="{{ item.name }}"]
     set_children: "{{ item.settings  + [ {'name':item.name } ] }}"
     pretty_print: yes

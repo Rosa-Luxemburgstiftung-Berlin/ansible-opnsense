@@ -1,0 +1,200 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
+---
+
+# example definition
+#
+# opn_unbound:
+#   enable: 1
+#   forwarding: 1
+#   active_interface: lan
+#   noreglladdr6: 1
+#   regdhcp: 1
+#   serveexpired: 1
+#   ...
+#   domainoverrides: # list of domainoverrides dicts
+#     - domain: example.xor
+#       ip: 127.0..1.1
+#       descr: xtra domain  # descr is optional, but in order to work as expected
+#                           # please do yourself a favor and be consistent and use
+#                           # either in all entries or none of them
+#     ...
+#   acls: # list of acl dicts
+#     - aclname: dnsaclx # !!! please use uniq names !!!
+#       aclaction: allow
+#       description: dns acl for xtra
+#       rows:
+#         - acl_network: 172.0.0.0
+#           mask: 24
+#           description: this network # same restrictions as for domainoverrides descr
+#                                   # entries apply here
+#     ...
+
+
+- name: unbound general settings
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/{{ item.key }}
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict:
+    - "{{ opn_unbound | default({}) }}"
+  when:
+    - item.key != 'domainoverrides'
+    - item.key != 'acls'
+
+# unbound/domainoverrides
+
+- name: count unbound/domainoverrides
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/domainoverrides/domain
+    count: yes
+  register: configured_unbound_domainoverrides_count
+- debug:
+    var: configured_unbound_domainoverrides_count
+    verbosity: 1
+
+- name: get unbound/domainoverrides/domain entries
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/domainoverrides/domain
+    content: "text"
+  register: configured_unbound_domainoverrides_domain
+  when: configured_unbound_domainoverrides_count.count > 0
+- debug:
+    var: configured_unbound_domainoverrides_domain
+    verbosity: 1
+
+- name: get unbound/domainoverrides/ip entries
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/domainoverrides/ip
+    content: "text"
+  register: configured_unbound_domainoverrides_ip
+  when: configured_unbound_domainoverrides_count.count > 0
+- debug:
+    var: configured_unbound_domainoverrides_ip
+    verbosity: 1
+
+# descr is otional
+# FIXME: here the detection is not working in all cases
+# i.e. if you do not use descr in the first element of the
+# domainoverrides list
+- name: get unbound/domainoverrides/descr entries
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/domainoverrides/descr
+    content: "text"
+  ignore_errors: True
+  register: configured_unbound_domainoverrides_descr
+  when: configured_unbound_domainoverrides_count.count > 0
+- debug:
+    var: configured_unbound_domainoverrides_descr|default([])
+    verbosity: 1
+
+- name: init configured_unbound_domainoverrides
+  set_fact:
+    configured_unbound_domainoverrides: []
+
+- name: populate configured_unbound_domainoverrides
+  set_fact:
+    configured_unbound_domainoverrides: "[{% for domaindict in configured_unbound_domainoverrides_domain.matches %}{'domain':'{{ domaindict.domain }}','ip':'{{configured_unbound_domainoverrides_ip.matches[loop.index0].ip}}'{% if configured_unbound_domainoverrides_descr.matches[loop.index0].descr is defined and configured_unbound_domainoverrides_descr.matches[loop.index0].descr %},'descr':'{{ configured_unbound_domainoverrides_descr.matches[loop.index0].descr }}'{% endif %}},{% endfor %}]"
+  when: configured_unbound_domainoverrides_count.count > 0
+
+- name: debug configured_unbound_domainoverrides
+  debug:
+    var: configured_unbound_domainoverrides
+    verbosity: 1
+- name: debug opn_unbound.domainoverrides
+  debug:
+    var: opn_unbound.domainoverrides|default([])
+    verbosity: 1
+
+- name: compare configured and defined unbound domainoverrides
+  set_fact:
+    unbound_domainoverrides_delta: "{{ configured_unbound_domainoverrides | symmetric_difference(opn_unbound.domainoverrides|default([])) }}"
+- name: debug delta between configured and defined unbound domainoverrides
+  debug:
+    var: unbound_domainoverrides_delta
+    verbosity: 1
+- name: check if a update of unbound domainoverrides is required
+  set_fact:
+    unbound_domainoverrides_update: True
+  when: unbound_domainoverrides_delta | length > 0
+
+# opnsense uses one or more domainoverrides entries for one forward-zone
+# in unbound multiple entries for the same zone are merged into one forward-zone
+# with multiple forward-addr entries
+# so here we just have one chance: remove all domainoverrides and recreate them in a bulk
+- name: unbound domainoverrides
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound/domainoverrides
+    state: absent
+    pretty_print: yes
+  when: unbound_domainoverrides_update | default(False)
+
+- name: unbound domainoverrides
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/unbound
+    add_children: "[  {% for domainoverrides in opn_unbound.domainoverrides -%}'<domainoverrides>{% for k,v in domainoverrides.items()|list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</domainoverrides>', {%- endfor %} ]"
+    input_type: xml
+    pretty_print: yes
+  when:
+    - opn_unbound.domainoverrides is defined
+    - unbound_domainoverrides_update | default(False)
+
+# END unbound/domainoverrides
+
+# unbound/acls
+# assumes uniq names and doesn't clean up undefined ACLs
+# in order to remove stuff from the xml, use opn_unset
+
+- name: unbound acls aclaction
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/unbound/acls[aclname/text()='{{ item.aclname }}']/aclaction"
+    value: "{{ item.aclaction }}"
+    pretty_print: yes
+  with_items:
+    - "{{ opn_unbound.acls | default([]) }}"
+
+- name: unbound acls description
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/unbound/acls[aclname/text()='{{ item.aclname }}']/description"
+    value: "{{ item.description }}"
+    pretty_print: yes
+  with_items:
+    - "{{ opn_unbound.acls | default([]) }}"
+  when: item.description is defined
+
+# Invalid variable name in 'register' specified: 'configured_unbound_acls_rows_count['{{ item.0.aclname }}']'
+# FIXME use block with_items and nested loop in block
+
+- name: unbound acls rows
+  include_tasks: unboundaclsrows.yml
+  vars:
+    aclname: "{{ item.aclname }}"
+    rows: "{{ item.rows }}"
+  when: item.rows is defined
+  with_items:
+    - "{{ opn_unbound.acls | default([]) }}"
+
+# END unbound/acls
+
+- name: unboundplus
+  include_tasks: unboundplus.yml
+  when: opn_unboundplus is defined
+
+...

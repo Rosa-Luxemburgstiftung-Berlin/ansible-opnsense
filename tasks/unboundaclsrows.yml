@@ -1,0 +1,116 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
+---
+
+# required as ansible is not able to loop blocks
+
+- name: "count unbound acl {{ aclname }} rows"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/unbound/acls[aclname/text()='{{ aclname }}']/row"
+    count: yes
+  register: configured_unbound_acls_rows_count
+- name: "debug configured_unbound_acls_rows_count for {{ aclname }}"
+  debug:
+    var: configured_unbound_acls_rows_count
+    verbosity: 1
+
+- name: "get unbound acl {{ aclname }} row acl_network entries"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/unbound/acls[aclname/text()='{{ aclname }}']/row/acl_network"
+    content: "text"
+  register: configured_unbound_acls_acl_network
+  when: configured_unbound_acls_rows_count.count > 0
+- name: "debug configured_unbound_acls_acl_network for {{ aclname }}"
+  debug:
+    var: configured_unbound_acls_acl_network
+    verbosity: 1
+
+- name: "get unbound acl {{ aclname }} row mask entries"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/unbound/acls[aclname/text()='{{ aclname }}']/row/mask"
+    content: "text"
+  register: configured_unbound_acls_mask
+  when: configured_unbound_acls_rows_count.count > 0
+- name: "debug configured_unbound_acls_mask for {{ aclname }}"
+  debug:
+    var: configured_unbound_acls_mask
+    verbosity: 1
+
+# description is optional
+# FIXME: here the detection is not working in all cases
+# i.e. if you do not use descr in the first row element
+- name: "get unbound acl {{ aclname }} row description entries"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/unbound/acls[aclname/text()='{{ aclname }}']/row/description"
+    content: "text"
+  register: configured_unbound_acls_description
+  when: configured_unbound_acls_rows_count.count > 0
+- name: "debug configured_unbound_acls_description for {{ aclname }}"
+  debug:
+    var: configured_unbound_acls_description
+    verbosity: 1
+
+- name: "init configured_unbound_acls for {{ aclname }}"
+  set_fact:
+    configured_unbound_acls: []
+
+- name: "populate configured_unbound_acls for {{ aclname }}"
+  set_fact:
+    configured_unbound_acls: "[{% for acldict in configured_unbound_acls_acl_network.matches %}{'acl_network':'{{ acldict.acl_network }}','mask':{{configured_unbound_acls_mask.matches[loop.index0].mask}}{% if configured_unbound_acls_description.matches[loop.index0].description is defined and configured_unbound_acls_description.matches[loop.index0].description %},'description':'{{ configured_unbound_acls_description.matches[loop.index0].description }}'{% endif %}},{% endfor %}]"
+  when: configured_unbound_acls_rows_count.count > 0
+
+- name: "debug configured_unbound_acls for {{ aclname }}"
+  debug:
+    var: configured_unbound_acls
+    verbosity: 1
+- name: "debug acl rows for {{ aclname }}"
+  debug:
+    var: rows
+    verbosity: 1
+
+- name: "compare configured and defined acl rows for {{ aclname }}"
+  set_fact:
+    unbound_acls_delta: "{{ configured_unbound_acls | symmetric_difference(rows|default([])) }}"
+- name: "debug unbound_acls_delta for {{ aclname }}"
+  debug:
+    var: unbound_acls_delta
+    verbosity: 1
+
+- name: "check if a update of acl rows for {{ aclname }} is required"
+  set_fact:
+    unbound_acls_update: True
+  when: unbound_acls_delta | length > 0
+
+- name: "clean up acl rows for {{ aclname }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/unbound/acls[aclname/text()='{{ aclname }}']/row"
+    state: absent
+    pretty_print: yes
+  when: unbound_acls_update | default(False)
+
+- name: "debug acl rows for {{ aclname }}"
+  debug:
+    msg: "xml add_children: [ {% for row in rows -%}'<row>{% for k,v in row.items()|list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</row>',{%- endfor %} ]"
+    verbosity: 1
+- name: "set acl rows for {{ aclname }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/unbound/acls[aclname/text()='{{ aclname }}']"
+    add_children: "[ {% for row in rows -%}'<row>{% for k,v in row.items()|list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</row>',{%- endfor %} ]"
+    input_type: xml
+    pretty_print: yes
+  when:
+    - unbound_acls_update | default(False)
+    - rows is defined
+
+...
