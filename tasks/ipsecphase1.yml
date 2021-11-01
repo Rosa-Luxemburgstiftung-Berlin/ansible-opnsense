@@ -23,6 +23,42 @@
   with_dict:
     - "{{ ipsecphasevar.phase1['encryption-algorithm'] | default({}) }}"
 
+- name: "IPSec ike phase2 count ..."
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2"
+    count: yes
+  register: phase2_count
+- debug:
+    var: phase2_count
+    verbosity: 1
+
+- name: "IPSec ike phase2 : check {{ uniqid }} ikeid {{ ikeid }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}']/uniqid[text()='{{ item.key }}']"
+    count: yes
+  register: phase2ikeiduniqid_count
+  with_dict:
+    - "{{ ipsecphasevar.phase2 }}"
+- debug:
+    var: phase2ikeiduniqid_count
+    verbosity: 1
+
+- name: "IPSec ike phase2 set uniqid for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec"
+    add_children:
+      - "<phase2><ikeid>{{ ikeid }}</ikeid><uniqid>{{ item.item.key }}</uniqid></phase2>"
+    input_type: xml
+    pretty_print: yes
+  when: item.count == 0
+  with_items: "{{ phase2ikeiduniqid_count.results }}"
+
 - name: "loop IPSec ike phase2 for ikeid {{ ikeid }}"
   include_tasks: ipsecphase2.yml
   vars:

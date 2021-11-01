@@ -1,41 +1,6 @@
 # vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
 ---
 
-- name: "IPSec ike phase2 count ..."
-  delegate_to: localhost
-  xml:
-    path: "{{ local_config_path }}"
-    xpath: "/opnsense/ipsec/phase2"
-    count: yes
-  register: phase2_count
-
-- name: "IPSec ike phase2 init for ikeid {{ ikeid }}"
-  delegate_to: localhost
-  xml:
-    path: "{{ local_config_path }}"
-    xpath: "/opnsense/ipsec/phase2/ikeid"
-    value: "{{ ikeid }}"
-    pretty_print: yes
-  when: phase2_count.count == 0
-
-- name: "IPSec ike phase2 : check {{ uniqid }} ikeid {{ ikeid }}"
-  delegate_to: localhost
-  xml:
-    path: "{{ local_config_path }}"
-    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']"
-    count: yes
-  register: phase2ikeiduniqid_count
-
-- name: "IPSec ike phase2 set uniqid for ikeid {{ ikeid }}"
-  delegate_to: localhost
-  xml:
-    path: "{{ local_config_path }}"
-    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}']"
-    add_children:
-      - uniqid: "{{ uniqid }}"
-    pretty_print: yes
-  when: phase2ikeiduniqid_count.count == 0
-
 - name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }}"
   delegate_to: localhost
   xml:
