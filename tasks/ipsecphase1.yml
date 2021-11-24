@@ -63,7 +63,7 @@
   include_tasks: ipsecphase2.yml
   vars:
     uniqid: "{{ p2.key }}"
-    ipsecphasevar2: "{{  ipsecphasevar.phase2 | combine({p2.key: ipsecphasevar.phase2_defaults|default({})}, recursive=true) }}"
+    ipsecphasevar2: "{{  {p2.key: ipsecphasevar.phase2_defaults|default({})} | combine(ipsecphasevar.phase2, recursive=true) }}"
   with_dict:
     - "{{ ipsecphasevar.phase2 }}"
   loop_control:
