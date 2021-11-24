@@ -15,6 +15,19 @@
     - not item.key == 'remoteid'
     - not item.key == 'encryption-algorithm-options'
     - not item.key == 'hash-algorithm-options'
+    - not (item.key == 'disabled' and item.value|int == 0)
+
+- name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }} enable"
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/{{ item.key }}"
+    state: absent
+    pretty_print: yes
+  with_dict:
+    - "{{ ipsecphasevar2[uniqid] | default({}) }}"
+  when:
+    - item.key == 'disabled' and item.value|int == 0
 
 - name: "IPSec ike phase2 {{ uniqid }} localid for ikeid {{ ikeid }}"
   delegate_to: localhost
