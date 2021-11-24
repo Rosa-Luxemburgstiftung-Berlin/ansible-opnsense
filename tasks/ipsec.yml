@@ -20,6 +20,7 @@
 #          name: aes 
 #          keylen: 256
 #      phase2_defaults: # common settings for all phase2 elements in this ikeid
+#        #disabled: 0 # use this if you like to ensure all tunnels are enabled as long as they are not explicitly disabled
 #        pfsgroup: 2
 #        lifetime: 3600
 #        protocol: esp 
