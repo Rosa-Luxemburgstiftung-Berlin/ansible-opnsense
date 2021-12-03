@@ -32,6 +32,16 @@
 #       - descr: WAN gateway group
 #
 
+- name: remove default empty gateways node
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/gateways/gateway_item[not(node())]
+    state: absent
+  when:
+    - opn_gateways is defined
+    - opn_gateways | length > 0
+
 - name: gateways
   delegate_to: localhost
   xml:
