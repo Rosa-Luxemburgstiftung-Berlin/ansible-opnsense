@@ -46,6 +46,13 @@
     - vpn
     - ipsec
 
+- name: wireguard
+  include: wireguard.yml
+  tags:
+    - vpn
+    - wg
+    - wireguard
+
 - name: interfaces
   include: interfaces.yml
   tags: interfaces
