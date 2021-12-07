@@ -1,0 +1,28 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
+---
+
+# this role requires that the os-wireguard plugin is installed
+# you can use
+# https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-plugpack
+# for this if you like
+
+# definition:
+# opn_wireguard:
+#   general:
+#     enabled: 1
+#   servers:
+#   
+#   clients:
+# ...
+
+- name: wireguard general settings
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/wireguard/general/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict:
+    - "{{ opn_wireguard.general | default({}) }}"
+
+...
