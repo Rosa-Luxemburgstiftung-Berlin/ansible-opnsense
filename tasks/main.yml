@@ -47,7 +47,7 @@
     - ipsec
 
 - name: wireguard
-  include: wireguard.yml
+  include_tasks: wireguard.yml
   tags:
     - vpn
     - wg
