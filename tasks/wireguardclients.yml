@@ -1,0 +1,28 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
+---
+
+- name: wireguard clients settings
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/wireguard/client/clients/client[@uuid='{{ uuid }}']/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  when:
+    - item.key not in ['tunneladdress'] or item.value is string
+  with_dict:
+    - "{{ clientscfg | default({}) }}"
+
+- name: wireguard clients settings with list elements
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/wireguard/client/clients/client[@uuid='{{ uuid }}']/{{ item.key }}"
+    value: "{{ item.value | join(',') }}"
+    pretty_print: yes
+  when:
+    - item.key in ['tunneladdress'] and not item.value is string
+  with_dict:
+    - "{{ clientscfg | default({}) }}"
+
+...

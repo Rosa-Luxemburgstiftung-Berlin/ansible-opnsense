@@ -1,3 +1,4 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu
 ---
 #- name: Download OPNsense XML sample config
 #  get_url:
@@ -45,6 +46,17 @@
   tags:
     - vpn
     - ipsec
+
+- name: wireguard
+  include_tasks:
+    file: wireguard.yml
+    apply:
+      tags:
+        - vpn
+        - wg
+        - wireguard
+  tags:
+    - always
 
 - name: interfaces
   include: interfaces.yml
