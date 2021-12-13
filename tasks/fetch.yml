@@ -1,7 +1,7 @@
 ---
 - name: fetch
   fetch:
-    src: /conf/config.xml
+    src: "{{ config_path }}"
     dest: "{{ local_config_path }}"
     flat: yes
     backup: yes

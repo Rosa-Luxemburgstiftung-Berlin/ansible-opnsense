@@ -1,4 +1,4 @@
-# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent
 ---
 #- name: Download OPNsense XML sample config
 #  get_url:
@@ -6,43 +6,46 @@
 #    dest: /tmp/config.xml
 
 - name: fetch
-  include: fetch.yml
+  include_tasks: fetch.yml
   tags: fetch
 
 - name: dnsserver
-  include: dnsserver.yml
+  include_tasks: dnsserver.yml
   tags: dnsserver
 
 - name: user
-  include: user.yml
+  include_tasks: user.yml
   tags: user
   
 - name: group
-  include: group.yml
+  include_tasks: group.yml
   tags: group
 
 - name: general
-  include: general.yml
+  include_tasks: general.yml
   tags: general
 
 #- name: sysctl
-#  include: sysctl.yml
+#  include_tasks: sysctl.yml
 #  tags: sysctl
 
 - name: authservers
-  include: authservers.yml
+  include_tasks: authservers.yml
   tags: authservers
 
 - name: CAs
-  include: ca.yml
-  tags: ca
+  include_tasks: ca.yml
+  tags:
+    - ca
+    - cert
+    - certificates
 
 - name: VPN
-  include: vpn.yml
+  include_tasks: vpn.yml
   tags: vpn
 
 - name: IPSec
-  include: ipsec.yml
+  include_tasks: ipsec.yml
   tags:
     - vpn
     - ipsec
@@ -59,61 +62,61 @@
     - always
 
 - name: interfaces
-  include: interfaces.yml
+  include_tasks: interfaces.yml
   tags: interfaces
 
 - name: vlans
-  include: vlans.yml
+  include_tasks: vlans.yml
   tags: vlans
   when: opn_interfaces_vlan_parent_interface is defined
 
 - name: bridges
-  include: bridges.yml
+  include_tasks: bridges.yml
   tags: bridges
   
 - name: virtualip
-  include: virtualip.yml
+  include_tasks: virtualip.yml
   tags: virtualip
 
 - name: alias
-  include: alias.yml
+  include_tasks: alias.yml
   tags: alias
 
 - name: filter
-  include: filter.yml
+  include_tasks: filter.yml
   tags: filter
   
 - name: gateways
-  include: gateways.yml
+  include_tasks: gateways.yml
   #when: prod | default([])
   tags: gateways 
 
 - name: hasync
-  include: hasync.yml
+  include_tasks: hasync.yml
   tags: hasync
 
 - name: dhcpd
-  include: dhcpd.yml
+  include_tasks: dhcpd.yml
   tags: dhcpd
 
 - name: unbound
-  include: unbound.yml
+  include_tasks: unbound.yml
   tags: unbound
 
 - name: syslog
-  include: syslog.yml
+  include_tasks: syslog.yml
   tags: syslog
 
 - name: staticroutes
-  include: staticroutes.yml
+  include_tasks: staticroutes.yml
   tags: staticroutes
 
 - name: nat
-  include: nat.yml
+  include_tasks: nat.yml
   tags: nat
 
 - name: laggs
-  include: laggs.yml
+  include_tasks: laggs.yml
   tags: laggs
 
 - name: trim EOF
@@ -148,11 +151,26 @@
   delegate_to: localhost
   shell: srm "{{ local_config_path }}"
   tags: clean
+  when: delete_local_xml_file|default(False)
+
+- name: sync
+  command: "{{ item }}"
+  throttle: 1
+  #loop_control:
+  #  pause: 3
+  with_items:
+    - configctl filter sync
+  when: config.changed
+  tags:
+    - sync
+    - copy
 
 - name: reload
   command: "{{ item }}"
+  throttle: 1
+  #loop_control:
+  #  pause: 3
   with_items:
-    - configctl filter sync
     - configctl service reload all
     - configctl webgui restart
   when: config.changed
