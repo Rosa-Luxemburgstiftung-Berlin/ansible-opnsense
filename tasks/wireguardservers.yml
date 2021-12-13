@@ -1,0 +1,28 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
+---
+
+- name: wireguard servers settings
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/wireguard/server/servers/server[@uuid={{ uuid }}]/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  when:
+    - item.key not in ['tunneladdress', 'peers'] or item.key is string
+  with_dict:
+    - "{{ serverscfg | default({}) }}"
+
+- name: wireguard servers settings with list elements
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/wireguard/server/servers/server[@uuid={{ uuid }}]/{{ item.key }}"
+    value: "{{ item.value | join(',')}}"
+    pretty_print: yes
+  when:
+    - item.key in ['tunneladdress', 'peers'] and not item.key is string
+  with_dict:
+    - "{{ serverscfg | default({}) }}"
+
+...

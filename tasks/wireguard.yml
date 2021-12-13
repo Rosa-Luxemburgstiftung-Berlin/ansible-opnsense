@@ -11,9 +11,18 @@
 #   general:
 #     enabled: 1
 #   servers:
-#   
+#     $UUID:
+#       tunneladdress: string or list
+#       peers: string or list of client UUIDs
+#       key: value
+#       ...
 #   clients:
-# ...
+#     $UUID:
+#       tunneladdress: string or list
+#       key: value
+#       ...
+#
+
 
 - name: wireguard general settings
   delegate_to: localhost
@@ -24,5 +33,25 @@
     pretty_print: yes
   with_dict:
     - "{{ opn_wireguard.general | default({}) }}"
+
+- name: configure wireguard servers
+  include_tasks: wireguardservers.yml
+  vars:
+    uuid: "{{ servers.key }}"
+    servercfg: "{{ servers.value }}"
+  with_dict:
+    - "{{ opn_wireguard.servers | default({}) }}"
+  loop_control:
+    loop_var: servers
+
+- name: configure wireguard clients
+  include_tasks: wireguardclients.yml
+  vars:
+    uuid: "{{ clients.key }}"
+    clientscfg: "{{ clients.value }}"
+  with_dict:
+    - "{{ opn_wireguard.clients | default({}) }}"
+  loop_control:
+    loop_var: clients
 
 ...
