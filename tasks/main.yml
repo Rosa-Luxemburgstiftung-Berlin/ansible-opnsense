@@ -50,6 +50,17 @@
     - vpn
     - ipsec
 
+- name: wireguard
+  include_tasks:
+    file: wireguard.yml
+    apply:
+      tags:
+        - vpn
+        - wg
+        - wireguard
+  tags:
+    - always
+
 - name: interfaces
   include_tasks: interfaces.yml
   tags: interfaces
