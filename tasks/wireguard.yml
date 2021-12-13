@@ -23,12 +23,11 @@
 #       ...
 #
 
-
 - name: wireguard general settings
   delegate_to: localhost
   xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/wireguard/general/{{ item.key }}"
+    xpath: "/opnsense/OPNsense/wireguard/general/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes
   with_dict:
@@ -38,7 +37,7 @@
   include_tasks: wireguardservers.yml
   vars:
     uuid: "{{ servers.key }}"
-    servercfg: "{{ servers.value }}"
+    serverscfg: "{{ servers.value }}"
   with_dict:
     - "{{ opn_wireguard.servers | default({}) }}"
   loop_control:

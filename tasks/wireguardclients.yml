@@ -5,7 +5,7 @@
   delegate_to: localhost
   xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/wireguard/client/clients/client[@uuid={{ uuid }}]/{{ item.key }}"
+    xpath: "/opnsense/OPNsense/wireguard/client/clients/client[@uuid='{{ uuid }}']/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes
   when:
@@ -17,7 +17,7 @@
   delegate_to: localhost
   xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/wireguard/client/clients/client[@uuid={{ uuid }}]/{{ item.key }}"
+    xpath: "/opnsense/OPNsense/wireguard/client/clients/client[@uuid='{{ uuid }}']/{{ item.key }}"
     value: "{{ item.value | join(',') }}"
     pretty_print: yes
   when:
