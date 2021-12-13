@@ -6,104 +6,202 @@
 #    dest: /tmp/config.xml
 
 - name: fetch
-  include_tasks: fetch.yml
-  tags: fetch
+  tags:
+    - always
+  include_tasks:
+    file: fetch.yml
+    apply:
+      tags: fetch
 
 - name: dnsserver
-  include_tasks: dnsserver.yml
-  tags: dnsserver
+  tags:
+    - always
+  include_tasks:
+    file: dnsserver.yml
+    apply:
+      tags: dnsserver
 
 - name: user
-  include_tasks: user.yml
-  tags: user
+  tags:
+    - always
+  include_tasks:
+    file: user.yml
+    apply:
+      tags: user
   
 - name: group
-  include_tasks: group.yml
-  tags: group
+  tags:
+    - always
+  include_tasks:
+    file: group.yml
+    apply:
+      tags: group
 
 - name: general
-  include_tasks: general.yml
-  tags: general
+  tags:
+    - always
+  include_tasks:
+    file: general.yml
+    apply:
+      tags: general
 
 #- name: sysctl
-#  include_tasks: sysctl.yml
-#  tags: sysctl
+#  tags:
+#    - always
+#  include_tasks:
+#    file: sysctl.yml
+#    apply:
+#      tags: sysctl
 
 - name: authservers
-  include_tasks: authservers.yml
-  tags: authservers
+  tags:
+    - always
+  include_tasks:
+    file: authservers.yml
+    apply:
+      tags: authservers
 
 - name: CAs
-  include_tasks: ca.yml
-  tags: ca
+  tags:
+    - always
+  include_tasks:
+    file: ca.yml
+    apply:
+      tags: ca
 
 - name: VPN
-  include_tasks: vpn.yml
-  tags: vpn
+  tags:
+    - always
+  include_tasks:
+    file: vpn.yml
+    apply:
+      tags:
+        - openvpn
+        - vpn
 
 - name: IPSec
-  include_tasks: ipsec.yml
   tags:
-    - vpn
-    - ipsec
+    - always
+  include_tasks:
+    file: ipsec.yml
+    apply:
+      tags:
+        - vpn
+        - ipsec
 
 - name: interfaces
-  include_tasks: interfaces.yml
-  tags: interfaces
+  tags:
+    - always
+  include_tasks:
+    file: interfaces.yml
+    apply:
+      tags: interfaces
 
 - name: vlans
-  include_tasks: vlans.yml
-  tags: vlans
+  tags:
+    - always
+  include_tasks:
+    file: vlans.yml
+    apply:
+      tags: vlans
   when: opn_interfaces_vlan_parent_interface is defined
 
 - name: bridges
-  include_tasks: bridges.yml
-  tags: bridges
+  tags:
+    - always
+  include_tasks:
+    file: bridges.yml
+    apply:
+      tags: bridges
   
 - name: virtualip
-  include_tasks: virtualip.yml
-  tags: virtualip
+  tags:
+    - always
+  include_tasks:
+    file: virtualip.yml
+    apply:
+      tags: virtualip
 
 - name: alias
-  include_tasks: alias.yml
-  tags: alias
+  tags:
+    - always
+  include_tasks:
+    file: alias.yml
+    apply:
+      tags: alias
 
 - name: filter
-  include_tasks: filter.yml
-  tags: filter
+  tags:
+    - always
+  include_tasks:
+    file: filter.yml
+    apply:
+      tags: filter
   
 - name: gateways
-  include_tasks: gateways.yml
+  tags:
+    - always
+  include_tasks:
+    file: gateways.yml
+    apply:
+      tags: gateways 
   #when: prod | default([])
-  tags: gateways 
 
 - name: hasync
-  include_tasks: hasync.yml
-  tags: hasync
+  tags:
+    - always
+  include_tasks:
+    file: hasync.yml
+    apply:
+      tags: hasync
 
 - name: dhcpd
-  include_tasks: dhcpd.yml
-  tags: dhcpd
+  tags:
+    - always
+  include_tasks:
+    file: dhcpd.yml
+    apply:
+      tags: dhcpd
 
 - name: unbound
-  include_tasks: unbound.yml
-  tags: unbound
+  tags:
+    - always
+  include_tasks:
+    file: unbound.yml
+    apply:
+      tags: unbound
 
 - name: syslog
-  include_tasks: syslog.yml
-  tags: syslog
+  tags:
+    - always
+  include_tasks:
+    file: syslog.yml
+    apply:
+      tags: syslog
 
 - name: staticroutes
-  include_tasks: staticroutes.yml
-  tags: staticroutes
+  tags:
+    - always
+  include_tasks:
+    file: staticroutes.yml
+    apply:
+      tags: staticroutes
 
 - name: nat
-  include_tasks: nat.yml
-  tags: nat
+  tags:
+    - always
+  include_tasks:
+    file: nat.yml
+    apply:
+      tags: nat
 
 - name: laggs
-  include_tasks: laggs.yml
-  tags: laggs
+  tags:
+    - always
+  include_tasks:
+    file: laggs.yml
+    apply:
+      tags: laggs
 
 - name: trim EOF
   delegate_to: localhost
