@@ -67,7 +67,10 @@
   include_tasks:
     file: ca.yml
     apply:
-      tags: ca
+      tags:
+        - ca
+        - cert
+        - certificates
 
 - name: VPN
   tags:
@@ -88,6 +91,17 @@
       tags:
         - vpn
         - ipsec
+
+- name: wireguard
+  include_tasks:
+    file: wireguard.yml
+    apply:
+      tags:
+        - vpn
+        - wg
+        - wireguard
+  tags:
+    - always
 
 - name: interfaces
   tags:
@@ -235,11 +249,26 @@
   delegate_to: localhost
   shell: srm "{{ local_config_path }}"
   tags: clean
+  when: delete_local_xml_file|default(False)
+
+- name: sync
+  command: "{{ item }}"
+  throttle: 1
+  #loop_control:
+  #  pause: 3
+  with_items:
+    - configctl filter sync
+  when: config.changed
+  tags:
+    - sync
+    - copy
 
 - name: reload
   command: "{{ item }}"
+  throttle: 1
+  #loop_control:
+  #  pause: 3
   with_items:
-    - configctl filter sync
     - configctl service reload all
     - configctl webgui restart
   when: config.changed

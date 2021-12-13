@@ -49,6 +49,8 @@ Other possible usefull ansible roles related to opnsense:
 
   * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-facts
   * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-checkmk
+  * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-plugpack
+  * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-update
 
 
 License

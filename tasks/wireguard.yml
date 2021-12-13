@@ -1,0 +1,56 @@
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
+---
+
+# this role requires that the os-wireguard plugin is installed
+# you can use
+# https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-plugpack
+# for this if you like
+
+# definition:
+# opn_wireguard:
+#   general:
+#     enabled: 1
+#   servers:
+#     $UUID:
+#       tunneladdress: string or list
+#       peers: string or list of client UUIDs
+#       key: value
+#       ...
+#   clients:
+#     $UUID:
+#       tunneladdress: string or list
+#       key: value
+#       ...
+#
+
+- name: wireguard general settings
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/wireguard/general/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict:
+    - "{{ opn_wireguard.general | default({}) }}"
+
+- name: configure wireguard servers
+  include_tasks: wireguardservers.yml
+  vars:
+    uuid: "{{ servers.key }}"
+    serverscfg: "{{ servers.value }}"
+  with_dict:
+    - "{{ opn_wireguard.servers | default({}) }}"
+  loop_control:
+    loop_var: servers
+
+- name: configure wireguard clients
+  include_tasks: wireguardclients.yml
+  vars:
+    uuid: "{{ clients.key }}"
+    clientscfg: "{{ clients.value }}"
+  with_dict:
+    - "{{ opn_wireguard.clients | default({}) }}"
+  loop_control:
+    loop_var: clients
+
+...
