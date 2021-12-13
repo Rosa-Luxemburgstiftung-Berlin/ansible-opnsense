@@ -9,7 +9,7 @@
     value: "{{ item.value }}"
     pretty_print: yes
   when:
-    - item.key not in ['tunneladdress', 'peers'] or item.key is string
+    - item.key not in ['tunneladdress', 'peers'] or item.value is string
   with_dict:
     - "{{ serverscfg | default({}) }}"
 
@@ -21,7 +21,7 @@
     value: "{{ item.value | join(',')}}"
     pretty_print: yes
   when:
-    - item.key in ['tunneladdress', 'peers'] and not item.key is string
+    - item.key in ['tunneladdress', 'peers'] and not item.value is string
   with_dict:
     - "{{ serverscfg | default({}) }}"
 
