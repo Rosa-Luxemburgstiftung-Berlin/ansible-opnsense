@@ -36,7 +36,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound/{{ item.key }}
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict:
     - "{{ opn_unbound | default({}) }}"
   when:
@@ -50,9 +50,11 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound/domainoverrides/domain
-    count: yes
+    count: true
   register: configured_unbound_domainoverrides_count
-- ansible.builtin.debug:
+
+- name: debug configured_unbound_domainoverrides_count
+  ansible.builtin.debug:
     var: configured_unbound_domainoverrides_count
     verbosity: 1
 
@@ -64,7 +66,9 @@
     content: "text"
   register: configured_unbound_domainoverrides_domain
   when: configured_unbound_domainoverrides_count.count > 0
-- ansible.builtin.debug:
+
+- name: debug configured_unbound_domainoverrides_domain
+  ansible.builtin.debug:
     var: configured_unbound_domainoverrides_domain
     verbosity: 1
 
@@ -76,7 +80,9 @@
     content: "text"
   register: configured_unbound_domainoverrides_ip
   when: configured_unbound_domainoverrides_count.count > 0
-- ansible.builtin.debug:
+
+- name: denug configured_unbound_domainoverrides_ip
+  ansible.builtin.debug:
     var: configured_unbound_domainoverrides_ip
     verbosity: 1
 
@@ -90,10 +96,12 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound/domainoverrides/descr
     content: "text"
-  ignore_errors: True
+  ignore_errors: true
   register: configured_unbound_domainoverrides_descr
   when: configured_unbound_domainoverrides_count.count > 0
-- ansible.builtin.debug:
+
+- name: debug configured_unbound_domainoverrides_descr
+  ansible.builtin.debug:
     var: configured_unbound_domainoverrides_descr|default([])
     verbosity: 1
 
@@ -103,7 +111,18 @@
 
 - name: populate configured_unbound_domainoverrides
   ansible.builtin.set_fact:
-    configured_unbound_domainoverrides: "[{% for domaindict in configured_unbound_domainoverrides_domain.matches %}{'domain':'{{ domaindict.domain }}','ip':'{{configured_unbound_domainoverrides_ip.matches[loop.index0].ip}}'{% if configured_unbound_domainoverrides_descr.matches[loop.index0].descr is defined and configured_unbound_domainoverrides_descr.matches[loop.index0].descr %},'descr':'{{ configured_unbound_domainoverrides_descr.matches[loop.index0].descr }}'{% endif %}},{% endfor %}]"
+    configured_unbound_domainoverrides: "[
+        {% for domaindict in configured_unbound_domainoverrides_domain.matches %}
+          {
+            'domain':'{{ domaindict.domain }}',
+            'ip':'{{ configured_unbound_domainoverrides_ip.matches[loop.index0].ip }}'
+            {% if configured_unbound_domainoverrides_descr.matches[loop.index0].descr is defined
+              and configured_unbound_domainoverrides_descr.matches[loop.index0].descr %}
+              ,'descr':'{{ configured_unbound_domainoverrides_descr.matches[loop.index0].descr }}'
+            {% endif %}
+          },
+        {% endfor %}
+      ]"
   when: configured_unbound_domainoverrides_count.count > 0
 
 - name: debug configured_unbound_domainoverrides
@@ -124,7 +143,7 @@
     verbosity: 1
 - name: check if a update of unbound domainoverrides is required
   ansible.builtin.set_fact:
-    unbound_domainoverrides_update: True
+    unbound_domainoverrides_update: true
   when: unbound_domainoverrides_delta | length > 0
 
 # opnsense uses one or more domainoverrides entries for one forward-zone
@@ -137,7 +156,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound/domainoverrides
     state: absent
-    pretty_print: yes
+    pretty_print: true
   when: unbound_domainoverrides_update | default(False)
 
 - name: unbound domainoverrides
@@ -145,9 +164,9 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound
-    add_children: "[  {% for domainoverrides in opn_unbound.domainoverrides -%}'<domainoverrides>{% for k,v in domainoverrides.items()|list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</domainoverrides>', {%- endfor %} ]"
+    add_children: "[ {% for domainoverrides in opn_unbound.domainoverrides -%}'<domainoverrides>{% for k,v in domainoverrides.items()|list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</domainoverrides>', {%- endfor %} ]"  # noqa line-length
     input_type: xml
-    pretty_print: yes
+    pretty_print: true
   when:
     - opn_unbound.domainoverrides is defined
     - unbound_domainoverrides_update | default(False)
@@ -164,7 +183,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/unbound/acls[aclname/text()='{{ item.aclname }}']/aclaction"
     value: "{{ item.aclaction }}"
-    pretty_print: yes
+    pretty_print: true
   with_items:
     - "{{ opn_unbound.acls | default([]) }}"
 
@@ -174,7 +193,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/unbound/acls[aclname/text()='{{ item.aclname }}']/description"
     value: "{{ item.description }}"
-    pretty_print: yes
+    pretty_print: true
   with_items:
     - "{{ opn_unbound.acls | default([]) }}"
   when: item.description is defined
