@@ -1,7 +1,9 @@
 ansible-opnsense
 =========
 
-Ansible role to configure OPNsense firewalls
+Ansible role to configure OPNsense firewalls.
+
+This is the [RLS](https://github.com/Rosa-Luxemburgstiftung-Berlin) fork of the original from https://github.com/naturalis/ansible-opnsense.
 
 Requirements
 ------------
@@ -13,12 +15,14 @@ Role Variables
 
 An example: https://github.com/naturalis/oss-network-demo/tree/master/ansible/basic
 
+[TODO #14](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/issues/14) up to date example
+
 Dependencies
 ------------
 
     sudo pip install lxml
     sudo pip3 install lxml
-    sudo apt install secure-delete
+    sudo apt install secure-delete (optional)
     
 Example Playbook
 ----------------
@@ -37,7 +41,7 @@ Become on play level is not needed for XML changes on localhost only for tasks t
 
 Ansible command
 ---------------
-    ansible-playbook -c paramiko firewalls.yml -l firewall1 -t user,fetch,copy,reload
+    ansible-playbook firewalls.yml -l firewall1 -t user,fetch,copy,reload
 
 
 Sample Playbook
