@@ -6,7 +6,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/user[name/text()="{{ item.0.name }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_user | default([]) }}"
     - settings
@@ -18,7 +18,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/user[name/text()="{{ item.0.name }}"]/{{ item.1.key }}
     value: "{{ item.1.b64_value | b64encode }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_user | default([]) }}"
     - settings
@@ -30,7 +30,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict: "{{ opn_nextid }}"
   when: opn_nextid is defined
 ...
