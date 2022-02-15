@@ -16,7 +16,7 @@
 #         - key: level
 #           value: info,notice,warn,err,crit,alert,emerg
 #         - key: facility
-#           value: kern,user,mail,daemon,auth,syslog,lpr,news,uucp,cron,authpriv,ftp,ntp,security,console,local0,local1,local2,local3,local4,local5,local6,local7
+#           value: kern,user,mail,daemon,auth,syslog,lpr,news,uucp,cron,authpriv,ftp,ntp,security,console,local0,local1,local2,local3,local4,local5,local6,local7  # noqa line-length
 #         - key: hostname
 #           value: IP
 #         - key: port
@@ -31,7 +31,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/Syslog/general/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict: "{{ opn_syslog.general | default({}) }}"
   when: opn_syslog is defined
 
@@ -41,7 +41,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/Syslog/destinations/destination[@uuid=\"{{ item.0.uuid }}\"]/{{ item.1.key }}"
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_syslog.destinations | default([]) }}"
     - settings
