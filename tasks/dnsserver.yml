@@ -4,7 +4,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/dnsserver
-    count: yes
+    count: true
   register: dnsservercount
 
 - name: Get dnsservers set
@@ -16,13 +16,15 @@
   register: configured_dnsserver
   when: dnsservercount.count > 0
 
-- ansible.builtin.set_fact:
-    change_dns: True
+- name: register fact change_dns
+  ansible.builtin.set_fact:
+    change_dns: true
   with_items: "{{ configured_dnsserver.matches }}"
   when: dnsservercount.count > 0 and ((item.dnsserver not in dnsserver) or (dnsserver|length) != (configured_dnsserver.matches|length))
 
-- ansible.builtin.set_fact:
-    change_dns: True
+- name: register fact change_dns
+  ansible.builtin.set_fact:
+    change_dns: true
   when: dnsservercount.count == 0 and dnsserver|length > 0
 
 - name: Reset dnsservers
@@ -31,7 +33,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/dnsserver
     state: absent
-    pretty_print: yes
+    pretty_print: true
   when: change_dns | default(False)
 
 - name: Dnsservers
@@ -39,17 +41,19 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/system
-    add_children: 
+    add_children:
       - dnsserver: "{{ item }}"
-    pretty_print: yes
+    pretty_print: true
   when: change_dns | default(False)
-  with_items: 
+  with_items:
     "{{ dnsserver }}"
 
-- ansible.builtin.set_fact:
+- name: register fact dnsallowoverride_state
+  ansible.builtin.set_fact:
     dnsallowoverride_state: "present"
   when: dnsallowoverride | default(True)
-- ansible.builtin.set_fact:
+- name: register fact dnsallowoverride_state
+  ansible.builtin.set_fact:
     dnsallowoverride_state: "absent"
   when: not (dnsallowoverride | default(True))
 
@@ -59,7 +63,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/dnsallowoverride
     state: "{{ dnsallowoverride_state }}"
-    pretty_print: yes
+    pretty_print: true
 
 - name: Use the local DNS service as a nameserver for this system
   delegate_to: localhost
@@ -67,7 +71,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/dnslocalhost
     value: "1"
-    pretty_print: yes
+    pretty_print: true
   when: dnslocalhost | default(False)
 
 - name: Do not use the local DNS service as a nameserver for this system
@@ -76,6 +80,6 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/dnslocalhost
     state: absent
-    pretty_print: yes
+    pretty_print: true
   when: not (dnslocalhost | default(False))
 ...
