@@ -1,5 +1,5 @@
 ---
-#vars:
+# vars:
 #  opn_hasync:
 #    - pfsyncenabled: "on"
 #    - username: "root"
@@ -11,6 +11,6 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/hasync/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict: "{{ opn_hasync | default([]) }}"
 ...
