@@ -7,7 +7,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase1[ikeid/text()='{{ ikeid }}']/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict:
     - "{{ ipsecphasevar.phase1 | default({}) }}"
   when:
@@ -19,7 +19,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase1[ikeid/text()='{{ ikeid }}']/encryption-algorithm/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict:
     - "{{ ipsecphasevar.phase1['encryption-algorithm'] | default({}) }}"
 
@@ -28,9 +28,10 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2"
-    count: yes
+    count: true
   register: phase2_count
-- ansible.builtin.debug:
+- name: debug phase2_count
+  ansible.builtin.debug:
     var: phase2_count
     verbosity: 1
 
@@ -39,11 +40,12 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}']/uniqid[text()='{{ item.key }}']"
-    count: yes
+    count: true
   register: phase2ikeiduniqid_count
   with_dict:
     - "{{ ipsecphasevar.phase2 }}"
-- ansible.builtin.debug:
+- name: debug phase2ikeiduniqid_count
+  ansible.builtin.debug:
     var: phase2ikeiduniqid_count
     verbosity: 1
 
@@ -55,7 +57,7 @@
     add_children:
       - "<phase2><ikeid>{{ ikeid }}</ikeid><uniqid>{{ item.item.key }}</uniqid></phase2>"
     input_type: xml
-    pretty_print: yes
+    pretty_print: true
   when: item.count == 0
   with_items: "{{ phase2ikeiduniqid_count.results }}"
 
