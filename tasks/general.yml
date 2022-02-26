@@ -5,7 +5,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict: "{{ opn_general }}"
   when: opn_general is defined
 
