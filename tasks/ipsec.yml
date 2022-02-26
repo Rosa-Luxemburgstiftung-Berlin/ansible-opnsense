@@ -2,50 +2,50 @@
 ---
 
 # definition:
-#opn_ipsec:
-#  enable: 1
-#  ipsec_asn: 1
-#  ipsec_chd: 1
-#  ... # other globalsettings like passthrough_networks, ...
-#  ikeids: # dict: ikeid is the key !
-#    1:
-#      phase1: # dict
-#        descr: s2s ...
-#        iketype: ikev1
-#        interface: wan
-#        mode: main
-#        protocol: inet
-#        ...
-#        encryption-algorithm:
-#          name: aes 
-#          keylen: 256
-#      phase2_defaults: # common settings for all phase2 elements in this ikeid
-#        #disabled: 0 # use this if you like to ensure all tunnels are enabled as long as they are not explicitly disabled
-#        pfsgroup: 2
-#        lifetime: 3600
-#        protocol: esp 
-#        localid:
-#          type: lan 
-#        encryption-algorithm-options:
-#          - name: aes 
-#            keylen: auto
-#          - name: blowfish
-#            keylen: auto
-#          - name: 3des 
-#        hash-algorithm-options:
-#          - hmac_md5
-#          - hmac_sha1
-#      phase2: # dict using the uniqid as key (see: http://php.net/uniqid or https://pypi.org/project/uniqid/)
-#        615472633b5ee:
-#          #disabled: 1 # this way you can disable a phase2 entry without deleting it; a disabled p2 entry must be enabled by explicitly setting disabled: 0
-#          descr: ...
-#          pinghost: ...
-#          ...
-#          remoteid:
-#            type: network
-#            address: 192.168.0.0
-#            netbits: 24
-#        ...
+# opn_ipsec:
+#   enable: 1
+#   ipsec_asn: 1
+#   ipsec_chd: 1
+#   ... # other globalsettings like passthrough_networks, ...
+#   ikeids: # dict: ikeid is the key !
+#     1:
+#       phase1: # dict
+#         descr: s2s ...
+#         iketype: ikev1
+#         interface: wan
+#         mode: main
+#         protocol: inet
+#         ...
+#         encryption-algorithm:
+#           name: aes
+#           keylen: 256
+#       phase2_defaults: # common settings for all phase2 elements in this ikeid
+#         #disabled: 0 # use this if you like to ensure all tunnels are enabled as long as they are not explicitly disabled
+#         pfsgroup: 2
+#         lifetime: 3600
+#         protocol: esp
+#         localid:
+#           type: lan
+#         encryption-algorithm-options:
+#           - name: aes
+#             keylen: auto
+#           - name: blowfish
+#             keylen: auto
+#           - name: 3des
+#         hash-algorithm-options:
+#           - hmac_md5
+#           - hmac_sha1
+#       phase2: # dict using the uniqid as key (see: http://php.net/uniqid or https://pypi.org/project/uniqid/)
+#         615472633b5ee:
+#           #disabled: 1 # this way you can disable a phase2 entry without deleting it; a disabled p2 entry must be enabled by explicitly setting disabled: 0
+#           descr: ...
+#           pinghost: ...
+#           ...
+#           remoteid:
+#             type: network
+#             address: 192.168.0.0
+#             netbits: 24
+#         ...
 # ...
 
 - name: IPSec settings
@@ -54,7 +54,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict:
     - "{{ opn_ipsec | default({}) }}"
   when:
