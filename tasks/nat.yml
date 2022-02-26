@@ -24,7 +24,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict: "{{ opn_nat_settings | default([]) }}"
 
 - name: nat - rules
@@ -33,7 +33,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/nat/outbound/rule[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_nat | default([]) }}"
     - settings
@@ -54,7 +54,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/nat/rule[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_nat_port_forward | default([]) }}"
     - settings
