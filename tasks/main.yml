@@ -262,7 +262,7 @@
   tags: clean
   when: delete_local_xml_file|default(False)
 
-- name: sync  # noqa E503 no-handler
+- name: sync  # noqa 503 no-handler
   ansible.builtin.command: "{{ item }}"
   throttle: 1
   # loop_control:
@@ -274,7 +274,7 @@
     - sync
     - copy
 
-- name: reload  # noqa E503 no-handler
+- name: reload  # noqa 503 no-handler
   ansible.builtin.command: "{{ item }}"
   throttle: 1
   # loop_control:
