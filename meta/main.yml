@@ -8,9 +8,9 @@ galaxy_info:
   license: Apache2
   min_ansible_version: 2.5
   platforms:
-  - name: FreeBSD
-    versions:
-    - all
+    - name: FreeBSD
+      versions:
+        - all
   galaxy_tags:
     - opnsense
     - firewall
