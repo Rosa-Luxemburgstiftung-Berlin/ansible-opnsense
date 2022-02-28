@@ -258,7 +258,7 @@
 
 - name: clean,safe delete
   delegate_to: localhost
-  ansible.builtin.shell: srm "{{ local_config_path }}"
+  ansible.builtin.command: srm "{{ local_config_path }}"
   tags: clean
   when: delete_local_xml_file|default(False)
 
