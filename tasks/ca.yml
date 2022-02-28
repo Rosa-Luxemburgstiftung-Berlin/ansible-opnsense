@@ -6,7 +6,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_cas | default([])  }}"
     - settings
@@ -18,7 +18,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.b64_value | b64encode }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_cas | default([]) }}"
     - settings
@@ -35,13 +35,13 @@
     state: absent
   when: opn_cas is defined
 
-- name: certificates 
+- name: certificates
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_certs | default([])  }}"
     - settings
@@ -53,7 +53,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.b64_value | b64encode }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_certs | default([]) }}"
     - settings
