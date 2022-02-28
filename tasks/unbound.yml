@@ -164,7 +164,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound
-    add_children: "[ {% for domainoverrides in opn_unbound.domainoverrides -%}'<domainoverrides>{% for k,v in domainoverrides.items()|list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</domainoverrides>', {%- endfor %} ]"  # noqa line-length
+    add_children: "[ {% for domainoverrides in opn_unbound.domainoverrides -%}'<domainoverrides>{% for k,v in domainoverrides.items()|list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</domainoverrides>', {%- endfor %} ]"  # noqa 204 line-length
     input_type: xml
     pretty_print: true
   when:
