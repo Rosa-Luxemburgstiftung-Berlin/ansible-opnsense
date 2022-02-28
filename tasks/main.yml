@@ -1,9 +1,9 @@
 # vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent
 ---
-#- name: Download OPNsense XML sample config
-#  get_url:
-#    url: https://raw.githubusercontent.com/opnsense/core/master/src/etc/config.xml.sample
-#    dest: /tmp/config.xml
+# - name: Download OPNsense XML sample config
+#   get_url:
+#     url: https://raw.githubusercontent.com/opnsense/core/master/src/etc/config.xml.sample
+#     dest: /tmp/config.xml
 
 - name: fetch
   tags:
@@ -28,7 +28,7 @@
     file: user.yml
     apply:
       tags: user
-  
+
 - name: group
   tags:
     - always
@@ -45,13 +45,13 @@
     apply:
       tags: general
 
-#- name: sysctl
-#  tags:
-#    - always
-#  include_tasks:
-#    file: sysctl.yml
-#    apply:
-#      tags: sysctl
+# - name: sysctl
+#   tags:
+#     - always
+#   include_tasks:
+#     file: sysctl.yml
+#     apply:
+#       tags: sysctl
 
 - name: authservers
   tags:
@@ -127,7 +127,7 @@
     file: bridges.yml
     apply:
       tags: bridges
-  
+
 - name: virtualip
   tags:
     - always
@@ -151,15 +151,15 @@
     file: filter.yml
     apply:
       tags: filter
-  
+
 - name: gateways
   tags:
     - always
   ansible.builtin.include_tasks:
     file: gateways.yml
     apply:
-      tags: gateways 
-  #when: prod | default([])
+      tags: gateways
+  # when: prod | default([])
 
 - name: hasync
   tags:
@@ -249,7 +249,10 @@
   ansible.builtin.copy:
     src: "{{ local_config_path }}"
     dest: "{{ config_path }}"
-    backup: yes
+    backup: true
+    owner: root
+    group: wheel
+    mode: 0644
   register: config
   tags: copy
 
@@ -259,11 +262,11 @@
   tags: clean
   when: delete_local_xml_file|default(False)
 
-- name: sync
+- name: sync  # noqa no-handler
   ansible.builtin.command: "{{ item }}"
   throttle: 1
-  #loop_control:
-  #  pause: 3
+  # loop_control:
+  #   pause: 3
   with_items:
     - configctl filter sync
   when: config.changed
@@ -271,11 +274,11 @@
     - sync
     - copy
 
-- name: reload
+- name: reload  # noqa no-handler
   ansible.builtin.command: "{{ item }}"
   throttle: 1
-  #loop_control:
-  #  pause: 3
+  # loop_control:
+  #   pause: 3
   with_items:
     - configctl service reload all
     - configctl webgui restart
