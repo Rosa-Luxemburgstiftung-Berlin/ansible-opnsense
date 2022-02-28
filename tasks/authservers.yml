@@ -6,7 +6,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/authserver[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_authservers }}"
     - settings
