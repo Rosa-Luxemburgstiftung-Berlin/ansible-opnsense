@@ -1,0 +1,58 @@
+---
+# configure monit
+#
+# example var definition
+# opn_monit:
+#   general:
+#     enabled: 1
+#     ...
+#   alerts:
+#     $UUID: {}
+#   services:
+#     $UUID: {}
+#   tests: []
+#     $UUID: {}
+
+# but please see
+# https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/issues/13#issuecomment-1062217277
+
+- name: monit general settings
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/monit/general/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: yes
+  with_dict:
+    - "{{ opn_monit.general | default({}) }}"
+
+- name: configure monit alerts
+  include_tasks: monitalerts.yml
+  vars:
+    uuid: "{{ alert.key }}"
+    alertcfg: "{{ alert.value }}"
+  with_dict:
+    - "{{ opn_monit.alerts | default({}) }}"
+  loop_control:
+    loop_var: alert
+
+- name: configure monit services
+  include_tasks: monitservices.yml
+  vars:
+    uuid: "{{ services.key }}"
+    servicecfg: "{{ services.value }}"
+  with_dict:
+    - "{{ opn_monit.services | default({}) }}"
+  loop_control:
+    loop_var: services
+
+
+- name: configure monit tests
+  include_tasks: monittests.yml
+  vars:
+    uuid: "{{ tests.key }}"
+    testcfg: "{{ tests.value }}"
+  with_dict:
+    - "{{ opn_monit.tests | default({}) }}"
+  loop_control:
+    loop_var: tests
