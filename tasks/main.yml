@@ -193,6 +193,14 @@
     apply:
       tags: syslog
 
+- name: monit
+  tags:
+    - always
+  include_tasks:
+    file: monit.yml
+    apply:
+      tags: monit
+
 - name: staticroutes
   tags:
     - always
