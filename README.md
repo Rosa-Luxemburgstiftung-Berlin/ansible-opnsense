@@ -20,8 +20,7 @@ An example: https://github.com/naturalis/oss-network-demo/tree/master/ansible/ba
 Dependencies
 ------------
 
-    sudo pip install lxml
-    sudo pip3 install lxml
+    sudo apt install python3-lxml
     sudo apt install secure-delete (optional)
     
 Example Playbook
