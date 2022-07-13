@@ -1,4 +1,23 @@
 ---
+# example definition
+#
+# One-to-one: Firewall A example from https://docs.opnsense.org/manual/how-tos/ipsec-s2s-binat.html
+#
+# opn_nat_onetoone:
+#   - descr: IPsec BINAT
+#     settings:
+#       - key: interface
+#         value: enc0
+#       - key: type
+#         value: binat
+#       - key: external
+#         value: '192.168.1.0'
+#       - key: source/address
+#         value: '10.0.1.0/24'
+#       - key: destination/address
+#         value: '192.168.2.0/24'
+
+
 - name: nat - settings
   delegate_to: localhost
   xml:
