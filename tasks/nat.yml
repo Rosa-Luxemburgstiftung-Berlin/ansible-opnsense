@@ -40,7 +40,6 @@
     - "{{ opn_nat_port_forward | default([]) }}"
     - settings
 
-
 # remove the default empty <rule/> node remains after configuring the first one
 
 - name: nat - remove default empty node
@@ -50,5 +49,26 @@
     xpath: /opnsense/nat/rule[not(node())]
     state: absent
   when: opn_nat_port_forward is defined
+
+- name: nat - onetoone
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/nat/onetoone[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: yes
+  with_subelements:
+    - "{{ opn_nat_onetoone | default([]) }}"
+    - settings
+
+# remove the default empty <rule/> node remains after configuring the first one
+
+- name: nat - remove default empty node
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/nat/onetoone[not(node())]
+    state: absent
+  when: opn_nat_onetoone is defined
 
 ...
