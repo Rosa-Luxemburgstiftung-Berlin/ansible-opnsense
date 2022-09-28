@@ -1,7 +1,7 @@
 ---
 - name: virtualip settings that apply to all interfaces with a vhid
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/virtualip/vip[vhid/text()="{{ item.1 }}"]/{{ item.0.key }}
     value: "{{ item.0.value }}"
@@ -12,7 +12,7 @@
 
 - name: virtualip settings specific for a vhid
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/virtualip/vip[vhid/text()="{{ item.0.vhid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -23,7 +23,7 @@
 
 - name: virtualip settings except CARPs
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/virtualip/vip[interface/text()="{{ item.0.interface }}" and subnet/text()="{{ item.0.subnet }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"

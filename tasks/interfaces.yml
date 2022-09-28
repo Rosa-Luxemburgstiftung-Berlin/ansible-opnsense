@@ -1,7 +1,7 @@
 ---
 - name: interfaces - remove interface
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item }}
     state: absent
@@ -11,7 +11,7 @@
 
 - name: interfaces - settings specific for an interface
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -25,7 +25,7 @@
 
 - name: interfaces - settings specific for enabling interfaces
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -39,7 +39,7 @@
 
 - name: interfaces - settings specific for disabled interfaces
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     state: absent
@@ -53,7 +53,7 @@
 
 - name: interfaces - settings that apply to all interfaces
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/interfaces/{{ item.1 }}/{{ item.0.key }}"
     value: "{{ item.0.value }}"
@@ -65,7 +65,7 @@
 
 - name: interfaces - set vlan parent interface
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/if
     value: "{{ item.0.vlan_parent_interface | default(opn_interfaces_vlan_parent_interface) }}_vlan{{ item.0.vlan }}"
@@ -77,7 +77,7 @@
 
 - name: create ifgroups
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/ifgroups
     state: present
@@ -86,7 +86,7 @@
 
 - name: create ifgroupentry
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/ifgroups
     set_children: "[ {% for ifgroupentry in opn_ifgroups -%}'<ifgroupentry>{% for k,v in ifgroupentry.iteritems() -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</ifgroupentry>',{%- endfor %} ]"

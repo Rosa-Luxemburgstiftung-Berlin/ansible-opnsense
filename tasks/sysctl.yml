@@ -2,7 +2,7 @@
 
 - name: sysctl - system tunables
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/sysctl/item[tunable/text()="{{ item.tunable }}"]/value
     value: "{{ item.value }}"

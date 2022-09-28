@@ -2,7 +2,7 @@
 
 - name: CAs - certificate authorities
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -14,7 +14,7 @@
 
 - name: b64 ca fields
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.b64_value | b64encode }}"
@@ -29,7 +29,7 @@
 
 - name: CAs - remove default empty node
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/ca[not(node())]
     state: absent
@@ -37,7 +37,7 @@
 
 - name: certificates 
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -49,7 +49,7 @@
 
 - name: b64 certificate fields
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.b64_value | b64encode }}"

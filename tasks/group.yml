@@ -1,7 +1,7 @@
 ---
 - name: groups - create
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/group[name/text()="{{ item.0.name }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -13,7 +13,7 @@
 
 - name: groups - count member nodes
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/group/member
     count: yes
@@ -24,7 +24,7 @@
 
 - name: groups - add users to groups
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/group[name/text()="{{ item.0.name }}"]
     add_children:

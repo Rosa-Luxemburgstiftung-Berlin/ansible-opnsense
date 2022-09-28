@@ -8,7 +8,7 @@
 - name: fetch
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: fetch.yml
     apply:
       tags: fetch
@@ -16,7 +16,7 @@
 - name: dnsserver
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: dnsserver.yml
     apply:
       tags: dnsserver
@@ -24,7 +24,7 @@
 - name: user
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: user.yml
     apply:
       tags: user
@@ -32,7 +32,7 @@
 - name: group
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: group.yml
     apply:
       tags: group
@@ -40,7 +40,7 @@
 - name: general
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: general.yml
     apply:
       tags: general
@@ -56,7 +56,7 @@
 - name: authservers
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: authservers.yml
     apply:
       tags: authservers
@@ -64,7 +64,7 @@
 - name: CAs
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: ca.yml
     apply:
       tags:
@@ -75,7 +75,7 @@
 - name: VPN
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: vpn.yml
     apply:
       tags:
@@ -85,7 +85,7 @@
 - name: IPSec
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: ipsec.yml
     apply:
       tags:
@@ -93,7 +93,7 @@
         - ipsec
 
 - name: wireguard
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: wireguard.yml
     apply:
       tags:
@@ -106,7 +106,7 @@
 - name: interfaces
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: interfaces.yml
     apply:
       tags: interfaces
@@ -114,7 +114,7 @@
 - name: vlans
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: vlans.yml
     apply:
       tags: vlans
@@ -123,7 +123,7 @@
 - name: bridges
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: bridges.yml
     apply:
       tags: bridges
@@ -131,7 +131,7 @@
 - name: virtualip
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: virtualip.yml
     apply:
       tags: virtualip
@@ -139,7 +139,7 @@
 - name: alias
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: alias.yml
     apply:
       tags: alias
@@ -147,7 +147,7 @@
 - name: filter
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: filter.yml
     apply:
       tags: filter
@@ -155,7 +155,7 @@
 - name: gateways
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: gateways.yml
     apply:
       tags: gateways 
@@ -164,7 +164,7 @@
 - name: hasync
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: hasync.yml
     apply:
       tags: hasync
@@ -172,7 +172,7 @@
 - name: dhcpd
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: dhcpd.yml
     apply:
       tags: dhcpd
@@ -180,7 +180,7 @@
 - name: unbound
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: unbound.yml
     apply:
       tags: unbound
@@ -188,7 +188,7 @@
 - name: syslog
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: syslog.yml
     apply:
       tags: syslog
@@ -196,7 +196,7 @@
 - name: monit
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: monit.yml
     apply:
       tags: monit
@@ -204,7 +204,7 @@
 - name: staticroutes
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: staticroutes.yml
     apply:
       tags: staticroutes
@@ -212,7 +212,7 @@
 - name: nat
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: nat.yml
     apply:
       tags: nat
@@ -220,14 +220,14 @@
 - name: laggs
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: laggs.yml
     apply:
       tags: laggs
 
 - name: trim EOF
   delegate_to: localhost
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: absent
     insertafter: EOF
     line: ""
@@ -237,7 +237,7 @@
 
 - name: fix xml start tag
   delegate_to: localhost
-  lineinfile:
+  ansible.builtin.lineinfile:
     line: '<?xml version="1.0"?>'
     regexp: '^<\?xml.*>'
     insertbefore: BOF
@@ -246,7 +246,7 @@
   tags: trim
 
 - name: copy
-  copy:
+  ansible.builtin.copy:
     src: "{{ local_config_path }}"
     dest: "{{ config_path }}"
     backup: yes
@@ -255,12 +255,12 @@
 
 - name: clean,safe delete
   delegate_to: localhost
-  shell: srm "{{ local_config_path }}"
+  ansible.builtin.shell: srm "{{ local_config_path }}"
   tags: clean
   when: delete_local_xml_file|default(False)
 
 - name: sync
-  command: "{{ item }}"
+  ansible.builtin.command: "{{ item }}"
   throttle: 1
   #loop_control:
   #  pause: 3
@@ -272,7 +272,7 @@
     - copy
 
 - name: reload
-  command: "{{ item }}"
+  ansible.builtin.command: "{{ item }}"
   throttle: 1
   #loop_control:
   #  pause: 3

@@ -50,7 +50,7 @@
 
 - name: IPSec settings
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/{{ item.key }}"
     value: "{{ item.value }}"
@@ -61,7 +61,7 @@
     - item.key != 'ikeids'
 
 - name: IPSec loop ikeids for phase1 ...
-  include_tasks: ipsecphase1.yml
+  ansible.builtin.include_tasks: ipsecphase1.yml
   vars:
     ikeid: "{{ ikeids.key }}"
     ipsecphasevar: "{{ ikeids.value }}"

@@ -25,7 +25,7 @@
 
 - name: wireguard general settings
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/wireguard/general/{{ item.key }}"
     value: "{{ item.value }}"
@@ -34,7 +34,7 @@
     - "{{ opn_wireguard.general | default({}) }}"
 
 - name: configure wireguard servers
-  include_tasks: wireguardservers.yml
+  ansible.builtin.include_tasks: wireguardservers.yml
   vars:
     uuid: "{{ servers.key }}"
     serverscfg: "{{ servers.value }}"
@@ -44,7 +44,7 @@
     loop_var: servers
 
 - name: configure wireguard clients
-  include_tasks: wireguardclients.yml
+  ansible.builtin.include_tasks: wireguardclients.yml
   vars:
     uuid: "{{ clients.key }}"
     clientscfg: "{{ clients.value }}"

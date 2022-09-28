@@ -1,7 +1,7 @@
 ---
 - name: general - set
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/{{ item.key }}"
     value: "{{ item.value }}"
@@ -11,7 +11,7 @@
 
 - name: general - unset
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/{{ item }}"
     state: absent

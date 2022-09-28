@@ -1,7 +1,7 @@
 ---
 - name: aliases
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid="{{ item.0.uuid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -13,7 +13,7 @@
 
 - name: multivalue aliases
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid="{{ item.0.uuid }}"]/{{ item.1.key }}
     value: "{{ item.1.list | join('\n') }}"

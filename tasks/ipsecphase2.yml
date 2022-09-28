@@ -3,7 +3,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }}"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/{{ item.key }}"
     value: "{{ item.value }}"
@@ -19,7 +19,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }} enable"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/{{ item.key }}"
     state: absent
@@ -31,7 +31,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} localid for ikeid {{ ikeid }}"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/localid/{{ item.key }}"
     value: "{{ item.value }}"
@@ -41,7 +41,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} remoteid for ikeid {{ ikeid }}"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/remoteid/{{ item.key }}"
     value: "{{ item.value }}"
@@ -51,7 +51,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} count encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option/name"
     count: yes
@@ -59,7 +59,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} get encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option[name='{{ item.name }}']"
     count: yes
@@ -67,31 +67,31 @@
   with_items:
     - "{{ ipsecphasevar2[uniqid]['encryption-algorithm-options'] | default([]) }}"
   when: eao_count.count > 0
-- debug:
+- ansible.builtin.debug:
     var: encalgopt
     verbosity: 1
   when: encalgopt is defined
 
 - name: "IPSec ike phase2 {{ uniqid }} check reset of encryption-algorithm-options for ikeid {{ ikeid }}"
-  set_fact:
+  ansible.builtin.set_fact:
     encalgopt_reset: True
   when:
     - eao_count.count != (ipsecphasevar2[uniqid]['encryption-algorithm-options']|length)
 - name: "IPSec ike phase2 {{ uniqid }} check reset of encryption-algorithm-options for ikeid {{ ikeid }}"
-  set_fact:
+  ansible.builtin.set_fact:
     encalgopt_reset: True
   when:
     - item.count is defined and item.count == 0
   with_items:
     - "{{ encalgopt.results }}"
-- debug:
+- ansible.builtin.debug:
     var: encalgopt_reset
     verbosity: 1
   when: encalgopt_reset is defined
 
 - name: "IPSec ike phase2 {{ uniqid }} reset encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option"
     state: absent
@@ -102,7 +102,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']"
     add_children: "[ {% for eao in ipsecphasevar2[uniqid]['encryption-algorithm-options'] -%}'<encryption-algorithm-option><name>{{ eao.name }}</name></encryption-algorithm-option>',{%- endfor %}]"
@@ -112,7 +112,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option[name='{{ item.name }}']/keylen"
     value: "{{ item.keylen }}"
@@ -123,7 +123,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }} : get hash-algorithm-option count"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option"
     count: yes
@@ -131,18 +131,18 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }} : get hash-algorithm-option elements"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option"
     content: text
   register: hashalgopt
   when: hashalgopt_count.count > 0
-- debug:
+- ansible.builtin.debug:
     var: hashalgopt
     verbosity: 1
   when: hashalgopt is defined
 
-- set_fact:
+- ansible.builtin.set_fact:
     change_hashalgopt: True
   with_items: "{{ hashalgopt.matches }}"
   when:
@@ -151,7 +151,7 @@
     - hashalgopt_count.count > 0
     - ((item['hash-algorithm-option'] not in ipsecphasevar2[uniqid]['hash-algorithm-options']) or (ipsecphasevar2[uniqid]['hash-algorithm-options']|length) != (hashalgopt.matches|length))
 
-- set_fact:
+- ansible.builtin.set_fact:
     change_hashalgopt: True
   with_items: "{{ hashalgopt.matches }}"
   when:
@@ -160,13 +160,13 @@
     - hashalgopt.matches is defined
     - ipsecphasevar2[uniqid]['hash-algorithm-options']|length > 0
 
-- set_fact:
+- ansible.builtin.set_fact:
     change_hashalgopt: True
   when: hashalgopt_count.count == 0 and ipsecphasevar2[uniqid]['hash-algorithm-options']|length > 0
 
 - name: "IPSec ike phase2 {{ uniqid }} reset hash-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option"
     state: absent
@@ -175,7 +175,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} hash-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']"
     add_children:

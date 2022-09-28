@@ -1,7 +1,7 @@
 ---
 - name: monit alert settings
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/monit/alert[@uuid='{{ uuid }}']/{{ item.key }}"
     value: "{{ item.value }}"

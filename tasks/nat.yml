@@ -20,7 +20,7 @@
 
 - name: nat - settings
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/{{ item.key }}"
     value: "{{ item.value }}"
@@ -29,7 +29,7 @@
 
 - name: nat - rules
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/nat/outbound/rule[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -42,7 +42,7 @@
 
 - name: nat - remove default empty node
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/nat/outbound/rule[not(node())]
     state: absent
@@ -50,7 +50,7 @@
 
 - name: nat - port forward
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/nat/rule[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -63,7 +63,7 @@
 
 - name: nat - remove default empty node
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/nat/rule[not(node())]
     state: absent
@@ -71,7 +71,7 @@
 
 - name: nat - onetoone
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/nat/onetoone[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -84,7 +84,7 @@
 
 - name: nat - remove default empty node
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/nat/onetoone[not(node())]
     state: absent

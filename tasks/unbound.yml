@@ -32,7 +32,7 @@
 
 - name: unbound general settings
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound/{{ item.key }}
     value: "{{ item.value }}"
@@ -47,36 +47,36 @@
 
 - name: count unbound/domainoverrides
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound/domainoverrides/domain
     count: yes
   register: configured_unbound_domainoverrides_count
-- debug:
+- ansible.builtin.debug:
     var: configured_unbound_domainoverrides_count
     verbosity: 1
 
 - name: get unbound/domainoverrides/domain entries
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound/domainoverrides/domain
     content: "text"
   register: configured_unbound_domainoverrides_domain
   when: configured_unbound_domainoverrides_count.count > 0
-- debug:
+- ansible.builtin.debug:
     var: configured_unbound_domainoverrides_domain
     verbosity: 1
 
 - name: get unbound/domainoverrides/ip entries
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound/domainoverrides/ip
     content: "text"
   register: configured_unbound_domainoverrides_ip
   when: configured_unbound_domainoverrides_count.count > 0
-- debug:
+- ansible.builtin.debug:
     var: configured_unbound_domainoverrides_ip
     verbosity: 1
 
@@ -86,44 +86,44 @@
 # domainoverrides list
 - name: get unbound/domainoverrides/descr entries
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound/domainoverrides/descr
     content: "text"
   ignore_errors: True
   register: configured_unbound_domainoverrides_descr
   when: configured_unbound_domainoverrides_count.count > 0
-- debug:
+- ansible.builtin.debug:
     var: configured_unbound_domainoverrides_descr|default([])
     verbosity: 1
 
 - name: init configured_unbound_domainoverrides
-  set_fact:
+  ansible.builtin.set_fact:
     configured_unbound_domainoverrides: []
 
 - name: populate configured_unbound_domainoverrides
-  set_fact:
+  ansible.builtin.set_fact:
     configured_unbound_domainoverrides: "[{% for domaindict in configured_unbound_domainoverrides_domain.matches %}{'domain':'{{ domaindict.domain }}','ip':'{{configured_unbound_domainoverrides_ip.matches[loop.index0].ip}}'{% if configured_unbound_domainoverrides_descr.matches[loop.index0].descr is defined and configured_unbound_domainoverrides_descr.matches[loop.index0].descr %},'descr':'{{ configured_unbound_domainoverrides_descr.matches[loop.index0].descr }}'{% endif %}},{% endfor %}]"
   when: configured_unbound_domainoverrides_count.count > 0
 
 - name: debug configured_unbound_domainoverrides
-  debug:
+  ansible.builtin.debug:
     var: configured_unbound_domainoverrides
     verbosity: 1
 - name: debug opn_unbound.domainoverrides
-  debug:
+  ansible.builtin.debug:
     var: opn_unbound.domainoverrides|default([])
     verbosity: 1
 
 - name: compare configured and defined unbound domainoverrides
-  set_fact:
+  ansible.builtin.set_fact:
     unbound_domainoverrides_delta: "{{ configured_unbound_domainoverrides | symmetric_difference(opn_unbound.domainoverrides|default([])) }}"
 - name: debug delta between configured and defined unbound domainoverrides
-  debug:
+  ansible.builtin.debug:
     var: unbound_domainoverrides_delta
     verbosity: 1
 - name: check if a update of unbound domainoverrides is required
-  set_fact:
+  ansible.builtin.set_fact:
     unbound_domainoverrides_update: True
   when: unbound_domainoverrides_delta | length > 0
 
@@ -133,7 +133,7 @@
 # so here we just have one chance: remove all domainoverrides and recreate them in a bulk
 - name: unbound domainoverrides
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound/domainoverrides
     state: absent
@@ -142,7 +142,7 @@
 
 - name: unbound domainoverrides
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound
     add_children: "[  {% for domainoverrides in opn_unbound.domainoverrides -%}'<domainoverrides>{% for k,v in domainoverrides.items()|list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</domainoverrides>', {%- endfor %} ]"
@@ -160,7 +160,7 @@
 
 - name: unbound acls aclaction
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/unbound/acls[aclname/text()='{{ item.aclname }}']/aclaction"
     value: "{{ item.aclaction }}"
@@ -170,7 +170,7 @@
 
 - name: unbound acls description
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/unbound/acls[aclname/text()='{{ item.aclname }}']/description"
     value: "{{ item.description }}"
@@ -183,7 +183,7 @@
 # FIXME use block with_items and nested loop in block
 
 - name: unbound acls rows
-  include_tasks: unboundaclsrows.yml
+  ansible.builtin.include_tasks: unboundaclsrows.yml
   vars:
     aclname: "{{ item.aclname }}"
     rows: "{{ item.rows }}"
@@ -194,7 +194,7 @@
 # END unbound/acls
 
 - name: unboundplus
-  include_tasks: unboundplus.yml
+  ansible.builtin.include_tasks: unboundplus.yml
   when: opn_unboundplus is defined
 
 ...

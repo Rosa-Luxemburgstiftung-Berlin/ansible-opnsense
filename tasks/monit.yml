@@ -18,7 +18,7 @@
 
 - name: monit general settings
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/monit/general/{{ item.key }}"
     value: "{{ item.value }}"
@@ -27,7 +27,7 @@
     - "{{ opn_monit.general | default({}) }}"
 
 - name: configure monit alerts
-  include_tasks: monitalerts.yml
+  ansible.builtin.include_tasks: monitalerts.yml
   vars:
     uuid: "{{ alert.key }}"
     alertcfg: "{{ alert.value }}"
@@ -37,7 +37,7 @@
     loop_var: alert
 
 - name: configure monit services
-  include_tasks: monitservices.yml
+  ansible.builtin.include_tasks: monitservices.yml
   vars:
     uuid: "{{ services.key }}"
     servicecfg: "{{ services.value }}"
@@ -48,7 +48,7 @@
 
 
 - name: configure monit tests
-  include_tasks: monittests.yml
+  ansible.builtin.include_tasks: monittests.yml
   vars:
     uuid: "{{ tests.key }}"
     testcfg: "{{ tests.value }}"
