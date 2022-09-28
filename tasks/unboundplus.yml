@@ -15,7 +15,7 @@
 
 - name: unboundplus dnsbl
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/unboundplus/dnsbl/{{ item.key }}"
     value: "{{ item.value }}"
@@ -25,7 +25,7 @@
 
 - name: unboundplus miscellaneous
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/unboundplus/miscellaneous/{{ item.key }}"
     value: "{{ item.value }}"

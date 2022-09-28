@@ -3,7 +3,7 @@
 
 - name: wireguard servers settings
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/wireguard/server/servers/server[@uuid='{{ uuid }}']/{{ item.key }}"
     value: "{{ item.value }}"
@@ -15,7 +15,7 @@
 
 - name: wireguard servers settings with list elements
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/wireguard/server/servers/server[@uuid='{{ uuid }}']/{{ item.key }}"
     value: "{{ item.value | join(',')}}"

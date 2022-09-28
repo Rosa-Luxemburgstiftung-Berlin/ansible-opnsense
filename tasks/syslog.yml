@@ -27,7 +27,7 @@
 
 - name: syslog general
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/Syslog/general/{{ item.key }}"
     value: "{{ item.value }}"
@@ -37,7 +37,7 @@
 
 - name: syslog destinations
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/Syslog/destinations/destination[@uuid=\"{{ item.0.uuid }}\"]/{{ item.1.key }}"
     value: "{{ item.1.value }}"

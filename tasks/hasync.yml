@@ -7,7 +7,7 @@
 
 - name: hasync
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/hasync/{{ item.key }}"
     value: "{{ item.value }}"

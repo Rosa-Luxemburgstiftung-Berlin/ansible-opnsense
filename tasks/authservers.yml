@@ -2,7 +2,7 @@
 
 - name: authservers - authentication servers
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/authserver[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -16,7 +16,7 @@
 
 - name: authserver - remove default empty node
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/authserver[not(node())]
     state: absent

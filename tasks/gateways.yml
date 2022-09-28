@@ -34,7 +34,7 @@
 
 - name: remove default empty gateways node
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_item[not(node())]
     state: absent
@@ -44,7 +44,7 @@
 
 - name: gateways
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_item[interface/text()="{{ item.0.interface }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -90,7 +90,7 @@
 
 - name: gateways with name per iface
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_item[interface/text()="{{ item.0.interface }}" and name/text()="{{ item.0.name }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
@@ -102,7 +102,7 @@
 
 - name: gateway groups
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_group[name/text()="{{ item.name }}"]
     pretty_print: yes
@@ -110,7 +110,7 @@
 
 - name: gateway groups settings
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_group[name/text()="{{ item.name }}"]
     set_children: "{{ item.settings  + [ {'name':item.name } ] }}"
