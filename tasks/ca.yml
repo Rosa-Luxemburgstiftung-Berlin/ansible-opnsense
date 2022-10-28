@@ -8,7 +8,7 @@
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
-    - "{{ opn_cas | default([])  }}"
+    - "{{ opn_cas | default([]) }}"
     - settings
   when: item.1.value is defined
 
@@ -43,7 +43,7 @@
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
-    - "{{ opn_certs | default([])  }}"
+    - "{{ opn_certs | default([]) }}"
     - settings
   when: item.1.value is defined
 
