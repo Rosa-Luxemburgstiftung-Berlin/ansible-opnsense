@@ -136,7 +136,7 @@
 
 - name: compare configured and defined unbound domainoverrides
   ansible.builtin.set_fact:
-    unbound_domainoverrides_delta: "{{ configured_unbound_domainoverrides | symmetric_difference(opn_unbound.domainoverrides|default([])) }}"
+    unbound_domainoverrides_delta: "{{ configured_unbound_domainoverrides | symmetric_difference(opn_unbound.domainoverrides | default([])) }}"
 - name: debug delta between configured and defined unbound domainoverrides
   ansible.builtin.debug:
     var: unbound_domainoverrides_delta
@@ -164,7 +164,14 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/unbound
-    add_children: "[ {% for domainoverrides in opn_unbound.domainoverrides -%}'<domainoverrides>{% for k,v in domainoverrides.items()|list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</domainoverrides>', {%- endfor %} ]"  # noqa 204 line-length
+    add_children: "[
+      {% for domainoverrides in opn_unbound.domainoverrides -%}
+        '<domainoverrides>
+          {% for k, v in domainoverrides.items() | list -%}<{{ k }}>{{ v }}</{{ k }}>
+          {%- endfor %}
+        </domainoverrides>',
+      {%- endfor %}
+      ]"
     input_type: xml
     pretty_print: true
   when:
