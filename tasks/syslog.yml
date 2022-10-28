@@ -1,6 +1,6 @@
 ---
 
-#
+# # noqa line-length yaml[line-length]
 # opn_syslog:
 #   general:
 #     enabled: 1
