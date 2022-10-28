@@ -92,7 +92,7 @@
     set_children: "[
       {% for ifgroupentry in opn_ifgroups -%}
         '<ifgroupentry>
-        {% for k,v in ifgroupentry.iteritems() -%}
+        {% for k, v in ifgroupentry.iteritems() -%}
           <{{ k }}>{{ v }}</{{ k }}>
         {%- endfor %}
         </ifgroupentry>',

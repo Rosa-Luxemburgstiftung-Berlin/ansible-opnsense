@@ -8,7 +8,7 @@
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
-    - "{{ opn_openvpn_servers | default([])  }}"
+    - "{{ opn_openvpn_servers | default([]) }}"
     - settings
   when: item.1.value is defined
 

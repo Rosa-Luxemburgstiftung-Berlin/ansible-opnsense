@@ -110,14 +110,14 @@
 
 - name: "debug acl rows for {{ aclname }}"
   ansible.builtin.debug:
-    msg: "xml add_children: [ {% for row in rows -%}'<row>{% for k,v in row.items() | list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</row>',{%- endfor %} ]"
+    msg: "xml add_children: [ {% for row in rows -%}'<row>{% for k, v in row.items() | list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</row>',{%- endfor %} ]"
     verbosity: 1
 - name: "set acl rows for {{ aclname }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/unbound/acls[aclname/text()='{{ aclname }}']"
-    add_children: "[ {% for row in rows -%}'<row>{% for k,v in row.items() | list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</row>',{%- endfor %} ]"
+    add_children: "[ {% for row in rows -%}'<row>{% for k, v in row.items() | list -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</row>',{%- endfor %} ]"
     input_type: xml
     pretty_print: true
   when:

@@ -102,7 +102,7 @@
     pretty_print: true
   with_items:
     - "{{ ipsecphasevar2[uniqid]['encryption-algorithm-options'] | default([]) }}"
-  when: encalgopt_reset|default(false)
+  when: encalgopt_reset | default(false)
 
 - name: "IPSec ike phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
@@ -116,7 +116,7 @@
       ]"
     input_type: xml
     pretty_print: true
-  when: encalgopt_reset|default(false)
+  when: encalgopt_reset | default(false)
 
 - name: "IPSec ike phase2 {{ uniqid }} encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
@@ -177,7 +177,7 @@
 - name: register fact change_hashalgopt
   ansible.builtin.set_fact:
     change_hashalgopt: true
-  when: hashalgopt_count.count == 0 and ipsecphasevar2[uniqid]['hash-algorithm-options']|length > 0
+  when: hashalgopt_count.count == 0 and ipsecphasevar2[uniqid]['hash-algorithm-options'] | length > 0
 
 - name: "IPSec ike phase2 {{ uniqid }} reset hash-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost

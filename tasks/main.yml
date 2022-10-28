@@ -260,7 +260,7 @@
   delegate_to: localhost
   ansible.builtin.command: srm "{{ local_config_path }}"
   tags: clean
-  when: delete_local_xml_file|default(False)
+  when: delete_local_xml_file | default(false)
 
 - name: sync  # noqa 503 no-handler
   ansible.builtin.command: "{{ item }}"
