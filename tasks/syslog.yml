@@ -16,7 +16,7 @@
 #         - key: level
 #           value: info,notice,warn,err,crit,alert,emerg
 #         - key: facility
-#           value: kern,user,mail,daemon,auth,syslog,lpr,news,uucp,cron,authpriv,ftp,ntp,security,console,local0,local1,local2,local3,local4,local5,local6,local7  # noqa line-length
+#           value: kern,user,mail,daemon,auth,syslog,lpr,news,uucp,cron,authpriv,ftp,ntp,security,console,local0,local1,local2,local3,local4,local5,local6,local7  # noqa line-length yaml[line-length]
 #         - key: hostname
 #           value: IP
 #         - key: port
