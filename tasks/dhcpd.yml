@@ -31,7 +31,7 @@
 
 - name: register dhcp_registered_dnsserver_count
   ansible.builtin.set_fact:
-    dhcp_registered_dnsserver_count: "{{ dhcp_registered_dnsserver_count|default({}) | combine({item.item.if: item.count}) }}"
+    dhcp_registered_dnsserver_count: "{{ dhcp_registered_dnsserver_count | default({}) | combine({item.item.if: item.count}) }}"
   with_items: "{{ dhcpd_configured_dnsserver_count.results }}"
 
 - name: debug dhcp_registered_dnsserver_count
@@ -57,7 +57,9 @@
 
 - name: set fact dhcp_registered_dnsserver
   ansible.builtin.set_fact:
-    dhcp_registered_dnsserver: "{{ dhcp_registered_dnsserver|default({}) | combine({item.item.if: item.matches|default({})|map(attribute='dnsserver')|list}) }}"
+    dhcp_registered_dnsserver: "{{
+      dhcp_registered_dnsserver | default({}) | combine({item.item.if: item.matches | default({}) | map(attribute='dnsserver') | list})
+      }}"
   with_items: "{{ dhcpd_configured_dnsserver.results }}"
 
 - name: debug dhcp_registered_dnsserver
