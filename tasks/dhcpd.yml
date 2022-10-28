@@ -7,7 +7,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.0.if }}/{{ item.1.key }}
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - settings
@@ -19,20 +19,23 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.if }}/dnsserver
-    count: yes
+    count: true
   register: dhcpd_configured_dnsserver_count
   with_items:
     - "{{ opn_dhcpd | default([]) }}"
 
-- ansible.builtin.debug:
+- name: debug dhcpd_configured_dnsserver_count.results
+  ansible.builtin.debug:
     var: dhcpd_configured_dnsserver_count.results
     verbosity: 1
 
-- ansible.builtin.set_fact:
-    dhcp_registered_dnsserver_count: "{{ dhcp_registered_dnsserver_count|default({}) | combine({item.item.if: item.count}) }}"
+- name: register dhcp_registered_dnsserver_count
+  ansible.builtin.set_fact:
+    dhcp_registered_dnsserver_count: "{{ dhcp_registered_dnsserver_count | default({}) | combine({item.item.if: item.count}) }}"
   with_items: "{{ dhcpd_configured_dnsserver_count.results }}"
 
-- ansible.builtin.debug:
+- name: debug dhcp_registered_dnsserver_count
+  ansible.builtin.debug:
     var: dhcp_registered_dnsserver_count
     verbosity: 1
 
@@ -47,15 +50,20 @@
     - "{{ opn_dhcpd | default([]) }}"
   when: dhcp_registered_dnsserver_count[item.if] > 0
 
-- ansible.builtin.debug:
+- name: debug dhcpd_configured_dnsserver.results
+  ansible.builtin.debug:
     var: dhcpd_configured_dnsserver.results
     verbosity: 1
 
-- ansible.builtin.set_fact:
-    dhcp_registered_dnsserver: "{{ dhcp_registered_dnsserver|default({}) | combine({item.item.if: item.matches|default({})|map(attribute='dnsserver')|list}) }}"
+- name: set fact dhcp_registered_dnsserver
+  ansible.builtin.set_fact:
+    dhcp_registered_dnsserver: "{{
+      dhcp_registered_dnsserver | default({}) | combine({item.item.if: item.matches | default({}) | map(attribute='dnsserver') | list})
+      }}"
   with_items: "{{ dhcpd_configured_dnsserver.results }}"
 
-- ansible.builtin.debug:
+- name: debug dhcp_registered_dnsserver
+  ansible.builtin.debug:
     var: dhcp_registered_dnsserver
     verbosity: 1
 
@@ -65,7 +73,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.0.if }}/dnsserver
     state: absent
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - settings
@@ -80,7 +88,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.0.if }}
     add_children: "{{ item.1.value | json_query('[].{\"dnsserver\": @}') }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - settings
@@ -101,23 +109,23 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.0.if }}/numberoptions/item[number/text()="{{ item.1.number }}"]/type
-    value: "{{item.1.type }}"
-    pretty_print: yes
+    value: "{{ item.1.type }}"
+    pretty_print: true
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - numberoptions
-    - skip_missing: yes
+    - skip_missing: true
 - name: set dhcp numberoptions value
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.0.if }}/numberoptions/item[number/text()="{{ item.1.number }}"]/value
-    value: "{{item.1.value }}"
-    pretty_print: yes
+    value: "{{ item.1.value }}"
+    pretty_print: true
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - numberoptions
-    - skip_missing: yes
+    - skip_missing: true
 
 - name: dhcpd static map
   delegate_to: localhost
@@ -125,7 +133,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.0.if }}/staticmap[mac/text()="{{ item.0.mac }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_dhcpd_staticmap | default([]) }}"
     - settings

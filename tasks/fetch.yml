@@ -3,6 +3,6 @@
   ansible.builtin.fetch:
     src: "{{ config_path }}"
     dest: "{{ local_config_path }}"
-    flat: yes
-    backup: yes
+    flat: true
+    backup: true
 ...

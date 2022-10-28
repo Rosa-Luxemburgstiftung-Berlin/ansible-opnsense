@@ -5,7 +5,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/group[name/text()="{{ item.0.name }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_group }}"
     - settings
@@ -16,11 +16,11 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/group/member
-    count: yes
+    count: true
   register: membercount
 
-#- debug:
-#    var: membercount.count
+# - debug:
+#     var: membercount.count
 
 - name: groups - add users to groups
   delegate_to: localhost
@@ -29,7 +29,7 @@
     xpath: /opnsense/system/group[name/text()="{{ item.0.name }}"]
     add_children:
       - member: "{{ item.1.member }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_group }}"
     - settings

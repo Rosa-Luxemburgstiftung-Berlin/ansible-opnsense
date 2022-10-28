@@ -6,7 +6,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/sysctl/item[tunable/text()="{{ item.tunable }}"]/value
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   loop: "{{ opn_sysctl }}"
   when: opn_sysctl is defined
 

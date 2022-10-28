@@ -22,7 +22,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/monit/general/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict:
     - "{{ opn_monit.general | default({}) }}"
 

@@ -5,7 +5,6 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/monit/alert[@uuid='{{ uuid }}']/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict:
     - "{{ alertcfg | default({}) }}"
-

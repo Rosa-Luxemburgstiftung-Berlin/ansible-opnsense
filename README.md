@@ -1,3 +1,5 @@
+[![ansible-lint](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/actions/workflows/lint.yml/badge.svg?branch=linted)](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/actions/workflows/lint.yml)
+
 ansible-opnsense
 =========
 

@@ -5,7 +5,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item }}
     state: absent
-    pretty_print: yes
+    pretty_print: true
   with_items: "{{ opn_interfaces_remove }}"
   when: opn_interfaces_remove is defined
 
@@ -15,7 +15,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_interfaces_specific }}"
     - settings
@@ -29,7 +29,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     value: "{{ item.1.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_interfaces_specific }}"
     - settings
@@ -43,7 +43,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     state: absent
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_interfaces_specific }}"
     - settings
@@ -57,7 +57,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/interfaces/{{ item.1 }}/{{ item.0.key }}"
     value: "{{ item.0.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_interfaces_all }}"
     - interfaces
@@ -69,7 +69,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/interfaces/{{ item.0.interface }}/if
     value: "{{ item.0.vlan_parent_interface | default(opn_interfaces_vlan_parent_interface) }}_vlan{{ item.0.vlan }}"
-    pretty_print: yes
+    pretty_print: true
   with_subelements:
     - "{{ opn_interfaces_specific }}"
     - settings
@@ -81,7 +81,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/ifgroups
     state: present
-    pretty_print: yes
+    pretty_print: true
   when: opn_ifgroups is defined
 
 - name: create ifgroupentry
@@ -89,8 +89,16 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/ifgroups
-    set_children: "[ {% for ifgroupentry in opn_ifgroups -%}'<ifgroupentry>{% for k,v in ifgroupentry.iteritems() -%}<{{ k }}>{{ v }}</{{ k }}>{%- endfor %}</ifgroupentry>',{%- endfor %} ]"
+    set_children: "[
+      {% for ifgroupentry in opn_ifgroups -%}
+        '<ifgroupentry>
+        {% for k, v in ifgroupentry.iteritems() -%}
+          <{{ k }}>{{ v }}</{{ k }}>
+        {%- endfor %}
+        </ifgroupentry>',
+      {%- endfor %}
+      ]"
     input_type: xml
-    pretty_print: yes
+    pretty_print: true
   when: opn_ifgroups is defined
 ...

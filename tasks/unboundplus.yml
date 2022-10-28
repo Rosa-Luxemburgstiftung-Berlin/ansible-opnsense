@@ -3,15 +3,15 @@
 
 # example definition:
 #
-#opn_unboundplus:
-#  dnsbl:
-#    enabled: 1
-#    type: "aa,ag,bla0,bla"
-#    whitelists: "*.example.com,*.another.xyz"
-#  dots: DNSoverTLS is NOT YET IMPLEMENTED!
-#  miscellaneous:
-#    privatedomain: "..."
-#    insecuredomain: "..."
+# opn_unboundplus:
+#   dnsbl:
+#     enabled: 1
+#     type: "aa,ag,bla0,bla"
+#     whitelists: "*.example.com,*.another.xyz"
+#   dots: DNSoverTLS is NOT YET IMPLEMENTED!
+#   miscellaneous:
+#     privatedomain: "..."
+#     insecuredomain: "..."
 
 - name: unboundplus dnsbl
   delegate_to: localhost
@@ -19,7 +19,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/unboundplus/dnsbl/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict: "{{ opn_unboundplus.dnsbl }}"
   when: opn_unboundplus.dnsbl is defined
 
@@ -29,7 +29,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/unboundplus/miscellaneous/{{ item.key }}"
     value: "{{ item.value }}"
-    pretty_print: yes
+    pretty_print: true
   with_dict: "{{ opn_unboundplus.miscellaneous }}"
   when: opn_unboundplus.miscellaneous is defined
 
