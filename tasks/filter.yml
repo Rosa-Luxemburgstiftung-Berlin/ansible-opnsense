@@ -4,7 +4,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/filter/rule[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
-    value: "{{ item.1.value }}"
+    value: "{% if item.1.key in opn_sort_values.filter | default([]) %}{{ item.1.value.split(',') | sort | join(',') }}{% else %}{{ item.1.value }}{% endif %}"
     pretty_print: true
   with_subelements:
     - "{{ opn_filter | default([]) + opn_vlan_filter | default([]) }}"
