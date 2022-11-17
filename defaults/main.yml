@@ -5,3 +5,8 @@ config_path: /conf/config.xml
 
 # local path for the config
 local_config_path: /tmp/config-{{ inventory_hostname }}.xml
+
+# list of keys per task to sort values
+opn_sort_values:
+  filter:
+    - interface
