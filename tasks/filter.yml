@@ -1,4 +1,7 @@
 ---
+
+# FIXME: the opnsense sort algorithm differs ... see filter_rules_sort in src/etc/inc/filter.inc
+
 - name: filters
   delegate_to: localhost
   community.general.xml:
