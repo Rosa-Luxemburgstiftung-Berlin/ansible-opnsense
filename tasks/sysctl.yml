@@ -1,5 +1,11 @@
 ---
 
+# example:
+# opn_sysctl:
+#   - tunable: ipmi_load
+#     descr: load ipmi module on boot
+#     value: 'YES'
+
 - name: sysctl - system tunables
   delegate_to: localhost
   community.general.xml:
