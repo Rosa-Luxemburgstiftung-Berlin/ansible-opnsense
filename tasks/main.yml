@@ -45,13 +45,13 @@
     apply:
       tags: general
 
-# - name: sysctl
-#   tags:
-#     - always
-#   include_tasks:
-#     file: sysctl.yml
-#     apply:
-#       tags: sysctl
+- name: sysctl
+  tags:
+    - always
+  include_tasks:
+    file: sysctl.yml
+    apply:
+      tags: sysctl
 
 - name: authservers
   tags:
