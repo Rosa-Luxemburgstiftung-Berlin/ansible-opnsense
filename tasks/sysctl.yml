@@ -4,10 +4,14 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/sysctl/item[tunable/text()='{{ item.tunable }}']/value"
-    value: "{{ item.value }}"
+    xpath: "/opnsense/sysctl/item[tunable/text()='{{ item[0].tunable }}']/{{ item[1] }}"
+    value: "{{ item[0][item[1]] }}"
     pretty_print: true
-  loop: "{{ opn_sysctl }}"
-  when: opn_sysctl is defined
+  when: item[1] in item[0].keys()
+  with_nested:
+    - "{{ opn_sysctl | default([])}}"
+    -  # the list contains all valid options for tunable
+      - value
+      - descr
 
 ...
