@@ -5,6 +5,9 @@
 #   - tunable: ipmi_load
 #     descr: load ipmi module on boot
 #     value: 'YES'
+#
+# pls be aware of the fact that some settings
+# require a reboot in order to be applied
 
 - name: sysctl - system tunables
   delegate_to: localhost
