@@ -12,4 +12,16 @@
   with_subelements:
     - "{{ opn_filter | default([]) + opn_vlan_filter | default([]) }}"
     - settings
+
+# check if in one rule for dest and src only one of address, network or any is defined
+- name: check filter rule for errors in source or destination
+  ansible.builtin.include_tasks: filtertest.yml
+  when: opn_check_filter_rules | default(true) | bool
+  with_nested:
+    - "{{ opn_filter | default([]) + opn_vlan_filter | default([]) }}"
+    -
+      - source
+      - destination
+  loop_control:
+    label: "{{ item.0.descr }} {{ item.1 }}"
 ...

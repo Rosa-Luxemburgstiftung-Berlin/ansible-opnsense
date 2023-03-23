@@ -1,0 +1,24 @@
+---
+- name: register definitions from xml ...
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/filter/rule[descr/text()="{{ item.0.descr }}"]/{{ item.1 }}/{{ checkelements }}
+    count: true
+  register: _checkelementscount
+  with_items:
+    - address
+    - network
+    - any
+  loop_control:
+    loop_var: checkelements
+
+- name: filter definitions from xml ...
+  ansible.builtin.set_fact:
+    _foundcheckelements: "[ {% for e in _checkelementscount.results %}{% if e['count'] | int == 1 %}'{{ e['checkelements'] }}',{% endif %}{% endfor %} ]"
+
+- name: report duplicated elements ...
+  ansible.builtin.fail:
+    msg: "rule '{{ item.0.descr }}' has a error in {{ item.1 }}: only one of these should be defined: {{ _foundcheckelements | join(', ') }}"
+  when: _foundcheckelements | length > 1
+...
