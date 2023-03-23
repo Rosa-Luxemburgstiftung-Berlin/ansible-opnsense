@@ -15,7 +15,7 @@
 
 # check if in one rule for dest and src only one of address, network or any is defined
 - name: check filter rule for errors in source or destination
-  include_tasks: filtertest.yml
+  ansible.builtin.include_tasks: filtertest.yml
   when: opn_check_filter_rules | default(true) | bool
   with_nested:
     - "{{ opn_filter | default([]) + opn_vlan_filter | default([]) }}"
