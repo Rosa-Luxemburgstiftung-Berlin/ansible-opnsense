@@ -15,9 +15,9 @@ Requirements
 Role Variables
 --------------
 
-An example: https://github.com/naturalis/oss-network-demo/tree/master/ansible/basic
+We try to privide some example variable definitions in the coresponding task files.
+This is [work in progress #14](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/issues/14) ...
 
-[TODO #14](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/issues/14) up to date example
 
 Dependencies
 ------------
