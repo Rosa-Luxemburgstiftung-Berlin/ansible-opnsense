@@ -23,4 +23,17 @@
     - settings
   when: item.1.list is defined
 
+# valid types can be determined from
+# https://github.com/opnsense/core/blob/master/src/opnsense/mvc/app/models/OPNsense/Firewall/Alias.xml
+- name: test aliases
+  ansible.builtin.fail:
+    msg: "alias with the uuid '{{ item.0.uuid }}' has wrong type '{{ item.1.value }}'"
+  with_subelements:
+    - "{{ opn_alias | default([]) }}"
+    - settings
+  when:
+    - opn_check_alias | default(true) | bool
+    - item.1.key == "type"
+    - item.1.value is not in ['host', 'network', 'port', 'url', 'urltable', 'geoip', 'networkgroup', 'mac', 'asn', 'dynipv6host', 'authgroup', 'internal', 'external']
+
 ...
