@@ -34,6 +34,6 @@
   when:
     - opn_check_alias | default(true) | bool
     - item.1.key == "type"
-    - item.1.value is not in ['host', 'network', 'port', 'url', 'urltable', 'geoip', 'networkgroup', 'mac', 'asn', 'dynipv6host', 'authgroup', 'internal', 'external']
+    - item.1.value is not in ['host', 'network', 'port', 'url', 'urltable', 'geoip', 'networkgroup', 'mac', 'asn', 'dynipv6host', 'authgroup', 'internal', 'external']  # noqa yaml[line-length]
 
 ...
