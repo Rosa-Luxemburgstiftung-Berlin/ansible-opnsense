@@ -1,5 +1,92 @@
 ---
 
+
+# examples
+#
+# opn_interfaces_specific:
+#   - interface: lan
+#     settings:
+#     - key: if
+#       value: ixl1
+#     - key: descr
+#       value: MGMT
+#     - key: enable
+#       value: 1
+#     - key: lock
+#       value: 1
+#     - key: ipaddr
+#       value: 172.1.0.1
+#     - key: subnet
+#       value: 28
+#   - interface: wan
+#     settings:
+#     - key: if
+#       value: ixl0
+#     - key: descr
+#       value: WAN
+#     - key: enable
+#       value: 1
+#     - key: lock
+#       value: 1
+#     - key: ipaddr
+#       value: 140.82.121.4
+#     - key: subnet
+#       value: 27
+#     - key: gateway
+#       value: GW_WAN
+#   - interface: fwlink
+#     settings:
+#     - key: if
+#       value: lagg0
+#     - key: descr
+#       value: FWUplink
+#     - key: enable
+#       value: 1
+#     - key: lock
+#       value: 1
+#     - key: ipaddr
+#       value: 192.168.0.1
+#     - key: subnet
+#       value: 28
+#   - interface: DMZ_300
+#     vlan: 300
+#     vlan_parent_interface: lagg1
+#     settings:
+#       # - key: if
+#       #   value: lagg1_vlan300
+#       - key: descr
+#         value: DMZ_300
+#       - key: lock
+#         value: 1
+#       - key: enable
+#         value: 1
+#       - key: ipaddr
+#         value: 10.1.0.1
+#       - key: subnet
+#         value: 28
+#   - interface: SPK8_705
+#     vlan: 705
+#     vlan_parent_interface: ixl1
+#     settings:
+#       # - key: if
+#       #   value: ixl1_vlan705
+#       - key: descr
+#         value: MGMT_705
+#       - key: lock
+#         value: 1
+#       - key: enable
+#         value: 0  # disabled
+#       - key: ipaddr
+#         value: 172.10.10.1
+#       - key: subnet
+#         value: 24
+# 
+# opn_ifgroups:
+#   - ifname: WANG
+#     members: WAN1 WAN2
+#     descr: Group of all outbound WAN interfaces
+
+
 - name: interfaces - deprecated opn_interfaces_remove
   ansible.builtin.pause:
     prompt: "usage of 'opn_interfaces_remove' is deprecated, please use the generic 'opn_unset' var instead"
