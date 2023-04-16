@@ -80,7 +80,7 @@
 #         value: 172.10.10.1
 #       - key: subnet
 #         value: 24
-# 
+#
 # opn_ifgroups:
 #   - ifname: WANG
 #     members: WAN1 WAN2
