@@ -1,4 +1,43 @@
 ---
+
+# examples
+#
+# opn_general:
+#   - system/hostname: "{{ hostname | default(inventory_hostname_short) | regex_replace('\\..*','') }}"
+#   - system/domain: "{{ domainname | default( inventory_hostname.split('.')[1:] | join('.') ) }}"
+#   - system/webgui/protocol: "https"
+#   - system/webgui/nohttpreferercheck: "1"
+#   - system/timezone: "Europe/Berlin"
+#   - system/timeservers: "0.opnsense.pool.ntp.org 1.opnsense.pool.ntp.org 2.opnsense.pool.ntp.org 3.opnsense.pool.ntp.org"
+#   - system/prefer_ipv4: "1"
+#   - OPNsense/lldpd/general/enabled: "1"
+#   - system/enablenatreflectionhelper: "yes"
+#   - system/optimization: conservative
+#
+# opn_unset:
+#   - system/ipv6allow
+#   - trigger_initial_wizard
+#   - system/disablenatreflection
+#   - OPNsense/Firewall/Alias/aliases/alias[name="GExyz"]
+#   - vlans/vlan[descr="DMZ_335"]
+#   - interfaces/DMZ_335
+#   - dhcpd/DMZ_335
+#   - 'filter/rule[descr="access to DMZ_335"]'
+#   - 'filter/rule[contains(descr, "DMZ_335")]'  # fancy way to delete all rules after a vlan removal
+#
+# you can even unset **all** rules / interfaces etc. and let the ansible role regenerate the complete section
+# opn_unset:
+#   - interfaces
+#   - virtualip
+#   - dhcpd
+#   - filter
+#   - OPNsense/Firewall/Alias
+#   - gateways
+#   - vlans
+#   - staticroutes
+#   - laggs
+
+
 - name: general - set
   delegate_to: localhost
   community.general.xml:
