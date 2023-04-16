@@ -1,4 +1,10 @@
 ---
+
+- name: interfaces - deprecated opn_interfaces_remove
+  ansible.builtin.pause:
+    prompt: "usage of 'opn_interfaces_remove' is deprecated, please use the generic 'opn_unset' var instead"
+  when: opn_interfaces_remove is defined
+
 - name: interfaces - remove interface
   delegate_to: localhost
   community.general.xml:
