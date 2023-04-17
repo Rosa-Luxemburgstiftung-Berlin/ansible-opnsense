@@ -24,6 +24,7 @@
 #   - dhcpd/DMZ_335
 #   - 'filter/rule[descr="access to DMZ_335"]'
 #   - 'filter/rule[contains(descr, "DMZ_335")]'  # fancy way to delete all rules after a vlan removal
+#   - - ipsec/phase2[uniqid="ee0e6..."]  # https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/issues/21
 #
 # you can even unset **all** rules / interfaces etc. and let the ansible role regenerate the complete section
 # opn_unset:
