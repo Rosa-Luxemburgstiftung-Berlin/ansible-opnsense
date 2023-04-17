@@ -1,4 +1,55 @@
 ---
+
+# examples
+#
+# some notes regarding uuid
+# see https://github.com/naturalis/ansible-opnsense/issues/61
+#
+# opn_alias:
+#   - uuid: b9ca4f72-ab35-5c48-8460-d71a7ef50184
+#     settings:
+#       - key: name
+#         value: PRIVATE_NETWORKS
+#       - key: type
+#         value: network
+#       - key: content
+#         list:
+#           - 10.0.0.0/8
+#           - 172.16.0.0/12
+#           - 192.168.0.0/16
+#       - key: enabled
+#         value: 1
+#       - key: description
+#         value: "opn alias PRIVATE_NETWORKS"
+#   - uuid: 67b86e3a-0534-5e15-86f7-eea1116dc9be
+#     settings:
+#       - key: name
+#         value: FIREWALL_ADMIN_ACCESS_PORTS_tcp
+#       - key: type
+#         value: port
+#       - key: content
+#         list:
+#           - 22
+#           - 443
+#       - key: enabled
+#         value: 1
+#       - key: description
+#         value: "admin access ports to the firewall"
+#   - uuid: e804a2e9-f765-58cc-a6d6-caa43be7ceef
+#     settings:
+#       - key: name
+#         value: BLOCKLIST_SPAMHAUS_DROP
+#       - key: type
+#         value: urltable
+#       - key: content
+#         value: "https://www.spamhaus.org/drop/drop.txt"
+#       - key: enabled
+#         value: 1
+#       - key: description
+#         value: "Spamhaus DROP list"
+#       - key: updatefreq
+#         value: 0.041666666666666664
+
 - name: aliases
   delegate_to: localhost
   community.general.xml:
