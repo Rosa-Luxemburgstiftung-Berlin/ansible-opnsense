@@ -225,6 +225,14 @@
     apply:
       tags: laggs
 
+- name: haproxy
+  tags:
+    - always
+  ansible.builtin.include_tasks:
+    file: haproxy.yml
+    apply:
+      tags: haproxy
+
 - name: trim EOF
   delegate_to: localhost
   ansible.builtin.lineinfile:
