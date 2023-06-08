@@ -1,0 +1,148 @@
+---
+# examples
+#
+# opn_haproxy_general:
+#   - enabled: 1
+#   - showIntro: 0
+#
+# opn_haproxy_servers:
+#   - uuid: ec472ac5-828e-4efe-9edf-32248b0f4a31
+#     settings:
+#       - key: id
+#         value: 606ec22e7c6f61.75190473
+#       - key: enabled
+#         value: 1
+#       - key: name
+#         value: server_name
+#       - key: address
+#         value: server_ip_or_host
+#       - key: mode
+#         value: active
+#       - key: multiplexer_protocol
+#         value: unspecified
+#       - key: type
+#         value: static
+#
+# opn_haproxy_healthchecks:
+#   - uuid: ee651b9a-b0d2-45fd-8a4a-65b21083fe07
+#     settings:
+#       - key: name
+#         value: Check_TCP_80
+#       - key: type
+#         value: tcp
+#       - key: interval
+#         value: 2s
+#       - key: checkport
+#         value: 80
+#
+# opn_haproxy_backends:
+#   - uuid: aff19bac-6e97-4ccf-a4c7-4b91ca47c103
+#     settings:
+#       - key: id
+#         value: 606ec25ee677b1.89355899
+#       - key: enabled
+#         value: 1
+#       - key: name
+#         value: backend_name
+#       - key: mode
+#         value: tcp
+#       - key: algorithm
+#         value: roundrobin
+#       - key: linkedServers
+#         value: ec472ac5-828e-4efe-9edf-32248b0f4a31
+#       - key: healthCheckEnabled
+#         value: 1
+#       - key: healthCheck
+#         value: ee651b9a-b0d2-45fd-8a4a-65b21083fe07
+#       - key: healthCheckLogStatus
+#         value: 0
+#       - key: http2Enabled
+#         value: 0
+#       - key: persistence
+#         value: sticktable
+#       - key: stickiness_pattern
+#         value: sourceipv4
+#       - key: basicAuthEnabled
+#         value: 0
+#
+# opn_haproxy_frontends:
+#   - uuid: 3c665efa-8048-4bdf-a86d-41f69455779f
+#     settings:
+#       - key: id
+#         value: 606ec335234d57.29337225
+#       - key: enabled
+#         value: 1
+#       - key: name
+#         value: frontend_name
+#       - key: bind
+#         value: haproxy_ip:port
+#       - key: mode
+#         value: tcp
+#       - key: defaultBackend
+#         value: aff19bac-6e97-4ccf-a4c7-4b91ca47c103
+#       - key: ssl_enabled
+#         value: 0
+#       - key: ssl_advancedEnabled
+#         value: 0
+#       - key: ssl_clientAuthEnabled
+#         value: 0
+#       - key: basicAuthEnabled
+#         value: 0
+#       - key: http2Enabled
+#         value: 0
+#
+- name: haproxy - general
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/HAProxy/general/{{ item.key }}
+    value: "{{ item.value }}"
+    pretty_print: true
+  with_dict: "{{ opn_haproxy_general }}"
+  when: opn_haproxy_general is defined
+
+- name: haproxy - frontends
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/HAProxy/frontends/frontend[@uuid="{{ item.0.uuid }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: true
+  with_subelements:
+    - "{{ opn_haproxy_frontends | default([]) }}"
+    - settings
+
+- name: haproxy - backends
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/HAProxy/backends/backend[@uuid="{{ item.0.uuid }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: true
+  with_subelements:
+    - "{{ opn_haproxy_backends | default([]) }}"
+    - settings
+
+- name: haproxy - servers
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/HAProxy/servers/server[@uuid="{{ item.0.uuid }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: true
+  with_subelements:
+    - "{{ opn_haproxy_servers | default([]) }}"
+    - settings
+
+- name: haproxy - healthchecks
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/HAProxy/healthchecks/healthcheck[@uuid="{{ item.0.uuid }}"]/{{ item.1.key }}
+    value: "{{ item.1.value }}"
+    pretty_print: true
+  with_subelements:
+    - "{{ opn_haproxy_healthchecks | default([]) }}"
+    - settings
+
+...
