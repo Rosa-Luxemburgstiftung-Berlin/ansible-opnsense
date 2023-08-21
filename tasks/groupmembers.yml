@@ -49,7 +49,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/system/group[name/text()="{{ group.name }}"]/member
+    xpath: "/opnsense/system/group[name/text()='{{ group.name }}']/member"
     state: absent
     pretty_print: true
   when: configuredmemberlist | default([]) != requestedmemberlist
@@ -58,7 +58,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/system/group[name/text()="{{ group.name }}"]
+    xpath: "/opnsense/system/group[name/text()='{{ group.name }}']"
     add_children:
       - member: "{{ item }}"
     pretty_print: true
