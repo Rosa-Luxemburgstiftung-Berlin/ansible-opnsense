@@ -1,0 +1,68 @@
+---
+
+- name: groups - count members from xml
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/system/group[name/text()='{{ group.name }}']/member"
+    count: true
+  register: membercount
+
+- name: groups - get current members
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/system/group[name/text()='{{ group.name }}']/member"
+    content: text
+  register: configured_members
+  when: membercount.count > 0
+
+- name: groups - map current members
+  ansible.builtin.set_fact:
+    configuredmemberlist: "{{ configured_members.matches | map(attribute='member') }}"
+  when: membercount.count > 0
+
+- name: groups - get requested members
+  ansible.builtin.set_fact:
+    requestedmemberlist: "[
+        {% for kvdict in group.settings %}
+          {% if kvdict.key == 'member' %}
+            '{{ kvdict.value }}',
+          {% endif %}
+        {% endfor %}
+      ]"
+
+- name: debug configured_members
+  ansible.builtin.debug:
+    var: configured_members
+    verbosity: 1
+- name: debug configuredmemberlist
+  ansible.builtin.debug:
+    var: configuredmemberlist
+    verbosity: 1
+- name: debug requestedmemberlist
+  ansible.builtin.debug:
+    var: requestedmemberlist
+    verbosity: 1
+
+- name: groups - reset xml
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/system/group[name/text()="{{ group.name }}"]/member
+    state: absent
+    pretty_print: true
+  when: configuredmemberlist | default([]) != requestedmemberlist
+
+- name: groups - add users to groups
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/system/group[name/text()="{{ group.name }}"]
+    add_children:
+      - member: "{{ item }}"
+    pretty_print: true
+  with_items: "{{ requestedmemberlist }}"
+  when: configuredmemberlist | default([]) != requestedmemberlist
+
+...

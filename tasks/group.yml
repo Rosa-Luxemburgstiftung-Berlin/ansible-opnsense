@@ -1,4 +1,18 @@
 ---
+
+# definition:
+# opn_group:
+#   - name: g2
+#     settings:
+#       - key: gid
+#         value: 2001
+#       - key: description
+#         value: group two
+#       - key: member
+#         value: 2000
+#       - key: member
+#         value: 2001
+
 - name: groups - create
   delegate_to: localhost
   community.general.xml:
@@ -9,30 +23,18 @@
   with_subelements:
     - "{{ opn_group }}"
     - settings
-  when: opn_group is defined and item.1.key is defined
+  when:
+    - opn_group is defined
+    - item.1.key is defined
+    - not item.1.key == "member"
 
-- name: groups - count member nodes
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: /opnsense/system/group/member
-    count: true
-  register: membercount
-
-# - debug:
-#     var: membercount.count
-
-- name: groups - add users to groups
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: /opnsense/system/group[name/text()="{{ item.0.name }}"]
-    add_children:
-      - member: "{{ item.1.member }}"
-    pretty_print: true
-  with_subelements:
+- name: groups - members
+  ansible.builtin.include_tasks: groupmembers.yml
+  with_items:
     - "{{ opn_group }}"
-    - settings
-  when: opn_group is defined and item.1.member is defined and membercount.count <= 1
+  loop_control:
+    loop_var: group
+    label: "{{ group.name }}"
+  when: opn_group is defined
 
 ...
