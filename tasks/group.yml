@@ -35,6 +35,8 @@
   loop_control:
     loop_var: group
     label: "{{ group.name }}"
-  when: opn_group is defined
+  when:
+    - opn_group is defined
+    - '"member" in group.settings | items2dict'
 
 ...
