@@ -5,7 +5,8 @@ ansible-opnsense
 
 Ansible role to configure OPNsense firewalls.
 
-This is the [RLS](https://github.com/Rosa-Luxemburgstiftung-Berlin) fork of the original from https://github.com/naturalis/ansible-opnsense.
+This is the [RLS](https://github.com/Rosa-Luxemburgstiftung-Berlin) fork of the original from https://github.com/naturalis/ansible-opnsense.  
+Due to inactivity in the upstream repo, we stopped creating pull requests and consider this fork as detached.
 
 Requirements
 ------------
@@ -15,7 +16,7 @@ Requirements
 Role Variables
 --------------
 
-We try to privide some example variable definitions in the coresponding task files.
+We try to provide some example variable definitions in the coresponding task files.
 This is [work in progress #14](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/issues/14) ...
 
 
@@ -38,7 +39,7 @@ Including an example of how to use your role (for instance, with variables passe
         - ansible-opnsense
     ...
 
-Become on play level is not needed for XML changes on localhost only for tasks to fetch/push config.xml and restart services on OPNsense.
+Become on play level is not needed for XML changes on localhost, only for tasks to fetch/push config.xml and restart services on OPNsense.
 
 Ansible command
 ---------------
