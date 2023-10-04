@@ -5,8 +5,10 @@ ansible-opnsense
 
 Ansible role to configure OPNsense firewalls.
 
-This is the [RLS](https://github.com/Rosa-Luxemburgstiftung-Berlin) fork of the original from https://github.com/naturalis/ansible-opnsense.  
-Due to inactivity in the upstream repo, we stopped creating pull requests and consider this fork as detached.
+This is the [RLS](https://github.com/Rosa-Luxemburgstiftung-Berlin) fork of the original from https://github.com/naturalis/ansible-opnsense.
+
+**As of 04. October 2023 this became the main repository, as the original was removed (see [#35](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/issues/35)).**  
+We like to thank [@rudibroekhuizen](https://github.com/rudibroekhuizen) and all other contributors from [@naturalis](https://github.com/naturalis) for their greate work and we are happy to use their contributions as a base for further development.
 
 Requirements
 ------------
