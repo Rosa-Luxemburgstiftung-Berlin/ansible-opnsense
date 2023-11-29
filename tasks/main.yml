@@ -19,7 +19,9 @@
   ansible.builtin.include_tasks:
     file: dnsserver.yml
     apply:
-      tags: dnsserver
+      tags:
+        - dnsserver
+        - dns
 
 - name: user
   tags:
@@ -109,7 +111,9 @@
   ansible.builtin.include_tasks:
     file: interfaces.yml
     apply:
-      tags: interfaces
+      tags:
+        - interfaces
+        - interface
 
 - name: vlans
   tags:
@@ -117,7 +121,9 @@
   ansible.builtin.include_tasks:
     file: vlans.yml
     apply:
-      tags: vlans
+      tags:
+        - vlans
+        - vlan
   when: opn_interfaces_vlan_parent_interface is defined
 
 - name: bridges
@@ -126,7 +132,9 @@
   ansible.builtin.include_tasks:
     file: bridges.yml
     apply:
-      tags: bridges
+      tags:
+        - bridges
+        - bridge
 
 - name: virtualip
   tags:
@@ -158,8 +166,9 @@
   ansible.builtin.include_tasks:
     file: gateways.yml
     apply:
-      tags: gateways
-  # when: prod | default([])
+      tags:
+        - gateways
+        - gateway
 
 - name: hasync
   tags:
@@ -175,7 +184,9 @@
   ansible.builtin.include_tasks:
     file: dhcpd.yml
     apply:
-      tags: dhcpd
+      tags:
+        - dhcpd
+        - dhcp
 
 - name: unbound
   tags:
@@ -207,7 +218,11 @@
   ansible.builtin.include_tasks:
     file: staticroutes.yml
     apply:
-      tags: staticroutes
+      tags:
+        - staticroutes
+        - routing
+        - routes
+        - route
 
 - name: nat
   tags:
@@ -223,7 +238,9 @@
   ansible.builtin.include_tasks:
     file: laggs.yml
     apply:
-      tags: laggs
+      tags:
+        - laggs
+        - lagg
 
 - name: haproxy
   tags:
