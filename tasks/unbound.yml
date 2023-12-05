@@ -159,7 +159,7 @@
     pretty_print: true
   when: unbound_domainoverrides_update | default(False)
 
-- name: unbound domainoverrides
+- name: unbound domainoverrides  # noqa jinja[spacing]
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"

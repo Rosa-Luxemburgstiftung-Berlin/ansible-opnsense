@@ -104,7 +104,7 @@
     - "{{ ipsecphasevar2[uniqid]['encryption-algorithm-options'] | default([]) }}"
   when: encalgopt_reset | default(false)
 
-- name: "IPSec ike phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }}"
+- name: "IPSec ike phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }}"  # noqa jinja[spacing]
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
