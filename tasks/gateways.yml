@@ -113,7 +113,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/gateways/gateway_group[name/text()="{{ item.name }}"]
-    set_children: "{{ item.settings  + [{'name':item.name }] }}"
+    set_children: "{{ item.settings + [{'name': item.name}] }}"
     pretty_print: true
   with_items: "{{ opn_gateway_groups | default([]) }}"
 
