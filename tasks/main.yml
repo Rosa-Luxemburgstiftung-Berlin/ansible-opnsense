@@ -50,7 +50,7 @@
 - name: sysctl
   tags:
     - always
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: sysctl.yml
     apply:
       tags: sysctl
