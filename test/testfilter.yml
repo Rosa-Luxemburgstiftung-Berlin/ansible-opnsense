@@ -1,0 +1,21 @@
+---
+
+# subtasks for filter test loop
+
+#- name: set test item
+#  ansible.builtin.set_fact:
+#    _test: "{{ item | basename | splitext | first }}"
+- name: copy test file
+  ansible.builtin.copy:
+    src: "{{ _test }}.xml"
+    dest: "cfg/{{ _test }}.xml"
+    remote_src: true
+- name: read test vars
+  ansible.builtin.include_vars:
+    file: "{{ _test }}.yml"
+- name: set local cfg path
+  ansible.builtin.set_fact:
+    local_config_path: "cfg/{{ _test }}.xml"
+- name: import filter task
+  ansible.builtin.include_tasks:
+    file: ../tasks/filter.yml

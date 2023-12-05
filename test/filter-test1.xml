@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<opnsense>
+  <filter>
+    <rule>
+      <descr>icmp allow</descr>
+      <type>pass</type>
+      <ipprotocol>inet</ipprotocol>
+      <statetype>keep state</statetype>
+      <direction>any</direction>
+      <quick>1</quick>
+      <category>TEST</category>
+      <floating>yes</floating>
+      <protocol>icmp</protocol>
+      <source>
+        <network>XYZ</network>
+      </source>
+      <destination>
+        <network>ABC</network>
+      </destination>
+    </rule>
+  </filter>
+</opnsense>
