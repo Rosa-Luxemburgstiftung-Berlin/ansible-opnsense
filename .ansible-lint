@@ -1,3 +1,9 @@
+---
+exclude_paths:
+  - .github/
+  - .pre-commit-config.yaml
+
 skip_list:
   - 'role-name'
   - 'name[casing]'
+  - 'name[template]'
