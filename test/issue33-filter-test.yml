@@ -1,0 +1,30 @@
+---
+
+#local_config_path: cfg/test1.xml
+
+test_name: test consistent setting src/dest to network/address/any ...
+
+opn_filter:
+  - descr: icmp allow
+    settings:
+      - key: type
+        value: pass
+      - key: ipprotocol
+        value: inet
+      - key: statetype
+        value: keep state
+      - key: direction
+        value: any
+      - key: quick
+        value: '1'
+      - key: category
+        value: TEST
+      - key: floating
+        value: 'yes'
+      - key: protocol
+        value: icmp
+      - key: source/any
+        value: '1'
+      - key: destination/any
+        value: '1'
+
