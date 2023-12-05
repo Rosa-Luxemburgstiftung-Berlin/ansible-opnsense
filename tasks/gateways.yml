@@ -80,7 +80,7 @@
 #      - key: ipprotocol
 #        value: inet
 
-# FIXME: in fact a definition as a dict would make like easier:
+# FIXME: in fact a definition as a dict would make life much easier:
 #  - interface: fwlink
 #    name: GW_02
 #    gateway: 192.168.0.3
