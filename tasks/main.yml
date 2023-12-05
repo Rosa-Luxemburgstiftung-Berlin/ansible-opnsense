@@ -281,13 +281,13 @@
   register: config
   tags: copy
 
-- name: clean,safe delete
+- name: clean,safe delete  # noqa no-changed-when
   delegate_to: localhost
   ansible.builtin.command: srm "{{ local_config_path }}"
   tags: clean
   when: delete_local_xml_file | default(false)
 
-- name: sync  # noqa no-handler
+- name: sync  # noqa no-handler no-changed-when
   ansible.builtin.command: "{{ item }}"
   throttle: 1
   # loop_control:
@@ -299,7 +299,7 @@
     - sync
     - copy
 
-- name: reload  # noqa no-handler
+- name: reload  # noqa no-handler no-changed-when
   ansible.builtin.command: "{{ item }}"
   throttle: 1
   # loop_control:
