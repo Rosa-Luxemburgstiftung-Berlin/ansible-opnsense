@@ -19,3 +19,7 @@
 - name: import filter task
   ansible.builtin.include_tasks:
     file: ../tasks/filter.yml
+- name: detect diff between result and expected state
+  ansible.builtin.command: "cmp -s '{{ local_config_path }}' '{{ _test }}-expect.xml'"
+  register: cmp
+  failed_when: cmp.rc > 0

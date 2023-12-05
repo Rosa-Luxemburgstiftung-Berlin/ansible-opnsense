@@ -1,8 +1,6 @@
 ---
 
-#local_config_path: cfg/test1.xml
-
-test_name: test consistent setting src/dest to network/address/any ...
+test_name: simple filter test
 
 opn_filter:
   - descr: icmp allow
