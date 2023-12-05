@@ -177,7 +177,7 @@
     pretty_print: true
   when: opn_ifgroups is defined
 
-- name: create ifgroupentry
+- name: create ifgroupentry  # noqa jinja[spacing]
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
