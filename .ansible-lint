@@ -1,6 +1,7 @@
 ---
 exclude_paths:
   - .github/
+  - test/
   - .pre-commit-config.yaml
 
 skip_list:
