@@ -5,21 +5,21 @@
 #- name: set test item
 #  ansible.builtin.set_fact:
 #    _test: "{{ item | basename | splitext | first }}"
-- name: copy test file
+- name: "copy test file {{ _test }}"
   ansible.builtin.copy:
     src: "{{ _test }}.xml"
     dest: "cfg/{{ _test }}.xml"
     remote_src: true
-- name: read test vars
+- name: "read test vars for {{ _test }}"
   ansible.builtin.include_vars:
     file: "{{ _test }}.yml"
-- name: set local cfg path
+- name: "set local cfg path to 'cfg/{{ _test }}.xml'"
   ansible.builtin.set_fact:
     local_config_path: "cfg/{{ _test }}.xml"
-- name: import filter task
+- name: "import {{ _testtask }} task for {{ _test }}"
   ansible.builtin.include_tasks:
     file: "../tasks/{{ _testtask }}.yml"
-- name: detect diff between result and expected state
+- name: "detect diff between result and expected state for {{ _test }}"
   ansible.builtin.command: "cmp -s '{{ local_config_path }}' '{{ _test }}-expect.xml'"
   register: cmp
   failed_when: cmp.rc > 0
