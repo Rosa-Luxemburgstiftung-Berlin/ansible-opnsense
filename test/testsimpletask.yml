@@ -1,7 +1,7 @@
 ---
 
 - name: "{{ _testtask }} test loop ..."
-  ansible.builtin.include_tasks: "test{{ _testtask }}.yml"
+  ansible.builtin.include_tasks: testsimpletaskgeneric.yml
   vars:
     _test: "{{ _testfile | basename | splitext | first }}"
   with_fileglob:

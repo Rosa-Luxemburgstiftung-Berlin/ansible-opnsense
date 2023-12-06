@@ -18,7 +18,7 @@
     local_config_path: "cfg/{{ _test }}.xml"
 - name: import filter task
   ansible.builtin.include_tasks:
-    file: ../tasks/filter.yml
+    file: "../tasks/{{ _testtask }}.yml"
 - name: detect diff between result and expected state
   ansible.builtin.command: "cmp -s '{{ local_config_path }}' '{{ _test }}-expect.xml'"
   register: cmp
