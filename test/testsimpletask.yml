@@ -1,0 +1,11 @@
+---
+
+- name: "{{ _testtask }} test loop ..."
+  ansible.builtin.include_tasks: "test{{ _testtask }}.yml"
+  vars:
+    _test: "{{ _testfile | basename | splitext | first }}"
+  with_fileglob:
+    - "{{ _testtask }}-test*.yml"
+  loop_control:
+    label: "{{ _test }}"
+    loop_var: _testfile

@@ -6,12 +6,10 @@
     config_path: test/{{ inventory_hostname }}.xml
     local_config_path: cfg/{{ inventory_hostname }}.xml
   tasks:
-    - name: filter test loop ...
-      ansible.builtin.include_tasks: testfilter.yml
-      vars:
-        _test: "{{ filter_test | basename | splitext | first }}"
-      with_fileglob:
-        - "filter-test*.yml"
+    - name: simple task test loop ...
+      ansible.builtin.include_tasks: testsimpletask.yml
       loop_control:
-        label: "{{ _test }}"
-        loop_var: filter_test
+        label: "{{ _testtask }}"
+        loop_var: _testtask
+      with_items:
+        - filter
