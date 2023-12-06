@@ -13,3 +13,4 @@
         loop_var: _testtask
       with_items:
         - filter
+        - alias

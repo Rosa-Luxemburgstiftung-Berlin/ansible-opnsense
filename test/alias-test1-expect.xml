@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <filter>
+  </filter>
+  <OPNsense>
+    <Firewall>
+      <Alias>
+        <aliases>
+          <alias uuid="b9ca4f72-ab35-5c48-8460-d71a7ef50184">
+            <name>PRIVATE_NETWORKS</name>
+            <type>network</type>
+            <enabled>1</enabled>
+            <description>opn alias PRIVATE_NETWORKS</description>
+            <content>10.0.0.0/8
+172.16.0.0/12
+192.168.0.0/16</content>
+          </alias>
+          <alias uuid="b948ceaa-1ca9-5009-bad1-04660a926f87">
+            <name>HTTP_TCP</name>
+            <type>port</type>
+            <enabled>1</enabled>
+            <description>tcp http(s) ports</description>
+            <content>80
+443</content>
+          </alias>
+        </aliases>
+      </Alias>
+    </Firewall>
+  </OPNsense>
+</opnsense>
