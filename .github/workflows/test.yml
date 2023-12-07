@@ -15,7 +15,7 @@ jobs:
       - name: set up python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.11
+          python-version: 3.11.2
       - name: install requirements
         run: |
           python -m pip install --upgrade pip
@@ -27,7 +27,9 @@ jobs:
           pip --version
           which pip
           pip list
+        when: debug | bool
       - name: run ansible test
-        working-directory: ./test
-        run: |
-          ansible-playbook test.yml
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          directory: ./test
+          playbook: test.yml
