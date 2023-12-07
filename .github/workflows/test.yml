@@ -23,4 +23,5 @@ jobs:
       - name: run ansible test
         working-directory: ./test
         run: |
+          pip list
           ansible-playbook test.yml
