@@ -27,7 +27,6 @@ jobs:
           pip --version
           which pip
           pip list
-        when: debug | bool
       - name: run ansible test
         uses: dawidd6/action-ansible-playbook@v2
         with:
