@@ -3,7 +3,7 @@
 - name: run test
   hosts: testhosts
   vars:
-    ansible_python_interpreter: "/usr/bin/env python"
+    ansible_python_interpreter: "/usr/bin/env python"  # REQUIRED for guthub action
     config_path: test/{{ inventory_hostname }}.xml
     local_config_path: cfg/{{ inventory_hostname }}.xml
   tasks:
