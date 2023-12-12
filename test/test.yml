@@ -16,3 +16,5 @@
         - filter
         - alias
         - wireguard
+      when:
+        - test | default(_testtask) == _testtask

@@ -14,6 +14,10 @@ A check consists of:
 
 `ansible-playbook test.yml`
 
+### run test for just a task
+
+`ansible-playbook -e test=filter test.yml`
+
 ## Notes
 
 This is work in progress ...
