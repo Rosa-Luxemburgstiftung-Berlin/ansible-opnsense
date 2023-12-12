@@ -32,16 +32,6 @@
   with_dict:
     - "{{ opn_wireguard.general | default({}) }}"
 
-- name: configure wireguard servers
-  ansible.builtin.include_tasks: wireguardservers.yml
-  vars:
-    uuid: "{{ servers.key }}"
-    serverscfg: "{{ servers.value }}"
-  with_dict:
-    - "{{ opn_wireguard.servers | default({}) }}"
-  loop_control:
-    loop_var: servers
-
 - name: configure wireguard clients
   ansible.builtin.include_tasks: wireguardclients.yml
   vars:
@@ -51,5 +41,15 @@
     - "{{ opn_wireguard.clients | default({}) }}"
   loop_control:
     loop_var: clients
+
+- name: configure wireguard servers
+  ansible.builtin.include_tasks: wireguardservers.yml
+  vars:
+    uuid: "{{ servers.key }}"
+    serverscfg: "{{ servers.value }}"
+  with_dict:
+    - "{{ opn_wireguard.servers | default({}) }}"
+  loop_control:
+    loop_var: servers
 
 ...
