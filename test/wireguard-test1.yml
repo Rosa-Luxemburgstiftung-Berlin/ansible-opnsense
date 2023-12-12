@@ -1,0 +1,63 @@
+---
+
+opn_wireguard:
+  general:
+    enabled: 1
+  servers:
+    "63eedfa6-725c-49e9-9678-1cc36a64bfff":
+      enabled: 1
+      name: wgs1
+      instance: 0
+      pubkey: "F7hSLFas3x3OWvPsrCZkWbOj6fO2stnoJgZec7YbQkw="
+      privkey: "aNz1ufO2AmEbN0xSPEXBdnldilDbU4FObX9KQ5zFtF4="
+      port: 5555
+      mtu:
+      dns:
+      tunneladdress: 192.168.0.254/29
+      disableroutes: 0
+      gateway:
+      peers: a2c9e616-2b70-4566-94b7-26982ee82d0e
+    "20e492fa-0acc-4082-95ad-7aa3dab18e1b":
+      enabled: 1
+      name: wgs2
+      instance: 1
+      pubkey: o8l2izL6Qib9lQOxy7zVRtnymDqej7z1OIiWEUTCc0M=
+      privkey: eJF3/TXwCGg2zzR9SN7Nd6ZTLxaXlDC6nPLt3y8SPyM=
+      port: 5556
+      tunneladdress: 172.0.255.1/24
+      disableroutes: 0
+      gateway:
+      peers:
+        - 42ab6cec-7f19-41a1-b0cd-47748d68335f
+        - 42ab6cec-7f19-41a1-b0cd-47748d68335f
+  clients:
+    "a2c9e616-2b70-4566-94b7-26982ee82d0e":
+      enabled: 1
+      name: wgc1
+      pubkey: +pW8dSurC0UGBc+LWoGWuQKVbBa56Y/pK4MW1ZwuKXc=
+      psk: mrbZjO476CVrr9YBTksVJK6ABr5mcTOsME2CaDYqb3g=
+      tunneladdress:
+        - 192.168.20.0/24
+        - 192.168.255.0/24
+        - 192.168.0.253/32
+      serveraddress: 192.168.0.242
+      serverport: 5555
+      keepalive: 30
+    "42ab6cec-7f19-41a1-b0cd-47748d68335f":
+      enabled: 1
+      name: wgc2
+      pubkey: BWT7WnYwV+86zhf4OAlGYwCZKlvvXrvoP6dd8cYcaAQ=
+      psk: 8tDw4YN3Ef581PivVYrV70ORdx8vyRZAA7CskAQ1xAk=
+      tunneladdress: 172.0.255.10/32
+      serveraddress:
+      serverport:
+      keepalive: 30
+    "9c1d12b8-dda5-4a88-9130-8da0b2450016":
+      enabled: 1
+      name: wgc3
+      pubkey: rnhKwvKEg22VkPweq0GGEbmBSQZ+WuD4sQ2BAVhodGg=
+      psk: /3dKqopj1cKOZbafVazm2SEiAQUFb/FnCBWQGns7730=
+      tunneladdress: 172.0.250.11/32
+      serveraddress:
+      serverport:
+      keepalive: 30
