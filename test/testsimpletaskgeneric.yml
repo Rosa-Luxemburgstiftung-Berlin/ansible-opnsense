@@ -7,9 +7,14 @@
 #    _test: "{{ item | basename | splitext | first }}"
 - name: "copy test file {{ _test }}"
   ansible.builtin.copy:
-    src: "{{ _test }}.xml"
+    src: "{{ lookup('ansible.builtin.first_found', testxmlfile) }}"
     dest: "cfg/{{ _test }}.xml"
     remote_src: true
+  vars:
+    testxmlfile:
+      files:
+        - "{{ _test }}.xml"
+        - 00default.xml
 - name: "read test vars for {{ _test }}"
   ansible.builtin.include_vars:
     file: "{{ _test }}.yml"
