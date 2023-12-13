@@ -16,6 +16,7 @@
         - filter
         - alias
         - wireguard
+        - ipsec
         - dnsserver
       when:
         - test | default(_testtask) == _testtask
