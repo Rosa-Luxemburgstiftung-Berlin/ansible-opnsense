@@ -3,6 +3,7 @@
   <system>
   </system>
   <ipsec>
+    <enable>1</enable>
     <ipsec_asn>1</ipsec_asn>
     <ipsec_chd>1</ipsec_chd>
     <passthrough_networks>192.168.0.0/24</passthrough_networks>
