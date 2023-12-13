@@ -3,7 +3,7 @@
 
 # definition:
 # opn_ipsec:
-#   enable: 1
+#   enable: 1  # set to 0 to disable ipsec and explicit to 1 do enable a disabled ipsec service
 #   ipsec_asn: 1
 #   ipsec_chd: 1
 #   ... # other globalsettings like passthrough_networks, ...
@@ -59,6 +59,19 @@
     - "{{ opn_ipsec | default({}) }}"
   when:
     - item.key != 'ikeids'
+    - not (item.key == 'enable' and item.value|int != 1)
+
+- name: IPSec disable
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/{{ item.key }}"
+    state: absent
+    pretty_print: true
+  with_dict:
+    - "{{ opn_ipsec | default({}) }}"
+  when:
+    - item.key == 'enable' and item.value|int != 1
 
 - name: IPSec loop ikeids for phase1 ...
   ansible.builtin.include_tasks: ipsecphase1.yml
