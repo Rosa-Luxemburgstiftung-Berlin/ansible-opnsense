@@ -9,3 +9,8 @@
   loop_control:
     label: "{{ _test }}"
     loop_var: _testfile
+
+- name: "{{ _testtask }} test loop done"
+  ansible.builtin.debug:
+    msg: "test task {{ _testtask }}: OK"
+    
