@@ -3,14 +3,22 @@
 test_name: simple filter test
 
 opn_filter:
-  - descr: test issue 45
+  - descr: test issue 45  # the interface schould never be changed
     settings:
       - key: interface
         value: opt1,opt2,wan,lan
+      - key: interface
+        value: opt2,opt1,wan,lan
+      - key: interface
+        value: lan,opt2,opt1,wan
+  - descr: update rule
+    settings:
+      - key: interface
+        value: opt1,opt2,wan
   - descr: new rule
     settings:
       - key: interface
-        value: opt1,opt2,wan,lan
+        value: opt1,opt2,lan
       - key: type
         value: pass
       - key: ipprotocol

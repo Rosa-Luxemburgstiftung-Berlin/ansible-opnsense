@@ -19,5 +19,41 @@
       </destination>
       <interface>wan,lan,opt1,opt2</interface>
     </rule>
+    <rule>
+      <descr>update rule</descr>
+      <interface>opt1,opt2,wan</interface>
+      <type>pass</type>
+      <ipprotocol>inet</ipprotocol>
+      <statetype>keep state</statetype>
+      <direction>any</direction>
+      <quick>1</quick>
+      <category>TEST</category>
+      <floating>yes</floating>
+      <protocol>tcp</protocol>
+      <source>
+        <any>1</any>
+      </source>
+      <destination>
+        <any>1</any>
+      </destination>
+    </rule>
+    <rule>
+      <descr>new rule</descr>
+      <interface>opt1,opt2,lan</interface>
+      <type>pass</type>
+      <ipprotocol>inet</ipprotocol>
+      <statetype>keep state</statetype>
+      <direction>any</direction>
+      <quick>1</quick>
+      <category>TEST</category>
+      <floating>yes</floating>
+      <protocol>tcp</protocol>
+      <source>
+        <any>1</any>
+      </source>
+      <destination>
+        <any>1</any>
+      </destination>
+    </rule>
   </filter>
 </opnsense>
