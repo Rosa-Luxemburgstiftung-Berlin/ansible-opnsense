@@ -59,6 +59,7 @@ opn_ipsec:
         e471b7299c8c1:
           pinghost: 10.128.0.1
           descr:  10.128.0.0/12
+          disabled: 1
           remoteid:
             type: network
             address: 10.128.0.0
@@ -67,6 +68,7 @@ opn_ipsec:
         e98f78c414ece:
           pinghost: 10.224.0.1
           descr: 10.224.0.0/12
+          disabled: 1
           remoteid:
             type: network
             address: 10.224.0.0
