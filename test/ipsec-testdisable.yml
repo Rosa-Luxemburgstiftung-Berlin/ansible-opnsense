@@ -7,6 +7,7 @@ opn_ipsec:
   ikeids:  # key is the ikeid
     1:
       phase1:
+        disabled: 1
         descr: s2s test
         iketype: ikev1
         interface: wan
