@@ -63,15 +63,12 @@
   when: item.1.value is defined
 
 - name: multivalue aliases
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: "/opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
-    value: "{{ item.1.list | join('\n') }}"
-    pretty_print: true
+  ansible.builtin.include_tasks: aliasmultivalue.yml
   with_subelements:
     - "{{ opn_alias | default([]) }}"
     - settings
+  loop_control:
+    label: "{{ item.0.uuid }} {{ item.1.key }}"
   when: item.1.list is defined
 
 # valid types can be determined from
