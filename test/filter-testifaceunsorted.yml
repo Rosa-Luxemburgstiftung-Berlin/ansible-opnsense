@@ -39,4 +39,3 @@ opn_filter:
         value: '1'
       - key: destination/any
         value: '1'
-

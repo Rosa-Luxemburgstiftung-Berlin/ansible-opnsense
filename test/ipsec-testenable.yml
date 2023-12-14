@@ -58,7 +58,7 @@ opn_ipsec:
           reqid: 1
         e471b7299c8c1:
           pinghost: 10.128.0.1
-          descr:  10.128.0.0/12
+          descr: 10.128.0.0/12
           remoteid:
             type: network
             address: 10.128.0.0
@@ -72,4 +72,3 @@ opn_ipsec:
             address: 10.224.0.0
             netbits: 12
           reqid: 3
-
