@@ -19,8 +19,7 @@ Requirements
 Role Variables
 --------------
 
-We try to provide some example variable definitions in the coresponding task files.
-This is [work in progress #14](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/issues/14) ...
+We try to provide some example variable definitions in the coresponding task and test (`test/*.yml`) files.
 
 
 Dependencies
