@@ -1,0 +1,24 @@
+---
+
+- name: get current setting from xml for multivalue alias
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
+    content: text
+  register: _configured_multivalue_alias
+  ignore_errors: true  # do not fail if node not exists
+
+- debug:
+    var: _configured_multivalue_alias
+
+- name: set multivalue alias
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
+    value: "{{ item.1.list | join('\n') }}"
+    pretty_print: true
+  when:
+    - _configured_multivalue_alias.failed | bool or _configured_multivalue_alias.matches[0][item.1.key].split('\n') | sort != item.1.list | sort
+
