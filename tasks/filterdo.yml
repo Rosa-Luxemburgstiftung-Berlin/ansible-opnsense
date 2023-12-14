@@ -1,6 +1,6 @@
 ---
 
-- name: "detect interface changes in filter {{ _filter.descr }}"
+- name: "detect interface changes in filter '{{ _filter.descr }}'"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -11,8 +11,28 @@
 
 - debug:
     var: _configured_filter_interface
+- debug:
+    var: _configured_filter_interface.matches[0].interface.split(',') | sort
+  with_items:
+    - "{{ _filter.settings }}"
+  loop_control:
+    label: "{{ _filter.descr }} {{ _filtersettings.key }}"
+    loop_var: _filtersettings
+  when:
+    - _filtersettings.key == 'interface'
+    - not _configured_filter_interface.failed | bool
+- debug:
+    var: _filtersettings.value.split(',') | sort
+  with_items:
+    - "{{ _filter.settings }}"
+  loop_control:
+    label: "{{ _filter.descr }} {{ _filtersettings.key }}"
+    loop_var: _filtersettings
+  when:
+    - _filtersettings.key == 'interface'
+    - not _configured_filter_interface.failed | bool
 
-- name: "configure filter {{ _filter.descr }}"
+- name: "configure filter '{{ _filter.descr }}'"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -24,10 +44,12 @@
   loop_control:
     label: "{{ _filter.descr }} {{ _filtersettings.key }}"
     loop_var: _filtersettings
+  when:
+    - _filtersettings.key != 'interface' or (_configured_filter_interface.failed | bool) or ( _configured_filter_interface.matches[0].interface.split(',') | sort != _filtersettings.value.split(',') | sort )
+
 
 # check if in one rule for dest and src only one of address, network or any is defined
-
-- name: check filter rule for errors in source or destination
+- name: "check filter rule '{{ _filter.descr }}' for errors in source or destination"
   ansible.builtin.include_tasks: filtertest.yml
   when: opn_check_filter_rules | default(true) | bool
   with_items:
