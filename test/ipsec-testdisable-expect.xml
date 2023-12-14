@@ -82,6 +82,7 @@
         <name>aes256</name>
       </encryption-algorithm-option>
       <hash-algorithm-option>hmac_sha1</hash-algorithm-option>
+      <disabled>1</disabled>
     </phase2>
     <phase2>
       <ikeid>1</ikeid>
@@ -105,6 +106,7 @@
         <name>aes256</name>
       </encryption-algorithm-option>
       <hash-algorithm-option>hmac_sha1</hash-algorithm-option>
+      <disabled>1</disabled>
     </phase2>
   </ipsec>
 </opnsense>
