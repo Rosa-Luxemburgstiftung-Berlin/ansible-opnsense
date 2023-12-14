@@ -1,0 +1,40 @@
+---
+
+- name: "detect interface changes in filter {{ _filter.descr }}"
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/filter/rule[descr/text()='{{ _filter.descr }}']/interface"
+    content: text
+  register: _configured_filter_interface
+  ignore_errors: true  # do not fail if node not exists
+
+- debug:
+    var: _configured_filter_interface
+
+- name: "configure filter {{ _filter.descr }}"
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/filter/rule[descr/text()='{{ _filter.descr }}']/{{ _filtersettings.key }}"
+    value: "{% if _filtersettings.key in opn_sort_values.filter | default([]) %}{{ _filtersettings.value.split(',') | sort | join(',') }}{% else %}{{ _filtersettings.value }}{% endif %}"
+    pretty_print: true
+  with_items:
+    - "{{ _filter.settings }}"
+  loop_control:
+    label: "{{ _filter.descr }} {{ _filtersettings.key }}"
+    loop_var: _filtersettings
+
+# check if in one rule for dest and src only one of address, network or any is defined
+
+- name: check filter rule for errors in source or destination
+  ansible.builtin.include_tasks: filtertest.yml
+  when: opn_check_filter_rules | default(true) | bool
+  with_items:
+      - source
+      - destination
+  loop_control:
+    label: "{{ _filter.descr }} {{ _srcdst }}"
+    loop_var: _srcdst
+
+...
