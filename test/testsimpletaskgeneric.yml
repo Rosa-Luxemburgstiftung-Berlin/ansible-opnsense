@@ -28,3 +28,6 @@
   ansible.builtin.command: "cmp -s '{{ local_config_path }}' '{{ _test }}-expect.xml'"
   register: cmp
   failed_when: cmp.rc > 0
+- name: "finished test {{ _testtask }} {{ _test }}"
+  ansible.builtin.debug:
+    msg: "test {{ _testtask }} {{ _test }} : OK"
