@@ -1,10 +1,9 @@
 ---
 
-# subtasks for filter test loop
+- name: register test in all_tests
+  ansible.builtin.set_fact:
+    all_tests: "{{ all_tests | combine({_testtask: all_tests[_testtask] + [_test]}) }}"
 
-#- name: set test item
-#  ansible.builtin.set_fact:
-#    _test: "{{ item | basename | splitext | first }}"
 - name: "copy test file {{ _test }}"
   ansible.builtin.copy:
     src: "{{ lookup('ansible.builtin.first_found', testxmlfile) }}"

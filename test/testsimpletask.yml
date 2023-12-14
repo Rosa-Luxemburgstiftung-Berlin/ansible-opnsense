@@ -1,5 +1,10 @@
 ---
 
+- name: register task in all_tests
+  ansible.builtin.set_fact:
+    all_tests: "{{ all_tests | combine({_testtask: []}) }}"
+  when: not _testtask in all_tests.keys()
+
 - name: "{{ _testtask }} test loop ..."
   ansible.builtin.include_tasks: testsimpletaskgeneric.yml
   vars:
