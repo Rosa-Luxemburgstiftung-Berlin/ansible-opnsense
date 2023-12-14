@@ -1,0 +1,75 @@
+---
+opn_ipsec:
+  enable: 1
+  ipsec_asn: 1
+  ipsec_chd: 1
+  passthrough_networks: "192.168.0.0/24"
+  ikeids:  # key is the ikeid
+    1:
+      phase1:
+        descr: s2s test
+        disabled: 0
+        iketype: ikev1
+        interface: wan
+        mode: main
+        protocol: inet
+        myid_type: auto
+        myid_data: "{{ inventory_hostname }}"
+        peerid_type: fqdn
+        peerid_data: fw02
+        encryption-algorithm:
+          name: aes
+          keylen: 256
+        lifetime: 28800
+        certref: 61546da45fbc3
+        caref: 5ef9c5881c158
+        authentication_method: rsasig
+        nat_traversal: "on"
+        auto: start
+        dhgroup: 2
+        hash-algorithm: md5,sha1
+        private-key:
+        remote-gateway: fw02
+        dpd_delay: 10
+        dpd_maxfail: 5
+        dpd_action: restart
+      phase2_defaults: # common settings for all phase2 elements in this ikeid
+        disabled: 0 # ensure all tunnels are enabled as long as they are not explicitly disabled
+        mode: tunnel
+        pfsgroup: 2
+        lifetime: 3600
+        protocol: esp
+        localid:
+          type: lan
+        encryption-algorithm-options:
+          - name: aes256
+        hash-algorithm-options:
+          - hmac_sha1
+      phase2:
+        # key is the uniqid
+        eea1dcb2e051a:
+          pinghost: 10.0.0.1
+          descr: 10.0.0.0/12
+          disabled: 1  # this way you can disable a p2 entry without deleting it; a disabled p2 entry must be enabled by explicitly setting disabled: 0
+          remoteid:
+            type: network
+            address: 10.0.0.0
+            netbits: 12
+          reqid: 1
+        e471b7299c8c1:
+          pinghost: 10.128.0.1
+          descr:  10.128.0.0/12
+          remoteid:
+            type: network
+            address: 10.128.0.0
+            netbits: 12
+          reqid: 2
+        e98f78c414ece:
+          pinghost: 10.224.0.1
+          descr: 10.224.0.0/12
+          remoteid:
+            type: network
+            address: 10.224.0.0
+            netbits: 12
+          reqid: 3
+
