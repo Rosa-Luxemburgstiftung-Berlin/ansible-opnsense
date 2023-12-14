@@ -1,6 +1,18 @@
 ---
 
-# FIXME: the opnsense sort algorithm differs ... see filter_rules_sort in src/etc/inc/filter.inc
+- name: detect interface changes in filters
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/filter/rule[descr/text()='{{ item.descr }}']/interface"
+    content: text
+  register: _configured_filter_interface
+  ignore_errors: true  # do not fail node not existent
+  with_items:
+    - "{{ opn_filter | default([]) + opn_vlan_filter | default([]) }}"
+
+- debug:
+    var: _configured_filter_interface
 
 - name: filters
   delegate_to: localhost
