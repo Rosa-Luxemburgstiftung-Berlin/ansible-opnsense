@@ -24,3 +24,17 @@ opn_alias:
           - 80
           - 443
           - 8443
+  - uuid: 67b86e3a-0534-5e15-86f7-eea1116dc9be
+    settings:
+      - key: name
+        value: FIREWALL_ADMIN_ACCESS_PORTS_tcp
+      - key: type
+        value: port
+      - key: content
+        list:
+          - 22
+          - 443
+      - key: enabled
+        value: 1
+      - key: description
+        value: "admin access ports to the firewall"
