@@ -1,39 +1,11 @@
 ---
 
-- name: detect interface changes in filters
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: "/opnsense/filter/rule[descr/text()='{{ item.descr }}']/interface"
-    content: text
-  register: _configured_filter_interface
-  ignore_errors: true  # do not fail node not existent
+- name: process filter ...
+  ansible.builtin.include_tasks: filterdo.yml
   with_items:
     - "{{ opn_filter | default([]) + opn_vlan_filter | default([]) }}"
-
-- debug:
-    var: _configured_filter_interface
-
-- name: filters
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: /opnsense/filter/rule[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
-    value: "{% if item.1.key in opn_sort_values.filter | default([]) %}{{ item.1.value.split(',') | sort | join(',') }}{% else %}{{ item.1.value }}{% endif %}"
-    pretty_print: true
-  with_subelements:
-    - "{{ opn_filter | default([]) + opn_vlan_filter | default([]) }}"
-    - settings
-
-# check if in one rule for dest and src only one of address, network or any is defined
-- name: check filter rule for errors in source or destination
-  ansible.builtin.include_tasks: filtertest.yml
-  when: opn_check_filter_rules | default(true) | bool
-  with_nested:
-    - "{{ opn_filter | default([]) + opn_vlan_filter | default([]) }}"
-    -
-      - source
-      - destination
   loop_control:
-    label: "{{ item.0.descr }} {{ item.1 }}"
+    label: "{{ _filter.descr }}"
+    loop_var: _filter
+
 ...
