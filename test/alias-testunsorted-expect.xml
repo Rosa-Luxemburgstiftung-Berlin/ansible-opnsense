@@ -24,6 +24,14 @@
 443
 8443</content>
           </alias>
+          <alias uuid="67b86e3a-0534-5e15-86f7-eea1116dc9be">
+            <name>FIREWALL_ADMIN_ACCESS_PORTS_tcp</name>
+            <type>port</type>
+            <enabled>1</enabled>
+            <description>admin access ports to the firewall</description>
+            <content>22
+443</content>
+          </alias>
         </aliases>
       </Alias>
     </Firewall>
