@@ -1,0 +1,26 @@
+---
+
+opn_alias:
+  - uuid: b9ca4f72-ab35-5c48-8460-d71a7ef50184
+    settings:
+      - key: name
+        value: PRIVATE_NETWORKS
+      - key: content
+        list:
+          - 172.16.0.0/12
+          - 192.168.0.0/16
+          - 10.0.0.0/8
+      - key: content
+        list:
+          - 192.168.0.0/16
+          - 172.16.0.0/12
+          - 10.0.0.0/8
+  - uuid: b948ceaa-1ca9-5009-bad1-04660a926f87
+    settings:
+      - key: name
+        value: HTTP_TCP
+      - key: content
+        list:
+          - 80
+          - 443
+          - 8443
