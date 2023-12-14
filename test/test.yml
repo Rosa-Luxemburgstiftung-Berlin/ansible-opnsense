@@ -6,6 +6,7 @@
     ansible_python_interpreter: "/usr/bin/env python"  # REQUIRED for guthub action
     config_path: test/{{ inventory_hostname }}.xml
     local_config_path: cfg/{{ inventory_hostname }}.xml
+    all_tests: {}
   tasks:
     - name: "simple task test {{ _testtask }} ..."
       ansible.builtin.include_tasks: testsimpletask.yml
@@ -20,3 +21,6 @@
         - dnsserver
       when:
         - test | default(_testtask) == _testtask
+    - name: report all tests
+      ansible.builtin.debug:
+        var: all_tests
