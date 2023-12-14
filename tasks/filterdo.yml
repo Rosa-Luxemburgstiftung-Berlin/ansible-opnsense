@@ -9,29 +9,6 @@
   register: _configured_filter_interface
   ignore_errors: true  # do not fail if node not exists
 
-- debug:
-    var: _configured_filter_interface
-- debug:
-    var: _configured_filter_interface.matches[0].interface.split(',') | sort
-  with_items:
-    - "{{ _filter.settings }}"
-  loop_control:
-    label: "{{ _filter.descr }} {{ _filtersettings.key }}"
-    loop_var: _filtersettings
-  when:
-    - _filtersettings.key == 'interface'
-    - not _configured_filter_interface.failed | bool
-- debug:
-    var: _filtersettings.value.split(',') | sort
-  with_items:
-    - "{{ _filter.settings }}"
-  loop_control:
-    label: "{{ _filter.descr }} {{ _filtersettings.key }}"
-    loop_var: _filtersettings
-  when:
-    - _filtersettings.key == 'interface'
-    - not _configured_filter_interface.failed | bool
-
 - name: "configure filter '{{ _filter.descr }}'"
   delegate_to: localhost
   community.general.xml:
