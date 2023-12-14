@@ -11,6 +11,7 @@
 #     1:
 #       phase1: # dict
 #         descr: s2s ...
+#         #disabled: 1 # this way you can disable a entry without deleting it; a disabled entry must be enabled by explicitly setting disabled: 0
 #         iketype: ikev1
 #         interface: wan
 #         mode: main
