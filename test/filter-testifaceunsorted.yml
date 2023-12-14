@@ -1,0 +1,34 @@
+---
+
+test_name: simple filter test
+
+opn_filter:
+  - descr: test issue 45
+    settings:
+      - key: interface
+        value: opt1,opt2,wan,lan
+  - descr: new rule
+    settings:
+      - key: interface
+        value: opt1,opt2,wan,lan
+      - key: type
+        value: pass
+      - key: ipprotocol
+        value: inet
+      - key: statetype
+        value: keep state
+      - key: direction
+        value: any
+      - key: quick
+        value: '1'
+      - key: category
+        value: TEST
+      - key: floating
+        value: 'yes'
+      - key: protocol
+        value: tcp
+      - key: source/any
+        value: '1'
+      - key: destination/any
+        value: '1'
+

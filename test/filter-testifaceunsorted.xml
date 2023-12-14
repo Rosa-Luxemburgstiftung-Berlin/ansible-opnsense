@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <filter>
+    <rule>
+      <descr>test issue 45</descr>
+      <type>pass</type>
+      <ipprotocol>inet</ipprotocol>
+      <statetype>keep state</statetype>
+      <direction>any</direction>
+      <quick>1</quick>
+      <category>TEST</category>
+      <floating>yes</floating>
+      <protocol>icmp</protocol>
+      <source>
+        <any>1</any>
+      </source>
+      <destination>
+        <any>1</any>
+      </destination>
+      <interface>wan,lan,opt1,opt2</interface>
+    </rule>
+  </filter>
+</opnsense>
