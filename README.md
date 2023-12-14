@@ -4,7 +4,7 @@
 ansible-opnsense
 =========
 
-Ansible role to configure OPNsense firewalls.
+Ansible role to configure [OPNsense](https://opnsense.org/) firewalls.
 
 This is the [RLS](https://github.com/Rosa-Luxemburgstiftung-Berlin) detached fork of the original from https://github.com/naturalis/ansible-opnsense.
 
