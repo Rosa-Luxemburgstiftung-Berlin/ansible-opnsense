@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <filter>
+  </filter>
+  <OPNsense>
+    <Firewall>
+      <Alias>
+        <aliases>
+	  <alias uuid="46d8f07d-7063-5331-ae6d-a67eb4a04a66">
+            <enabled>1</enabled>
+            <name>AA_375_1_SERVICE</name>
+            <type>port</type>
+            <proto/>
+            <interface/>
+            <counters>0</counters>
+            <updatefreq/>
+            <content>443
+12061
+12063
+7004
+18443
+8084
+21
+4060
+4061
+8602
+7000
+8808
+5432
+5060:5062
+8801:8803
+8779</content>
+            <categories/>
+            <description>AA_375_1_SERVICE</description>
+          </alias>
+        </aliases>
+      </Alias>
+    </Firewall>
+  </OPNsense>
+</opnsense>
