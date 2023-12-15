@@ -9,6 +9,11 @@
   register: _configured_multivalue_alias
   ignore_errors: true  # do not fail if node not exists
 
+- debug:
+    var: _configured_multivalue_alias.matches[0][item.1.key].split('\n') | sort
+- debug:
+    var: item.1.list | sort
+
 - name: set multivalue alias
   delegate_to: localhost
   community.general.xml:
