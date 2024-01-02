@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<opnsense>
+  <filter>
+  </filter>
+  <OPNsense>
+    <Firewall>
+    <Alias>
+      <aliases>
+      </aliases>
+    </Alias>
+    </Firewall>
+  </OPNsense>
+</opnsense>
