@@ -7,6 +7,10 @@
     config_path: test/{{ inventory_hostname }}.xml
     local_config_path: cfg/{{ inventory_hostname }}.xml
     all_tests: {}
+  handlers:
+    - name: reconfigure aliases
+      debug:
+        msg: fake handler - reconfigure aliases
   tasks:
     - name: "simple task test {{ _testtask }} ..."
       ansible.builtin.include_tasks: testsimpletask.yml
