@@ -27,6 +27,7 @@
     xpath: "/opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
     value: "{{ _listsort | join('\n') }}"
     pretty_print: true
+  notify: reconfigure aliases
   when:
     - _configured_multivalue_alias.failed | bool or _configured_multivalue_alias.matches[0][item.1.key].split('\n') | sort != _listsort | sort
 
