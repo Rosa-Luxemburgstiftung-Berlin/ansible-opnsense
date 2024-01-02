@@ -1,0 +1,22 @@
+---
+
+# some configctl infos
+# https://docs.opnsense.org/manual/settingsmenu.html
+
+# alias handlers
+# see: src/opnsense/mvc/app/controllers/OPNsense/Firewall/Api/AliasController.php
+
+- name: template reload OPNsense/Filter
+  ansible.builtin.command: configctl template reload OPNsense/Filter
+  listen:
+    - reconfigure aliases
+
+- name: filter reload skip_alias
+  ansible.builtin.command: configctl filter reload skip_alias
+  listen:
+    - reconfigure aliases
+
+- name: filter refresh_aliases
+  ansible.builtin.command: configctl filter refresh_aliases
+  listen:
+    - reconfigure aliases
