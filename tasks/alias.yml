@@ -5,6 +5,9 @@
 # some notes regarding uuid
 # see https://github.com/naturalis/ansible-opnsense/issues/61
 #
+# if the settings of a alias are missing the 'enabled' key, the
+# task will set enabled to 1 (as opnsense itself handles a missing enabled tag this way)
+#
 # opn_alias:
 #   - uuid: b9ca4f72-ab35-5c48-8460-d71a7ef50184
 #     settings:
@@ -71,6 +74,18 @@
   loop_control:
     label: "{{ item.0.uuid }} {{ item.1.key }}"
   when: item.1.list is defined
+
+# issue #52
+- name: enable alias by default
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid='{{ item.uuid }}']/enabled"
+    value: "1"
+    pretty_print: true
+  with_items:
+    - "{{ opn_alias | default([]) }}"
+  when: item.settings | selectattr('key', 'equalto', 'enabled') | length == 0
 
 # valid types can be determined from
 # https://github.com/opnsense/core/blob/master/src/opnsense/mvc/app/models/OPNsense/Firewall/Alias.xml
