@@ -14,19 +14,39 @@
       files:
         - "{{ _test }}.xml"
         - 00default.xml
+
 - name: "read test vars for {{ _test }}"
   ansible.builtin.include_vars:
     file: "{{ _test }}.yml"
+
 - name: "set local cfg path to 'cfg/{{ _test }}.xml'"
   ansible.builtin.set_fact:
     local_config_path: "cfg/{{ _test }}.xml"
+
 - name: "import {{ _testtask }} task for {{ _test }}"
   ansible.builtin.include_tasks:
     file: "../tasks/{{ _testtask }}.yml"
+
 - name: "detect diff between result and expected state for {{ _test }}"
   ansible.builtin.command: "cmp -s '{{ local_config_path }}' '{{ _test }}-expect.xml'"
   register: cmp
-  failed_when: cmp.rc > 0
+  failed_when: false
+
+- name: "register diff between result and expected state for {{ _test }} due to failed cmp ..."
+  ansible.builtin.command: "diff -Naur '{{ local_config_path }}' '{{ _test }}-expect.xml'"
+  register: diff
+  when: cmp.rc > 0
+
+- name: "print diff between result and expected state for {{ _test }} due to failed cmp ..."
+  debug:
+    var: diff
+  when: cmp.rc > 0
+
+- name: "fail due to diff between result and expected state for {{ _test }}"
+  ansible.builtin.fail:
+    msg: "fail due to diff between result and expected state for {{ _test }}"
+  when: cmp.rc > 0
+
 - name: "finished test {{ _testtask }} {{ _test }}"
   ansible.builtin.debug:
     msg: "test {{ _testtask }} {{ _test }} : OK"
