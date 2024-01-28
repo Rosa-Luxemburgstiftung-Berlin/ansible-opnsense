@@ -19,7 +19,7 @@ jobs:
       - name: install requirements
         run: |
           python -m pip install --upgrade pip
-          pip install ansible==9.1.0 ansible-core==2.16.1 lxml
+          pip install ansible==9.1.0 ansible-core==2.16.1 lxml cryptography==42.0.0
       - name: run ansible test
         working-directory: ./test
         run: |
