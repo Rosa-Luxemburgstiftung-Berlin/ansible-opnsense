@@ -8,6 +8,7 @@
     <passthrough_networks>192.168.0.0/24</passthrough_networks>
     <phase1>
       <ikeid>1</ikeid>
+      <disabled>1</disabled>
       <descr>s2s test</descr>
       <iketype>ikev1</iketype>
       <interface>wan</interface>
@@ -62,6 +63,7 @@
     <phase2>
       <ikeid>1</ikeid>
       <uniqid>e471b7299c8c1</uniqid>
+      <disabled>1</disabled>
       <mode>tunnel</mode>
       <pfsgroup>2</pfsgroup>
       <lifetime>3600</lifetime>
@@ -85,6 +87,7 @@
     <phase2>
       <ikeid>1</ikeid>
       <uniqid>e98f78c414ece</uniqid>
+      <disabled>1</disabled>
       <mode>tunnel</mode>
       <pfsgroup>2</pfsgroup>
       <lifetime>3600</lifetime>
@@ -105,6 +108,5 @@
       </encryption-algorithm-option>
       <hash-algorithm-option>hmac_sha1</hash-algorithm-option>
     </phase2>
-    <enable>1</enable>
   </ipsec>
 </opnsense>
