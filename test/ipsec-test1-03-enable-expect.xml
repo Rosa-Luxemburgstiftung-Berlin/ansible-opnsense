@@ -3,6 +3,7 @@
   <system>
   </system>
   <ipsec>
+    <enable>1</enable>
     <ipsec_asn>1</ipsec_asn>
     <ipsec_chd>1</ipsec_chd>
     <passthrough_networks>192.168.0.0/24</passthrough_networks>
@@ -34,7 +35,6 @@
         <name>aes</name>
         <keylen>256</keylen>
       </encryption-algorithm>
-      <disabled>1</disabled>
     </phase1>
     <phase2>
       <ikeid>1</ikeid>
@@ -82,7 +82,6 @@
         <name>aes256</name>
       </encryption-algorithm-option>
       <hash-algorithm-option>hmac_sha1</hash-algorithm-option>
-      <disabled>1</disabled>
     </phase2>
     <phase2>
       <ikeid>1</ikeid>
@@ -106,7 +105,6 @@
         <name>aes256</name>
       </encryption-algorithm-option>
       <hash-algorithm-option>hmac_sha1</hash-algorithm-option>
-      <disabled>1</disabled>
     </phase2>
   </ipsec>
 </opnsense>
