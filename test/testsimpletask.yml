@@ -5,12 +5,15 @@
     all_tests: "{{ all_tests | combine({_testtask: []}) }}"
   when: not _testtask in all_tests.keys()
 
+- name: register tasks to run for {{ _testtask }}
+  ansible.builtin.set_fact:
+    _taskfiles: "{{ query('ansible.builtin.fileglob', _testtask ~ '-test*.yml') | sort }}"
+
 - name: "{{ _testtask }} test loop ..."
   ansible.builtin.include_tasks: testsimpletaskgeneric.yml
   vars:
     _test: "{{ _testfile | basename | splitext | first }}"
-  with_fileglob:
-    - "{{ _testtask }}-test*.yml"
+  with_items: "{{ _taskfiles }}"
   loop_control:
     label: "{{ _test }}"
     loop_var: _testfile
