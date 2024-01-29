@@ -23,4 +23,4 @@ jobs:
       - name: run ansible test
         working-directory: ./test
         run: |
-          ansible-playbook -e test=ipsec test.yml
+          ansible-playbook test.yml
