@@ -11,6 +11,12 @@
     - name: reconfigure aliases
       debug:
         msg: fake handler - reconfigure aliases
+    - name: restart dhcpd
+      debug:
+        msg: fake handler - restart dhcpd
+    - name: restart wireguard
+      debug:
+        msg: fake handler - restart wireguard
   tasks:
     - name: "simple task test {{ _testtask }} ..."
       ansible.builtin.include_tasks: testsimpletask.yml
