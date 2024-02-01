@@ -8,6 +8,7 @@
     xpath: /opnsense/dhcpd/{{ item.0.if }}/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: restart dhcpd
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - settings
@@ -74,6 +75,7 @@
     xpath: /opnsense/dhcpd/{{ item.0.if }}/dnsserver
     state: absent
     pretty_print: true
+  notify: restart dhcpd
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - settings
@@ -89,6 +91,7 @@
     xpath: /opnsense/dhcpd/{{ item.0.if }}
     add_children: "{{ item.1.value | json_query('[].{\"dnsserver\": @}') }}"
     pretty_print: true
+  notify: restart dhcpd
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - settings
@@ -111,10 +114,12 @@
     xpath: /opnsense/dhcpd/{{ item.0.if }}/numberoptions/item[number/text()="{{ item.1.number }}"]/type
     value: "{{ item.1.type }}"
     pretty_print: true
+  notify: restart dhcpd
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - numberoptions
     - skip_missing: true
+
 - name: set dhcp numberoptions value
   delegate_to: localhost
   community.general.xml:
@@ -122,6 +127,7 @@
     xpath: /opnsense/dhcpd/{{ item.0.if }}/numberoptions/item[number/text()="{{ item.1.number }}"]/value
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: restart dhcpd
   with_subelements:
     - "{{ opn_dhcpd | default([]) }}"
     - numberoptions
@@ -134,6 +140,7 @@
     xpath: /opnsense/dhcpd/{{ item.0.if }}/staticmap[mac/text()="{{ item.0.mac }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: restart dhcpd
   with_subelements:
     - "{{ opn_dhcpd_staticmap | default([]) }}"
     - settings
