@@ -12,16 +12,28 @@
   ansible.builtin.command: configctl template reload OPNsense/Filter
   listen:
     - reconfigure aliases
+  when:
+    - config is defined
+    - config.changed | bool
 
 - name: filter reload skip_alias  # noqa no-changed-when
   ansible.builtin.command: configctl filter reload skip_alias
   listen:
     - reconfigure aliases
+  when:
+    - config is defined
+    - config.changed | bool
 
 - name: filter refresh_aliases  # noqa no-changed-when
   ansible.builtin.command: configctl filter refresh_aliases
   listen:
     - reconfigure aliases
+  when:
+    - config is defined
+    - config.changed | bool
 
 - name: restart dhcpd   # noqa no-changed-when
   ansible.builtin.command: configctl configctl dhcpd restart
+  when:
+    - config is defined
+    - config.changed | bool
