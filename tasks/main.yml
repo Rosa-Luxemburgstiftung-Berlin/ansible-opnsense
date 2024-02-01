@@ -289,6 +289,18 @@
   tags: clean
   when: delete_local_xml_file | default(false)
 
+- name: create opnsense service mimic script
+  ansible.builtin.template:
+    src: opnsense_service_mimic.php.j2
+    dest: /usr/local/sbin/opnsense_service_mimic.php
+    owner: root
+    group: wheel
+    mode: "0750"
+  tags: copy
+  when:
+    - config is defined
+    - config.changed | bool
+
 - name: sync  # noqa no-handler no-changed-when
   ansible.builtin.command: "{{ item }}"
   throttle: 1
