@@ -11,7 +11,9 @@
   ansible.builtin.include_tasks:
     file: fetch.yml
     apply:
-      tags: fetch
+      tags:
+        - fetch
+        - always
 
 - name: dnsserver
   tags:
