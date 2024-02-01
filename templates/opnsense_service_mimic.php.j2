@@ -1,0 +1,39 @@
+#!/usr/local/bin/php
+<?php
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=php
+
+# {{ ansible_managed }}
+
+/* mimmic opnsense service reconfig and reload
+ * see
+ *  src/etc/rc.bootup
+ *  src/etc/rc.reload_all
+ *  ...
+ */
+
+require_once("config.inc");
+require_once("interfaces.inc");
+require_once("filter.inc");
+require_once("auth.inc");
+require_once('rrd.inc');
+require_once("util.inc");
+require_once("system.inc");
+require_once("interfaces.inc");
+
+# src/www/services_dhcp.php
+function reconfigure_dhcpd()
+{
+    system_resolver_configure();
+    plugins_configure('dns');
+    clear_subsystem_dirty('hosts');
+    dhcpd_dhcp4_configure();
+    clear_subsystem_dirty('staticmaps');
+}
+
+foreach ($argv as $idx => $argfunc) {
+    if ($idx > 0) {
+        call_user_func($argfunc);
+    }
+}
+exit(0);
+?>
