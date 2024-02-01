@@ -22,3 +22,6 @@
   ansible.builtin.command: configctl filter refresh_aliases
   listen:
     - reconfigure aliases
+
+- name: restart dhcpd   # noqa no-changed-when
+  ansible.builtin.command: configctl configctl dhcpd restart
