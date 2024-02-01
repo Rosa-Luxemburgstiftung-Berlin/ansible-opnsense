@@ -8,6 +8,8 @@
 
 # api endpoint /api/firewall/alias/reconfigure
 
+# NOTE: all configured handlers must be defined as dummy handler in test/test.yml too
+
 - name: template reload OPNsense/Filter  # noqa no-changed-when
   ansible.builtin.command: configctl template reload OPNsense/Filter
   listen:
@@ -44,6 +46,24 @@
   ansible.builtin.command: configctl dhcpd restart
   listen:
     - restart dhcpd
+  when:
+    - config is defined
+    - config.changed | bool
+
+# this will fail if the package is not installed
+- name: reconfig wireguard  # noqa no-changed-when
+  ansible.builtin.command: configctl wireguard configure
+  listen:
+    - restart wireguard
+  when:
+    - config is defined
+    - config.changed | bool
+
+# this will fail if the package is not installed
+- name: restart wireguard  # noqa no-changed-when
+  ansible.builtin.command: configctl wireguard restart
+  listen:
+    - restart wireguard
   when:
     - config is defined
     - config.changed | bool

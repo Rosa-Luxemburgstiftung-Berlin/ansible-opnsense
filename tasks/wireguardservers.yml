@@ -7,6 +7,7 @@
     xpath: "/opnsense/OPNsense/wireguard/server/servers/server[@uuid='{{ uuid }}']/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: true
+  notify: restart wireguard
   when:
     - item.key not in ['tunneladdress', 'peers'] or item.value is string
   with_dict:
@@ -21,6 +22,7 @@
     pretty_print: true
   when:
     - item.key in ['tunneladdress', 'peers'] and not item.value is string
+  notify: restart wireguard
   with_dict:
     - "{{ serverscfg | default({}) }}"
 

@@ -9,6 +9,7 @@
     pretty_print: true
   when:
     - item.key not in ['tunneladdress'] or item.value is string
+  notify: restart wireguard
   with_dict:
     - "{{ clientscfg | default({}) }}"
 
@@ -21,6 +22,7 @@
     pretty_print: true
   when:
     - item.key in ['tunneladdress'] and not item.value is string
+  notify: restart wireguard
   with_dict:
     - "{{ clientscfg | default({}) }}"
 
