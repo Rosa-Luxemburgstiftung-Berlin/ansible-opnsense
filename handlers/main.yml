@@ -34,6 +34,14 @@
     - config is defined
     - config.changed | bool
 
+- name: reconfig dnsservers  # noqa no-changed-when
+  ansible.builtin.command: /usr/local/sbin/opnsense_service_mimic.php system_resolver_configure
+  listen:
+    - reconfigure dnsservers
+  when:
+    - config is defined
+    - config.changed | bool
+
 - name: reconfig dhcpd service  # noqa no-changed-when
   ansible.builtin.command: /usr/local/sbin/opnsense_service_mimic.php reconfigure_dhcpd
   listen:

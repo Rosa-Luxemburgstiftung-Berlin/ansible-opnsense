@@ -34,6 +34,7 @@
     xpath: /opnsense/system/dnsserver
     state: absent
     pretty_print: true
+  notify: reconfigure dnsservers
   when: change_dns | default(False)
 
 - name: Dnsservers
@@ -44,6 +45,7 @@
     add_children:
       - dnsserver: "{{ item }}"
     pretty_print: true
+  notify: reconfigure dnsservers
   when: change_dns | default(False)
   with_items:
     "{{ dnsserver }}"
@@ -64,6 +66,7 @@
     xpath: /opnsense/system/dnsallowoverride
     state: "{{ dnsallowoverride_state }}"
     pretty_print: true
+  notify: reconfigure dnsservers
 
 - name: Use the local DNS service as a nameserver for this system
   delegate_to: localhost
@@ -73,6 +76,7 @@
     value: "1"
     pretty_print: true
   when: dnslocalhost | default(False)
+  notify: reconfigure dnsservers
 
 - name: Do not use the local DNS service as a nameserver for this system
   delegate_to: localhost
@@ -82,4 +86,5 @@
     state: absent
     pretty_print: true
   when: not (dnslocalhost | default(False))
+  notify: reconfigure dnsservers
 ...

@@ -11,6 +11,9 @@
     - name: reconfigure aliases
       debug:
         msg: fake handler - reconfigure aliases
+    - name: reconfigure dnsservers
+      debug:
+        msg: fake handler - reconfigure dnsservers
     - name: restart dhcpd
       debug:
         msg: fake handler - restart dhcpd
