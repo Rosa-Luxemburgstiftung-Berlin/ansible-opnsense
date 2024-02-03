@@ -55,7 +55,7 @@
 # auth
 # ----
 
-- name: reconfigure auth
+- name: reconfigure auth  # noqa no-changed-when
   ansible.builtin.command: /usr/local/sbin/opnsense_service_mimic.php system_login_configure
   when:
     - config is defined
