@@ -11,6 +11,9 @@
     - name: reconfigure aliases
       debug:
         msg: fake handler - reconfigure aliases
+    - name: reconfigure filter
+      debug:
+        msg: fake handler - reconfigure filter
     - name: reconfigure dnsservers
       debug:
         msg: fake handler - reconfigure dnsservers

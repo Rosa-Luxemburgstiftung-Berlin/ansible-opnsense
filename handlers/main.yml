@@ -10,6 +10,9 @@
 
 # NOTE: all configured handlers must be defined as dummy handler in test/test.yml too
 
+# alias
+# -----
+
 - name: template reload OPNsense/Filter  # noqa no-changed-when
   ansible.builtin.command: configctl template reload OPNsense/Filter
   listen:
@@ -34,6 +37,24 @@
     - config is defined
     - config.changed | bool
 
+# filter
+# -----
+
+- name: reconfigure filter  # noqa no-handler no-changed-when
+  ansible.builtin.command: "{{ item }}"
+  throttle: 1
+  # TODO: determine if both methods are required / order / if one is sufficient/better
+  #       maybe use some common handlers for alias/filter
+  with_items:
+    - configctl filter reload
+    - configctl filter sync
+  when:
+    - config is defined
+    - config.changed | bool
+
+# dnsservers
+# ----------
+
 - name: reconfig dnsservers  # noqa no-changed-when
   ansible.builtin.command: /usr/local/sbin/opnsense_service_mimic.php system_resolver_configure
   listen:
@@ -41,6 +62,9 @@
   when:
     - config is defined
     - config.changed | bool
+
+# dhcp
+# ----
 
 - name: reconfig dhcpd service  # noqa no-changed-when
   ansible.builtin.command: /usr/local/sbin/opnsense_service_mimic.php reconfigure_dhcpd
@@ -57,6 +81,9 @@
   when:
     - config is defined
     - config.changed | bool
+
+# wireguard
+# ---------
 
 # this will fail if the package is not installed
 - name: reconfig wireguard  # noqa no-changed-when

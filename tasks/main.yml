@@ -301,26 +301,21 @@
     - config is defined
     - config.changed | bool
 
-- name: sync  # noqa no-handler no-changed-when
-  ansible.builtin.command: "{{ item }}"
-  throttle: 1
-  # loop_control:
-  #   pause: 3
-  with_items:
-    - configctl filter sync
-  when: config.changed
-  tags:
-    - sync
-    - copy
+# run handlers before conditionally run reload
+- name: run all notified handlers at this point
+  ansible.builtin.meta: flush_handlers
 
+# this is a hard reload and will only be run if opnreload is defined and true
 - name: reload  # noqa no-handler no-changed-when
   ansible.builtin.command: "{{ item }}"
   throttle: 1
-  # loop_control:
-  #   pause: 3
   with_items:
     - configctl service reload all
     - configctl webgui restart
-  when: config.changed
+  when:
+    - config is defined
+    - config.changed | bool
+    - opnreload is defined
+    - opnreload | bool
   tags: reload
 ...
