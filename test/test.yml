@@ -14,6 +14,9 @@
     - name: reconfigure filter
       debug:
         msg: fake handler - reconfigure filter
+    - name: reconfigure auth
+      debug:
+        msg: fake handler - reconfigure auth
     - name: reconfigure dnsservers
       debug:
         msg: fake handler - reconfigure dnsservers

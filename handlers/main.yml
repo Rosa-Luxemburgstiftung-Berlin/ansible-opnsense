@@ -52,6 +52,15 @@
     - config is defined
     - config.changed | bool
 
+# auth
+# ----
+
+- name: reconfigure auth
+  ansible.builtin.command: /usr/local/sbin/opnsense_service_mimic.php system_login_configure
+  when:
+    - config is defined
+    - config.changed | bool
+
 # dnsservers
 # ----------
 

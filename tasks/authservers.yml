@@ -10,6 +10,7 @@
   with_subelements:
     - "{{ opn_authservers }}"
     - settings
+  notify: reconfigure auth
   when: opn_authservers is defined
 
 # remove the default empty <authserver/> node remains after configuring the first one
