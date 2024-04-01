@@ -4,8 +4,7 @@
   ansible.builtin.template:
     src: 'usr/local/etc/dnsmasq.conf.d/ansible.conf.j2'
     dest: '/usr/local/etc/dnsmasq.conf.d/ansible.conf'
-    validate: |-
-      bash -c 'dnsmasq --test --conf-dir "$(dirname "%s")"'
+    validate: 'dnsmasq --test --conf-file=%s'
   when: (lookup("xmlfile", local_config_path, xpath="//opnsense/dnsmasq/custom_options") != '')
   notify: [ 'Restart dns subsystem' ]
 
