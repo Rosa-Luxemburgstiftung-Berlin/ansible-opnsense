@@ -76,11 +76,11 @@
         - cert
         - certificates
 
-- name: VPN
+- name: OpenVPN
   tags:
     - always
   ansible.builtin.include_tasks:
-    file: vpn.yml
+    file: openvpn.yml
     apply:
       tags:
         - openvpn
