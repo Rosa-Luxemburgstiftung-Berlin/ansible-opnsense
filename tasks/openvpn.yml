@@ -80,9 +80,14 @@
     loop_var: instance
 
 - name: OpenVPN StaticKeys configuration
-  when: opn_openvpn_statickeys is defined
-  block:
-# end block OpenVPN StaticKeys configuration
+  ansible.builtin.include_tasks: openvpnstatickey.yml
+  vars:
+    uuid: "{{ statickey.key }}"
+    statickeycfg: "{{ statickey.value }}"
+  with_dict:
+    - "{{ opn_openvpn_statickeys | default({}) }}"
+  loop_control:
+    loop_var: statickey
 
 - name: OpenVPN legacy server configuration
   when: opn_openvpn_servers is defined
