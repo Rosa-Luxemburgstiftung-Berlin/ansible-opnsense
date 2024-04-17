@@ -1,10 +1,27 @@
 ---
 # OpenVPN config
 #
-# examples
+# examples:
+#
+# new config
+# ----------
+# overwrite settings
+# ..................
+# dns_domain_search, dns_servers, ntp_servers and wins_servers can be defined as yaml list
+# or as string with commas as separator
+# opn_openvpn_overwrites:
+#
 # instance settings
+# .................
 # route, push_route, dns_domain_search, dns_servers and ntp_servers can be defined as yaml list
 # or as string with commas as separator
+# opn_openvpn_instances:
+#
+# statickey settings
+# ..................
+# the key can be generated using
+#   openvpn --genkey secret
+#
 #
 # legacy server config
 # --------------------
