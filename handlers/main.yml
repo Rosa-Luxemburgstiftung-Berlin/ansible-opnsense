@@ -8,6 +8,7 @@
 
 # api endpoint /api/firewall/alias/reconfigure
 
+# alias
 - name: template reload OPNsense/Filter  # noqa no-changed-when
   ansible.builtin.command: configctl template reload OPNsense/Filter
   listen:
@@ -32,6 +33,7 @@
     - config is defined
     - config.changed | bool
 
+# dhcp
 - name: reconfig dhcpd service  # noqa no-changed-when
   ansible.builtin.command: /usr/local/sbin/opnsense_service_mimic.php reconfigure_dhcpd
   listen:
@@ -44,6 +46,23 @@
   ansible.builtin.command: configctl dhcpd restart
   listen:
     - restart dhcpd
+  when:
+    - config is defined
+    - config.changed | bool
+
+# openvpn
+- name: configure openvpn instances  # noqa no-changed-when
+  ansible.builtin.command: configctl openvpn configure
+  listen:
+    - restart openvpn
+  when:
+    - config is defined
+    - config.changed | bool
+
+- name: restart openvpn  # noqa no-changed-when
+  ansible.builtin.command: configctl openvpn restart
+  listen:
+    - restart openvpn
   when:
     - config is defined
     - config.changed | bool
