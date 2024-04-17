@@ -23,8 +23,6 @@
 #         value: "wan"
 #       - key: local_port
 #         value: "443"
-#       - key: server_certificate
-#         value: "my.server.cert"  # just a name ?
 #       - key: peer_certificate_revocation_list
 #         value: none
 #       - key: crypto
@@ -37,6 +35,8 @@
 #         value: 666aaa...  # ref to the ca cert configured under trust
 #       - key: certref
 #         value: 615f....  # ref to the certificate to use
+#       - key: server_certificate
+#         value: "my.server.cert"  # name of the cert in certref
 #       - key: tlsmode
 #         value: auth
 #       - key: tls
@@ -66,6 +66,19 @@
 #           push "dhcp-option DOMAIN abc.example.net"
 #           push "dhcp-option DOMAIN xyz.example.net"
 
+# TODO:
+#   - if uuid is not defined, we use uuid: {{ data.uuid | default( description | to_uuid ) }}
+#   - vpnid : if not defined and instance is new, increment it
+#   - required fields: At least one IPv4 or IPv6 tunnel network is required. (server or server_ipv6)
+- name: OpenVPN Instances configuration
+  when: opn_openvpn_instances is defined
+  block:
+# end block OpenVPN Instances configuration
+
+- name: OpenVPN StaticKeys configuration
+  when: opn_openvpn_statickeys is defined
+  block:
+# end block OpenVPN StaticKeys configuration
 
 - name: OpenVPN legacy server configuration
   when: opn_openvpn_servers is defined
