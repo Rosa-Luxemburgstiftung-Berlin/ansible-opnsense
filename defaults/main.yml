@@ -18,3 +18,12 @@ opn_openvpn_instances_defaults:
   verb: 3
   topology: subnet
   role: server
+
+# defaults for opn_openvpn_instances
+opn_openvpn_overwrites_defaults:
+  enabled: 1
+  block: 0
+  push_reset: 0
+  register_dns: 0
+
+...

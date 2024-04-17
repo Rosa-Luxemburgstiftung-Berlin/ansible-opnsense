@@ -1,0 +1,27 @@
+---
+
+- name: OpenVPN Overwrite settings
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/OpenVPN/Overwrites/Overwrite[@uuid='{{ uuid }}']/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  when:
+    - item.key not in ['dns_domain_search', 'dns_servers', 'ntp_servers', 'wins_servers'] or item.value is string
+  with_dict:
+    - "{{ overwritecfg | default({}) }}"
+
+- name: OpenVPN Overwrite settings with list elements
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/OpenVPN/Overwrites/Overwrite[@uuid='{{ uuid }}']/{{ item.key }}"
+    value: "{{ item.value | join(',') }}"
+    pretty_print: true
+  when:
+    - item.key in ['dns_domain_search', 'dns_servers', 'ntp_servers', 'wins_servers'] and not item.value is string
+  with_dict:
+    - "{{ overwritecfg | default({}) }}"
+
+...

@@ -69,6 +69,16 @@
 #           push "dhcp-option DOMAIN abc.example.net"
 #           push "dhcp-option DOMAIN xyz.example.net"
 
+- name: OpenVPN Overwrites configuration
+  ansible.builtin.include_tasks: openvpnoverwrite.yml
+  vars:
+    uuid: "{{ overwrite.key }}"
+    overwritecfg: "{{ overwrite.value | combine(opn_openvpn_overwrites_defaults) }}"
+  with_dict:
+    - "{{ opn_openvpn_overwrites | default({}) }}"
+  loop_control:
+    loop_var: overwrite
+
 - name: OpenVPN Instances configuration
   ansible.builtin.include_tasks: openvpninstance.yml
   vars:
