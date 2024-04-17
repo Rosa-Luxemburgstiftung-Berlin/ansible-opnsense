@@ -96,6 +96,14 @@
   loop_control:
     loop_var: overwrite
 
+- name: OpenVPN Overwrites - remove default empty node
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/OpenVPN/Overwrites[not(node())]
+    state: absent
+  when:  opn_openvpn_overwrites.keys() | default([]) | length > 0
+
 - name: OpenVPN Instances configuration
   ansible.builtin.include_tasks: openvpninstance.yml
   vars:
@@ -106,6 +114,14 @@
   loop_control:
     loop_var: instance
 
+- name: OpenVPN Instances - remove default empty node
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/OpenVPN/Instances[not(node())]
+    state: absent
+  when:  opn_openvpn_instances.keys() | default([]) | length > 0
+
 - name: OpenVPN StaticKeys configuration
   ansible.builtin.include_tasks: openvpnstatickey.yml
   vars:
@@ -115,6 +131,14 @@
     - "{{ opn_openvpn_statickeys | default({}) }}"
   loop_control:
     loop_var: statickey
+
+- name: OpenVPN StaticKeys - remove default empty node
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/OpenVPN/StaticKeys[not(node())]
+    state: absent
+  when:  opn_openvpn_statickeys.keys() | default([]) | length > 0
 
 - name: OpenVPN legacy server configuration
   when: opn_openvpn_servers is defined
