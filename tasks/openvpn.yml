@@ -2,6 +2,9 @@
 # OpenVPN config
 #
 # examples
+# instance settings
+# route, push_route, dns_domain_search, dns_servers and ntp_servers can be defined as yaml list
+# or as string with commas as separator
 #
 # legacy server config
 # --------------------
@@ -66,14 +69,15 @@
 #           push "dhcp-option DOMAIN abc.example.net"
 #           push "dhcp-option DOMAIN xyz.example.net"
 
-# TODO:
-#   - if uuid is not defined, we use uuid: {{ data.uuid | default( description | to_uuid ) }}
-#   - vpnid : if not defined and instance is new, increment it
-#   - required fields: At least one IPv4 or IPv6 tunnel network is required. (server or server_ipv6)
 - name: OpenVPN Instances configuration
-  when: opn_openvpn_instances is defined
-  block:
-# end block OpenVPN Instances configuration
+  ansible.builtin.include_tasks: openvpninstance.yml
+  vars:
+    uuid: "{{ instance.key }}"
+    instancecfg: "{{ instance.value }}"
+  with_dict:
+    - "{{ opn_openvpn_instances | default({}) }}"
+  loop_control:
+    loop_var: instance
 
 - name: OpenVPN StaticKeys configuration
   when: opn_openvpn_statickeys is defined

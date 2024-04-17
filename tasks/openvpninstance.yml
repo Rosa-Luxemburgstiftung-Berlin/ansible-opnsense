@@ -1,0 +1,27 @@
+---
+
+- name: OpenVPN Instance settings
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/OpenVPN/Instances/Instance[@uuid='{{ uuid }}']/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  when:
+    - item.key not in ['route', 'push_route', 'dns_domain_search', 'dns_servers', 'ntp_servers'] or item.value is string
+  with_dict:
+    - "{{ instancecfg | default({}) }}"
+
+- name: OpenVPN Instance settings with list elements
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/OpenVPN/Instances/Instance[@uuid='{{ uuid }}']/{{ item.key }}"
+    value: "{{ item.value | join(',') }}"
+    pretty_print: true
+  when:
+    - item.key in ['route', 'push_route', 'dns_domain_search', 'dns_servers', 'ntp_servers'] and not item.value is string
+  with_dict:
+    - "{{ instancecfg | default({}) }}"
+
+...
