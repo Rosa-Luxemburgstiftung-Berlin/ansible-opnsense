@@ -11,6 +11,9 @@
     - name: reconfigure aliases
       debug:
         msg: fake handler - reconfigure aliases
+    - name: restart openvpn
+      debug:
+        msg: fake handler - restart openvpn
   tasks:
     - name: include default vars
       ansible.builtin.include_vars:
