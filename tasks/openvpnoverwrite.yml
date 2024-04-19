@@ -7,6 +7,7 @@
     xpath: "/opnsense/OPNsense/OpenVPN/Overwrites/Overwrite[@uuid='{{ uuid }}']/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: true
+  notify: restart openvpn
   when:
     - item.key not in ['dns_domain_search', 'dns_servers', 'ntp_servers', 'wins_servers'] or item.value is string
   with_dict:
@@ -19,6 +20,7 @@
     xpath: "/opnsense/OPNsense/OpenVPN/Overwrites/Overwrite[@uuid='{{ uuid }}']/{{ item.key }}"
     value: "{{ item.value | join(',') }}"
     pretty_print: true
+  notify: restart openvpn
   when:
     - item.key in ['dns_domain_search', 'dns_servers', 'ntp_servers', 'wins_servers'] and not item.value is string
   with_dict:
