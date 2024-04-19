@@ -12,6 +12,9 @@
       debug:
         msg: fake handler - reconfigure aliases
   tasks:
+    - name: include default vars
+      ansible.builtin.include_vars:
+        file: ../defaults/main.yml
     - name: "simple task test {{ _testtask }} ..."
       ansible.builtin.include_tasks: testsimpletask.yml
       loop_control:
