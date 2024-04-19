@@ -13,17 +13,17 @@
 # ..................
 # dns_domain_search, dns_servers, ntp_servers and wins_servers can be defined as yaml list
 # or as string with commas as separator
-# opn_openvpn_overwrites:
+# opn_openvpn_overwrites: for examples see test/openvpn-testcfg.yml
 #
 # instance settings
 # .................
 # route, push_route, dns_domain_search, dns_servers and ntp_servers can be defined as yaml list
 # or as string with commas as separator
-# opn_openvpn_instances:
+# opn_openvpn_instances: for examples see test/openvpn-testcfg.yml
 #
 # statickey settings
 # ..................
-# opn_openvpn_statickeys:
+# opn_openvpn_statickeys: for examples see test/openvpn-testcfg.yml
 #
 # the key can be generated using
 #   openvpn --genkey secret
