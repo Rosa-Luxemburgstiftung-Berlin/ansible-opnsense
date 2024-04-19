@@ -24,7 +24,6 @@ opn_openvpn_instances_defaults:
   use_ocsp: 0
   username_as_common_name: 0
   strictusercn: 0
-  register_dns: 0
 
 # defaults for opn_openvpn_instances
 opn_openvpn_overwrites_defaults:
