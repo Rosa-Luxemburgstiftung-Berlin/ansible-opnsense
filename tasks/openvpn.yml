@@ -108,7 +108,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/OpenVPN/Overwrites[not(node())]
     state: absent
-  when: opn_openvpn_overwrites.keys() | default([]) | length > 0
+  when: (opn_openvpn_overwrites | default({})).keys() | length > 0
 
 - name: OpenVPN Instances configuration
   ansible.builtin.include_tasks: openvpninstance.yml
@@ -126,7 +126,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/OpenVPN/Instances[not(node())]
     state: absent
-  when: opn_openvpn_instances.keys() | default([]) | length > 0
+  when: (opn_openvpn_instances | default({})).keys() | length > 0
 
 - name: OpenVPN StaticKeys configuration
   ansible.builtin.include_tasks: openvpnstatickey.yml
@@ -144,7 +144,7 @@
     path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/OpenVPN/StaticKeys[not(node())]
     state: absent
-  when: opn_openvpn_statickeys.keys() | default([]) | length > 0
+  when: (opn_openvpn_statickeys | default({})).keys() | length > 0
 
 - name: OpenVPN legacy server configuration
   when: opn_openvpn_servers is defined
