@@ -23,6 +23,7 @@
         - wireguard
         - ipsec
         - dnsserver
+        - openvpn
       when:
         - test | default(_testtask) == _testtask
     - name: report all tests
