@@ -96,7 +96,7 @@
   ansible.builtin.include_tasks: openvpnoverwrite.yml
   vars:
     uuid: "{{ overwrite.key }}"
-    overwritecfg: "{{ overwrite.value | combine(opn_openvpn_overwrites_defaults) }}"
+    overwritecfg: "{{ opn_openvpn_overwrites_defaults | combine(overwrite.value) }}"
   with_dict:
     - "{{ opn_openvpn_overwrites | default({}) }}"
   loop_control:
@@ -114,7 +114,7 @@
   ansible.builtin.include_tasks: openvpninstance.yml
   vars:
     uuid: "{{ instance.key }}"
-    instancecfg: "{{ instance.value | combine(opn_openvpn_instances_defaults) }}"
+    instancecfg: "{{ opn_openvpn_instances_defaults | combine(instance.value) }}"
   with_dict:
     - "{{ opn_openvpn_instances | default({}) }}"
   loop_control:
