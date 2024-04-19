@@ -1,0 +1,60 @@
+---
+
+opn_openvpn_overwrites:
+  3ccdb1bb-2ad1-48a8-b851-72fc23259f3b:
+    servers: 01499238-93cc-4fef-a50a-cedffb464e36
+    common_name: KlaudiusStibitz
+    tunnel_network: 192.168.1.254/32
+    local_networks: 10.10.10.0/22
+    description: my CSO
+
+opn_openvpn_instances:
+  01499238-93cc-4fef-a50a-cedffb464e36:
+    vpnid: 1
+    proto: tcp
+    port: 666
+    server: 192.168.192.1
+    route:
+      - 192.168.1.0/24
+      - 192.168.2.0/24
+    push_route: 192.168.0.0/24
+    various_push_flags: register-dns
+    cert: 61546da45fbc3
+    cert_depth: 1
+    verify_client_cert: require
+    use_ocsp: 1
+    tls_key: 446d2aa3-f7cd-4a87-acd5-0c3f8933ed4e
+    authmode: radius
+    dns_domain: test.example.com
+    dns_domain_search: test.example.com
+    dns_servers:
+      - 1.1.1.1
+    mssfix: 0
+    description: my fancy openvpn server instance
+
+opn_openvpn_statickeys:
+  446d2aa3-f7cd-4a87-acd5-0c3f8933ed4e:
+    mode: crypt
+    key: |-
+      #
+      # 2048 bit OpenVPN static key
+      #
+      -----BEGIN OpenVPN Static key V1-----
+      8d9ad2a7b502a182d4bb99b51d7a44f6
+      05bbccc5128cd62bef91bb5a2404c4a8
+      6007f04a076420a1e4c46faebf378264
+      c3d84b858235171fdc52604be99fcb02
+      9c3ad48a2971972502b4ebaf3bc15300
+      189f5479e0f56f5a82a1a6f8ee09ab3c
+      ccdf4a1eb339c40f09a5be12f53c47ee
+      fec9d0554451beb3854600fcffc759c4
+      c7fc72b5f1bd08a59d1474f81606df48
+      402794efb63cb8a5738a3c59f75fab3b
+      9d2eaf86128be8253a85ee3d9abf9bc7
+      995b57f399f14f734fe8b0d698e9cab7
+      07094d9445d7a81b01180b5eb2c4e5c7
+      154fede2efa03d56784c23579153c681
+      58d67bbe43af10d80f5e150b92c9baa1
+      7f3924c4df84f49f5a1717078c448272
+      -----END OpenVPN Static key V1-----
+    description: my static key

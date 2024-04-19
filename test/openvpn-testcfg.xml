@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <OPNsense>
+    <OpenVPN version="1.0.0">
+      <Overwrites/>
+      <Instances/>
+      <StaticKeys/>
+    </OpenVPN>
+  </OPNsense>
+</opnsense>
