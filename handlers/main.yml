@@ -59,3 +59,9 @@
   when:
     - config is defined
     - config.changed | bool
+
+- name: register interfaces  # noqa no-changed-when
+  ansible.builtin.command: /usr/local/sbin/pluginctl -i
+  when:
+    - config is defined
+    - config.changed | bool
