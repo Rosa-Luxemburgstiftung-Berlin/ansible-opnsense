@@ -7,6 +7,7 @@
     xpath: /opnsense/vlans/vlan[tag/text()="{{ item.0.tag }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: reconfigure vlans
   with_subelements:
     - "{{ opn_vlans }}"
     - settings
@@ -18,6 +19,7 @@
     xpath: /opnsense/vlans/vlan[tag/text()="{{ item.0.tag }}"]/if
     value: "{{ item.0.vlan_parent_interface | default(opn_interfaces_vlan_parent_interface) }}"
     pretty_print: true
+  notify: reconfigure vlans
   with_subelements:
     - "{{ opn_vlans }}"
     - settings
@@ -29,6 +31,7 @@
     xpath: /opnsense/vlans/vlan[tag/text()="{{ item.0.tag }}"]/vlanif
     value: "{{ item.0.vlan_parent_interface | default(opn_interfaces_vlan_parent_interface) }}_vlan{{ item.0.tag }}"
     pretty_print: true
+  notify: reconfigure vlans
   with_subelements:
     - "{{ opn_vlans }}"
     - settings
