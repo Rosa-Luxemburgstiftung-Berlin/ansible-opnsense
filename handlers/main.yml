@@ -47,3 +47,9 @@
   when:
     - config is defined
     - config.changed | bool
+
+- name: reconfigure vlans
+  ansible.builtin.command: /usr/local/opnsense/scripts/interfaces/reconfigure_vlans.php
+  when:
+    - config is defined
+    - config.changed | bool
