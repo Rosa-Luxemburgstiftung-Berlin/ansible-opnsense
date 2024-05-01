@@ -6,6 +6,7 @@
     xpath: /opnsense/virtualip/vip[vhid/text()="{{ item.1 }}"]/{{ item.0.key }}
     value: "{{ item.0.value }}"
     pretty_print: true
+  notify: reconfigure vips
   with_subelements:
     - "{{ opn_virtualip_all | default([]) }}"
     - vhids
@@ -17,6 +18,7 @@
     xpath: /opnsense/virtualip/vip[vhid/text()="{{ item.0.vhid }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: reconfigure vips
   with_subelements:
     - "{{ opn_virtualip_specific | default([]) }}"
     - settings
@@ -28,6 +30,7 @@
     xpath: /opnsense/virtualip/vip[interface/text()="{{ item.0.interface }}" and subnet/text()="{{ item.0.subnet }}"]/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: reconfigure vips
   with_subelements:
     - "{{ opn_virtualip | default([]) }}"
     - settings
