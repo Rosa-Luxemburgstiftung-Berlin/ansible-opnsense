@@ -107,15 +107,15 @@
   tags:
     - always
 
-- name: interfaces
+- name: laggs
   tags:
     - always
   ansible.builtin.include_tasks:
-    file: interfaces.yml
+    file: laggs.yml
     apply:
       tags:
-        - interfaces
-        - interface
+        - laggs
+        - lagg
 
 - name: vlans
   tags:
@@ -127,6 +127,16 @@
         - vlans
         - vlan
   when: opn_interfaces_vlan_parent_interface is defined
+
+- name: interfaces
+  tags:
+    - always
+  ansible.builtin.include_tasks:
+    file: interfaces.yml
+    apply:
+      tags:
+        - interfaces
+        - interface
 
 - name: bridges
   tags:
@@ -233,16 +243,6 @@
     file: nat.yml
     apply:
       tags: nat
-
-- name: laggs
-  tags:
-    - always
-  ansible.builtin.include_tasks:
-    file: laggs.yml
-    apply:
-      tags:
-        - laggs
-        - lagg
 
 - name: haproxy
   tags:
