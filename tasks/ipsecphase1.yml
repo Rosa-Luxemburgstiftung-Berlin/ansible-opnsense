@@ -98,7 +98,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ item.uniqid }}']"
     state: absent
-    pretty_print: yes
+    pretty_print: true
   when: item.uniqid not in ipsecphasevar.phase2
   with_items: "{{ phase2ikeiduniqid_all.matches }}"
 
