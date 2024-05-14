@@ -158,7 +158,7 @@
     verbosity: 1
   when: hashalgopt is defined
 
-- name: register fact change_hashalgopt
+- name: register fact change_hashalgopt (1)
   ansible.builtin.set_fact:
     change_hashalgopt: true
   with_items: "{{ hashalgopt.matches }}"
@@ -170,22 +170,19 @@
       or
       (ipsecphasevar2[uniqid]['hash-algorithm-options']|length) != (hashalgopt.matches|length))
 
-- name: register fact change_hashalgopt (1)
-  ansible.builtin.set_fact:
-    change_hashalgopt: true
-  with_items: "{{ hashalgopt.matches }}"
-  when:
-    - hashalgopt_count.count == 0
-    - hashalgopt is defined
-    - hashalgopt.matches is defined
-    - ipsecphasevar2[uniqid]['hash-algorithm-options'] | length > 0
-
 - name: register fact change_hashalgopt (2)
   ansible.builtin.set_fact:
     change_hashalgopt: true
   when:
-    - hashalgopt_count.count > 0
+    - hashalgopt_count.count == 0
     - ipsecphasevar2[uniqid]['hash-algorithm-options'] | length > 0
+
+- name: register fact change_hashalgopt (3)
+  ansible.builtin.set_fact:
+    change_hashalgopt: true
+  when:
+    - hashalgopt_count.count > 0
+    - ipsecphasevar2[uniqid]['hash-algorithm-options'] | length == 0
 
 - name: debug change_hashalgopt
   ansible.builtin.debug:
