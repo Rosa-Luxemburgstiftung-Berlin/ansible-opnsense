@@ -199,6 +199,8 @@
     pretty_print: true
   when:
     - change_hashalgopt | default(False)
+    - hashalgopt is defined
+    - hashalgopt.matches is defined
 
 - name: "IPSec ike phase2 {{ uniqid }} hash-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
