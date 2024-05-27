@@ -4,7 +4,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/system/authserver[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    xpath: "/opnsense/system/authserver[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -21,4 +21,5 @@
     xpath: /opnsense/system/authserver[not(node())]
     state: absent
   when: opn_authservers is defined
+
 ...
