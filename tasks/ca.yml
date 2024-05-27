@@ -4,7 +4,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    xpath: "/opnsense/ca[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -16,7 +16,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    xpath: "/opnsense/ca[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: true
   with_subelements:
@@ -38,7 +38,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    xpath: "/opnsense/cert[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -50,7 +50,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    xpath: "/opnsense/cert[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: true
   with_subelements:
