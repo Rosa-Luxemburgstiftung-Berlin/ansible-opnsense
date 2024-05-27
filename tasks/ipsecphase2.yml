@@ -49,6 +49,17 @@
   with_dict:
     - "{{ ipsecphasevar2[uniqid].remoteid | default({}) }}"
 
+# /encryption-algorithm-option can be defined multiple times as
+#      <encryption-algorithm-option>
+#        <name>aes192</name>
+#      </encryption-algorithm-option>
+#      <encryption-algorithm-option>
+#        <name>aes256</name>
+#      </encryption-algorithm-option>
+#      <encryption-algorithm-option>
+#        <name>aes128gcm16</name>
+#      </encryption-algorithm-option>
+
 - name: "IPSec ike phase2 {{ uniqid }} count encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
@@ -61,6 +72,32 @@
   ansible.builtin.debug:
     var: eao_count
     verbosity: 1
+
+- name: "IPSec ike phase2 {{ uniqid }} get defined encryption-algorithm-options for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option/name"
+    content: text
+  register: eao_matches
+  when: eao_count.count > 0
+
+- name: debug eao_matches
+  ansible.builtin.debug:
+    var: eao_matches
+    verbosity: 1
+  when: eao_matches is defined
+
+- name: "IPSec ike phase2 {{ uniqid }} get defined list of encryption-algorithm-options for ikeid {{ ikeid }}"
+  ansible.builtin.set_fact:
+    eao_list: "{{ eao_matches.matches | list | map(attribute='name') | list | flatten }}"
+  when: eao_matches is defined
+
+- name: debug eao_list
+  ansible.builtin.debug:
+    var: eao_list
+    verbosity: 1
+  when: eao_list is defined
 
 - name: "IPSec ike phase2 {{ uniqid }} get encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
@@ -83,7 +120,7 @@
   ansible.builtin.set_fact:
     encalgopt_reset: true
   when:
-    - eao_count.count != (ipsecphasevar2[uniqid]['encryption-algorithm-options']|length)
+    - eao_count.count != (ipsecphasevar2[uniqid]['encryption-algorithm-options'] | length)
 
 - name: "IPSec ike phase2 {{ uniqid }} check reset of encryption-algorithm-options for ikeid {{ ikeid }} (2)"
   ansible.builtin.set_fact:
@@ -134,6 +171,12 @@
   with_items:
     - "{{ ipsecphasevar2[uniqid]['encryption-algorithm-options'] | default([]) }}"
   when: item.keylen is defined
+
+# can be multiple
+#      <hash-algorithm-option>hmac_sha1</hash-algorithm-option>
+#      <hash-algorithm-option>hmac_sha256</hash-algorithm-option>
+#      <hash-algorithm-option>hmac_sha384</hash-algorithm-option>
+#      <hash-algorithm-option>hmac_sha512</hash-algorithm-option>
 
 - name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }} : get hash-algorithm-option count"
   delegate_to: localhost
@@ -194,11 +237,12 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option/{{ item['hash-algorithm-option'] }}"
     state: absent
     pretty_print: true
+  with_items: "{{ hashalgopt.matches }}"
   when:
-    - change_hashalgopt | default(False)
+    - change_hashalgopt | default(false)
     - hashalgopt is defined
     - hashalgopt.matches is defined
 
