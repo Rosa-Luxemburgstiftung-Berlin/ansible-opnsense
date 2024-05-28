@@ -105,7 +105,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/ipsec/phase2[ikeid={{ ikeid }} and uniqid={{ uniqid }}]/encryption-algorithm-option[name={{ item.name }}]"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option[name='{{ item.name }}']"
     count: true
   register: encalgopt
   with_items:
