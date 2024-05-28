@@ -140,7 +140,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option"
+    xpath: "/opnsense/ipsec/phase2[ikeid={{ ikeid }} and uniqid={{ uniqid }}]/encryption-algorithm-option"
     state: absent
     pretty_print: true
   when: encalgopt_reset | default(false)
