@@ -129,7 +129,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} reset encryption-algorithm-options for ikeid {{ ikeid }} ..."
   delegate_to: localhost
-  #debugger: on_failed
+  # debugger: on_failed
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option"
