@@ -49,17 +49,6 @@
   with_dict:
     - "{{ ipsecphasevar2[uniqid].remoteid | default({}) }}"
 
-# /encryption-algorithm-option can be defined multiple times as
-#      <encryption-algorithm-option>
-#        <name>aes192</name>
-#      </encryption-algorithm-option>
-#      <encryption-algorithm-option>
-#        <name>aes256</name>
-#      </encryption-algorithm-option>
-#      <encryption-algorithm-option>
-#        <name>aes128gcm16</name>
-#      </encryption-algorithm-option>
-
 - name: "IPSec ike phase2 {{ uniqid }} count encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
@@ -140,7 +129,7 @@
 
 - name: "IPSec ike phase2 {{ uniqid }} reset encryption-algorithm-options for ikeid {{ ikeid }} ..."
   delegate_to: localhost
-  debugger: on_failed
+  #debugger: on_failed
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option"
@@ -173,12 +162,6 @@
   with_items:
     - "{{ ipsecphasevar2[uniqid]['encryption-algorithm-options'] | default([]) }}"
   when: item.keylen is defined
-
-# can be multiple
-#      <hash-algorithm-option>hmac_sha1</hash-algorithm-option>
-#      <hash-algorithm-option>hmac_sha256</hash-algorithm-option>
-#      <hash-algorithm-option>hmac_sha384</hash-algorithm-option>
-#      <hash-algorithm-option>hmac_sha512</hash-algorithm-option>
 
 - name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }} : get hash-algorithm-option count"
   delegate_to: localhost
@@ -240,10 +223,6 @@
   # debugger: on_failed
   community.general.xml:
     path: "{{ local_config_path }}"
-    # issue #69: with quotes around jinja2 vars we get a Couldn't delete xpath target ...
-    #       (module 'lxml.etree' has no attribute '_ElementStringResult') ERROR
-    #       but using a hardcoded xpath with quotes works
-    #       "/opnsense/ipsec/phase2[ikeid='1' and uniqid='eea1dcb2e051a']/hash-algorithm-option"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option"
     state: absent
     pretty_print: true
