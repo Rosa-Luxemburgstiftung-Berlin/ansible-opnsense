@@ -233,14 +233,19 @@
     verbosity: 1
   when: change_hashalgopt is defined
 
+- debug:
+    var: local_config_path
+
 - name: "IPSec ike phase2 {{ uniqid }} reset hash-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
+  # debugger: on_failed
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option/{{ item['hash-algorithm-option'] }}"
+    # FIXME: with quotes around jinja2 vars we get a Couldn't delete xpath target ...
+    #        (module 'lxml.etree' has no attribute '_ElementStringResult') ERROR
+    xpath: "/opnsense/ipsec/phase2[ikeid={{ ikeid }} and uniqid={{ uniqid }}]/hash-algorithm-option"
     state: absent
     pretty_print: true
-  with_items: "{{ hashalgopt.matches }}"
   when:
     - change_hashalgopt | default(false)
     - hashalgopt is defined
