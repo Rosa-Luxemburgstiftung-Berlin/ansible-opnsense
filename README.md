@@ -15,6 +15,7 @@ Requirements
 ------------
 
 * OPNsense firewall with shell access
+* python lxml <= 5.1.0 (see: ansible-collections/community.general#8435 )
 
 Role Variables
 --------------
@@ -26,6 +27,15 @@ Dependencies
 ------------
 
     sudo apt install python3-lxml
+
+or
+
+    pip install lxml==5.1.0
+
+
+optional
+........
+
     sudo apt install secure-delete (optional)
     
 Example Playbook
