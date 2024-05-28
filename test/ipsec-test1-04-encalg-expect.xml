@@ -38,7 +38,7 @@
     </phase1>
     <phase2>
       <ikeid>1</ikeid>
-      <uniqid>eea1dcb2e051a</uniqid>
+      <uniqid>aaa</uniqid>
       <disabled>1</disabled>
       <mode>tunnel</mode>
       <pfsgroup>2</pfsgroup>
@@ -66,7 +66,7 @@
     </phase2>
     <phase2>
       <ikeid>1</ikeid>
-      <uniqid>e471b7299c8c1</uniqid>
+      <uniqid>bbb</uniqid>
       <mode>tunnel</mode>
       <pfsgroup>2</pfsgroup>
       <lifetime>3600</lifetime>
@@ -93,7 +93,7 @@
     </phase2>
     <phase2>
       <ikeid>1</ikeid>
-      <uniqid>e98f78c414ece</uniqid>
+      <uniqid>ccc</uniqid>
       <mode>tunnel</mode>
       <pfsgroup>2</pfsgroup>
       <lifetime>3600</lifetime>

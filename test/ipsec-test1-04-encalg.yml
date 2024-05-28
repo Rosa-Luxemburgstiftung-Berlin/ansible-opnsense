@@ -48,7 +48,7 @@ opn_ipsec:
           - hmac_sha512
       phase2:
         # key is the uniqid
-        eea1dcb2e051a:
+        aaa:
           pinghost: 10.0.0.1
           descr: 10.0.0.0/12
           disabled: 1  # this way you can disable a p2 entry without deleting it; a disabled p2 entry must be enabled by explicitly setting disabled: 0
@@ -57,7 +57,7 @@ opn_ipsec:
             address: 10.0.0.0
             netbits: 12
           reqid: 1
-        e471b7299c8c1:
+        bbb:
           pinghost: 10.128.0.1
           descr: 10.128.0.0/12
           remoteid:
@@ -65,7 +65,7 @@ opn_ipsec:
             address: 10.128.0.0
             netbits: 12
           reqid: 2
-        e98f78c414ece:
+        ccc:
           pinghost: 10.224.0.1
           descr: 10.224.0.0/12
           remoteid:
