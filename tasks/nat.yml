@@ -31,7 +31,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/nat/outbound/rule[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
+    xpath: "/opnsense/nat/outbound/rule[descr/text()='{{ item.0.descr }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -52,7 +52,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/nat/rule[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
+    xpath: "/opnsense/nat/rule[descr/text()='{{ item.0.descr }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -73,7 +73,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/nat/onetoone[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
+    xpath: "/opnsense/nat/onetoone[descr/text()='{{ item.0.descr }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:

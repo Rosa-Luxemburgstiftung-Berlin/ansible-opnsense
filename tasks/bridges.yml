@@ -3,7 +3,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/bridges/bridged[descr/text()="{{ item.0.descr }}"]/{{ item.1.key }}
+    xpath: "/opnsense/bridges/bridged[descr/text()='{{ item.0.descr }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:

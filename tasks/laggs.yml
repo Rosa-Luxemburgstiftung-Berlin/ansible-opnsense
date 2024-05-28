@@ -3,7 +3,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/laggs/lagg[laggif/text()="{{ item.0.laggif }}"]/{{ item.1.key }}
+    xpath: "/opnsense/laggs/lagg[laggif/text()='{{ item.0.laggif }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   notify: reconfigure laggs
