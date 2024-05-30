@@ -84,4 +84,22 @@
   loop_control:
     loop_var: p2
 
+- name: "IPSec ike phase2 search configured uniqid for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}']/uniqid"
+    content: text
+  register: phase2ikeiduniqid_all
+
+- name: "IPSec ike phase2 cleanup for ikeid {{ ikeid }}"
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ item.uniqid }}']"
+    state: absent
+    pretty_print: true
+  when: item.uniqid not in ipsecphasevar.phase2
+  with_items: "{{ phase2ikeiduniqid_all.matches }}"
+
 ...

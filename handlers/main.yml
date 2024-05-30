@@ -66,3 +66,28 @@
   when:
     - config is defined
     - config.changed | bool
+
+# interfaces, vlans etc
+- name: reconfigure vlans  # noqa no-changed-when
+  ansible.builtin.command: /usr/local/opnsense/scripts/interfaces/reconfigure_vlans.php
+  when:
+    - config is defined
+    - config.changed | bool
+
+- name: reconfigure laggs  # noqa no-changed-when
+  ansible.builtin.command: /usr/local/opnsense/scripts/interfaces/reconfigure_laggs.php
+  when:
+    - config is defined
+    - config.changed | bool
+
+- name: reconfigure vips  # noqa no-changed-when
+  ansible.builtin.command: /usr/local/opnsense/scripts/interfaces/reconfigure_vips.php
+  when:
+    - config is defined
+    - config.changed | bool
+
+- name: register interfaces  # noqa no-changed-when
+  ansible.builtin.command: /usr/local/sbin/pluginctl -i
+  when:
+    - config is defined
+    - config.changed | bool

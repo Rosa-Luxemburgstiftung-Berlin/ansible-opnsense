@@ -4,7 +4,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    xpath: "/opnsense/ca[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -16,7 +16,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/ca[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    xpath: "/opnsense/ca[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: true
   with_subelements:
@@ -26,20 +26,19 @@
 
 
 # remove the default empty <ca/> node remains after configuring the first one
-
 - name: CAs - remove default empty node
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/ca[not(node())]
     state: absent
-  when: opn_cas is defined
+  when: opn_cas | default([]) | length > 0
 
 - name: certificates
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    xpath: "/opnsense/cert[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -51,7 +50,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/cert[refid/text()="{{ item.0.refid }}"]/{{ item.1.key }}
+    xpath: "/opnsense/cert[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: true
   with_subelements:
@@ -59,5 +58,13 @@
     - settings
   when: item.1.b64_value is defined
 
+# remove the default empty <cert/> node remains after configuring the first one
+- name: cert - remove default empty node
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/cert[not(node())]
+    state: absent
+  when: opn_certs | default([]) | length > 0
 
 ...

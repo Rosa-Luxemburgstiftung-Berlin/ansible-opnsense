@@ -99,6 +99,7 @@
     xpath: /opnsense/interfaces/{{ item }}
     state: absent
     pretty_print: true
+  notify: register interfaces
   with_items: "{{ opn_interfaces_remove }}"
   when: opn_interfaces_remove is defined
 
@@ -109,6 +110,7 @@
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: register interfaces
   with_subelements:
     - "{{ opn_interfaces_specific }}"
     - settings
@@ -123,6 +125,7 @@
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: register interfaces
   with_subelements:
     - "{{ opn_interfaces_specific }}"
     - settings
@@ -137,6 +140,7 @@
     xpath: /opnsense/interfaces/{{ item.0.interface }}/{{ item.1.key }}
     state: absent
     pretty_print: true
+  notify: register interfaces
   with_subelements:
     - "{{ opn_interfaces_specific }}"
     - settings
@@ -151,6 +155,7 @@
     xpath: "/opnsense/interfaces/{{ item.1 }}/{{ item.0.key }}"
     value: "{{ item.0.value }}"
     pretty_print: true
+  notify: register interfaces
   with_subelements:
     - "{{ opn_interfaces_all }}"
     - interfaces
@@ -163,6 +168,7 @@
     xpath: /opnsense/interfaces/{{ item.0.interface }}/if
     value: "{{ item.0.vlan_parent_interface | default(opn_interfaces_vlan_parent_interface) }}_vlan{{ item.0.vlan }}"
     pretty_print: true
+  notify: register interfaces
   with_subelements:
     - "{{ opn_interfaces_specific }}"
     - settings

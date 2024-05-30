@@ -57,6 +57,39 @@
     count: true
   register: eao_count
 
+- name: debug eao_count
+  ansible.builtin.debug:
+    var: eao_count
+    verbosity: 1
+
+- name: "IPSec ike phase2 {{ uniqid }} get defined encryption-algorithm-options for ikeid {{ ikeid }} from xml"
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option/name"
+    content: text
+  register: eao_matches
+  when: eao_count.count > 0
+
+- name: debug eao_matches
+  ansible.builtin.debug:
+    var: eao_matches
+    verbosity: 1
+  when: eao_matches is defined
+
+- name: "IPSec ike phase2 {{ uniqid }} get defined list of encryption-algorithm-options for ikeid {{ ikeid }}"
+  ansible.builtin.set_fact:
+    eao_list: "{{ eao_matches.matches | list | map(attribute='name') | list | flatten }}"
+  when:
+    - eao_matches is defined
+    - eao_matches.matches is defined
+
+- name: debug eao_list
+  ansible.builtin.debug:
+    var: eao_list
+    verbosity: 1
+  when: eao_list is defined
+
 - name: "IPSec ike phase2 {{ uniqid }} get encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
@@ -74,12 +107,13 @@
     verbosity: 1
   when: encalgopt is defined
 
-- name: "IPSec ike phase2 {{ uniqid }} check reset of encryption-algorithm-options for ikeid {{ ikeid }}"
+- name: "IPSec ike phase2 {{ uniqid }} check reset of encryption-algorithm-options for ikeid {{ ikeid }} (1)"
   ansible.builtin.set_fact:
     encalgopt_reset: true
   when:
-    - eao_count.count != (ipsecphasevar2[uniqid]['encryption-algorithm-options']|length)
-- name: "IPSec ike phase2 {{ uniqid }} check reset of encryption-algorithm-options for ikeid {{ ikeid }}"
+    - eao_count.count != (ipsecphasevar2[uniqid]['encryption-algorithm-options'] | length)
+
+- name: "IPSec ike phase2 {{ uniqid }} check reset of encryption-algorithm-options for ikeid {{ ikeid }} (2)"
   ansible.builtin.set_fact:
     encalgopt_reset: true
   when:
@@ -93,16 +127,16 @@
     verbosity: 1
   when: encalgopt_reset is defined
 
-- name: "IPSec ike phase2 {{ uniqid }} reset encryption-algorithm-options for ikeid {{ ikeid }}"
+- name: "IPSec ike phase2 {{ uniqid }} reset encryption-algorithm-options for ikeid {{ ikeid }} ..."
   delegate_to: localhost
+  # debugger: on_failed
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option"
     state: absent
     pretty_print: true
-  with_items:
-    - "{{ ipsecphasevar2[uniqid]['encryption-algorithm-options'] | default([]) }}"
-  when: encalgopt_reset | default(false)
+  when:
+    - encalgopt_reset | default(false)
 
 - name: "IPSec ike phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }}"  # noqa jinja[spacing]
   delegate_to: localhost
@@ -152,7 +186,7 @@
     verbosity: 1
   when: hashalgopt is defined
 
-- name: register fact change_hashalgopt
+- name: register fact change_hashalgopt (1)
   ansible.builtin.set_fact:
     change_hashalgopt: true
   with_items: "{{ hashalgopt.matches }}"
@@ -164,29 +198,38 @@
       or
       (ipsecphasevar2[uniqid]['hash-algorithm-options']|length) != (hashalgopt.matches|length))
 
-- name: register fact change_hashalgopt
+- name: register fact change_hashalgopt (2)
   ansible.builtin.set_fact:
     change_hashalgopt: true
-  with_items: "{{ hashalgopt.matches }}"
   when:
     - hashalgopt_count.count == 0
-    - hashalgopt is defined
-    - hashalgopt.matches is defined
-    - ipsecphasevar2[uniqid]['hash-algorithm-options']|length > 0
+    - ipsecphasevar2[uniqid]['hash-algorithm-options'] | length > 0
 
-- name: register fact change_hashalgopt
+- name: register fact change_hashalgopt (3)
   ansible.builtin.set_fact:
     change_hashalgopt: true
-  when: hashalgopt_count.count == 0 and ipsecphasevar2[uniqid]['hash-algorithm-options'] | length > 0
+  when:
+    - hashalgopt_count.count > 0
+    - ipsecphasevar2[uniqid]['hash-algorithm-options'] | length == 0
+
+- name: debug change_hashalgopt
+  ansible.builtin.debug:
+    var: change_hashalgopt
+    verbosity: 1
+  when: change_hashalgopt is defined
 
 - name: "IPSec ike phase2 {{ uniqid }} reset hash-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
+  # debugger: on_failed
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option"
     state: absent
     pretty_print: true
-  when: change_hashalgopt | default(False)
+  when:
+    - change_hashalgopt | default(false)
+    - hashalgopt is defined
+    - hashalgopt.matches is defined
 
 - name: "IPSec ike phase2 {{ uniqid }} hash-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost

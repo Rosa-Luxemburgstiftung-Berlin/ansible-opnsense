@@ -111,7 +111,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/dhcpd/{{ item.0.if }}/numberoptions/item[number/text()="{{ item.1.number }}"]/type
+    xpath: "/opnsense/dhcpd/{{ item.0.if }}/numberoptions/item[number/text()='{{ item.1.number }}']/type"
     value: "{{ item.1.type }}"
     pretty_print: true
   notify: restart dhcpd
@@ -124,7 +124,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/dhcpd/{{ item.0.if }}/numberoptions/item[number/text()="{{ item.1.number }}"]/value
+    xpath: "/opnsense/dhcpd/{{ item.0.if }}/numberoptions/item[number/text()='{{ item.1.number }}']/value"
     value: "{{ item.1.value }}"
     pretty_print: true
   notify: restart dhcpd
@@ -137,7 +137,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/dhcpd/{{ item.0.if }}/staticmap[mac/text()="{{ item.0.mac }}"]/{{ item.1.key }}
+    xpath: "/opnsense/dhcpd/{{ item.0.if }}/staticmap[mac/text()='{{ item.0.mac }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   notify: restart dhcpd

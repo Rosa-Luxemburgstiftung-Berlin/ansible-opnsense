@@ -46,7 +46,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/gateways/gateway_item[interface/text()="{{ item.0.interface }}"]/{{ item.1.key }}
+    xpath: "/opnsense/gateways/gateway_item[interface/text()='{{ item.0.interface }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -92,7 +92,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/gateways/gateway_item[interface/text()="{{ item.0.interface }}" and name/text()="{{ item.0.name }}"]/{{ item.1.key }}
+    xpath: "/opnsense/gateways/gateway_item[interface/text()='{{ item.0.interface }}' and name/text()='{{ item.0.name }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -104,7 +104,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/gateways/gateway_group[name/text()="{{ item.name }}"]
+    xpath: "/opnsense/gateways/gateway_group[name/text()='{{ item.name }}']"
     pretty_print: true
   with_items: "{{ opn_gateway_groups | default([]) }}"
 
@@ -112,7 +112,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/gateways/gateway_group[name/text()="{{ item.name }}"]
+    xpath: "/opnsense/gateways/gateway_group[name/text()='{{ item.name }}']"
     set_children: "{{ item.settings + [{'name': item.name}] }}"
     pretty_print: true
   with_items: "{{ opn_gateway_groups | default([]) }}"
