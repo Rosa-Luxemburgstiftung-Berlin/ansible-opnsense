@@ -1,0 +1,187 @@
+---
+# OpenVPN config
+#
+# examples:
+#
+# new config
+# ----------
+#
+# valid options for the settings can be found at
+# https://github.com/opnsense/core/blob/master/src/opnsense/mvc/app/models/OPNsense/OpenVPN/OpenVPN.xml
+#
+# overwrite settings
+# ..................
+# dns_domain_search, dns_servers, ntp_servers and wins_servers can be defined as yaml list
+# or as string with commas as separator
+# opn_openvpn_overwrites: for examples see test/openvpn-testcfg.yml
+#
+# instance settings
+# .................
+# route, push_route, dns_domain_search, dns_servers and ntp_servers can be defined as yaml list
+# or as string with commas as separator
+# opn_openvpn_instances: for examples see test/openvpn-testcfg.yml
+#
+# statickey settings
+# ..................
+# opn_openvpn_statickeys: for examples see test/openvpn-testcfg.yml
+#
+# the key can be generated using
+#   openvpn --genkey secret
+#
+#
+# legacy server config
+# --------------------
+# should NOT be used for a new setup
+# opn_openvpn_servers:
+#   - vpnid: 1
+#     settings:
+#       - key: description
+#         value: "OpenVPN RemoteAccess"
+#       - key: mode
+#         value: "server_tls_user"
+#       - key: authmode
+#         value: radius
+#       - key: protocol
+#         value: "TCP"
+#       - key: dev
+#         value: "TUN"
+#       - key: interface
+#         value: "wan"
+#       - key: local_port
+#         value: "443"
+#       - key: peer_certificate_revocation_list
+#         value: none
+#       - key: crypto
+#         value: AES-256-GCM
+#       - key: digest
+#         value: SHA512
+#       - key: cert_depth
+#         value: 1
+#       - key: caref
+#         value: 666aaa...  # ref to the ca cert configured under trust
+#       - key: certref
+#         value: 615f....  # ref to the certificate to use
+#       - key: server_certificate
+#         value: "my.server.cert"  # name of the cert in certref
+#       - key: tlsmode
+#         value: auth
+#       - key: tls
+#         b64_value: "{{ lookup('file', '....tls-key.pem') }}"
+#       - key: tunnel_network
+#         value: "192.168.101.128/26"
+#       - key: local_network
+#         value: "10.0.0.0/24,10.10.10.0/24"
+#       - key: dynamic_ip
+#         value: "true"
+#       - key: topology_subnet
+#         value: "true"
+#       - key: dns_domain
+#         value: "local.domain.example.net"
+#       - key: dns_domain_search
+#         value: "abc.example.net,xyz.example.net"
+#       - key: dns_server1
+#         value: "10.0.0.10"
+#       - key: dns_server2
+#         value: "10.10.10.1"
+#       - key: push_register_dns
+#         value: "yes"
+#       - key: push_block_outside_dns
+#         value: "yes"
+#       - key: custom_options
+#         value: |
+#           push "dhcp-option DOMAIN abc.example.net"
+#           push "dhcp-option DOMAIN xyz.example.net"
+
+- name: OpenVPN Overwrites configuration
+  ansible.builtin.include_tasks: openvpnoverwrite.yml
+  vars:
+    uuid: "{{ overwrite.key }}"
+    overwritecfg: "{{ opn_openvpn_overwrites_defaults | combine(overwrite.value) }}"
+  with_dict:
+    - "{{ opn_openvpn_overwrites | default({}) }}"
+  loop_control:
+    loop_var: overwrite
+
+- name: OpenVPN Overwrites - remove default empty node
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/OpenVPN/Overwrites[not(node())]
+    state: absent
+  when: (opn_openvpn_overwrites | default({})).keys() | length > 0
+
+- name: OpenVPN Instances configuration
+  ansible.builtin.include_tasks: openvpninstance.yml
+  vars:
+    uuid: "{{ instance.key }}"
+    instancecfg: "{{ opn_openvpn_instances_defaults | combine(instance.value) }}"
+  with_dict:
+    - "{{ opn_openvpn_instances | default({}) }}"
+  loop_control:
+    loop_var: instance
+
+- name: OpenVPN Instances - remove default empty node
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/OpenVPN/Instances[not(node())]
+    state: absent
+  when: (opn_openvpn_instances | default({})).keys() | length > 0
+
+- name: OpenVPN StaticKeys configuration
+  ansible.builtin.include_tasks: openvpnstatickey.yml
+  vars:
+    uuid: "{{ statickey.key }}"
+    statickeycfg: "{{ statickey.value }}"
+  with_dict:
+    - "{{ opn_openvpn_statickeys | default({}) }}"
+  loop_control:
+    loop_var: statickey
+
+- name: OpenVPN StaticKeys - remove default empty node
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/OpenVPN/StaticKeys[not(node())]
+    state: absent
+  when: (opn_openvpn_statickeys | default({})).keys() | length > 0
+
+- name: OpenVPN legacy server configuration
+  when: opn_openvpn_servers is defined
+  block:
+    - name: OpenVPN Servers
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: /opnsense/openvpn/openvpn-server[vpnid/text()="{{ item.0.vpnid }}"]/{{ item.1.key }}
+        value: "{{ item.1.value }}"
+        pretty_print: true
+      notify: restart openvpn
+      with_subelements:
+        - "{{ opn_openvpn_servers | default([]) }}"
+        - settings
+      when: item.1.value is defined
+
+    - name: b64 OpenVPN fields
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: /opnsense/openvpn/openvpn-server[vpnid/text()="{{ item.0.vpnid }}"]/{{ item.1.key }}
+        value: "{{ item.1.b64_value | b64encode }}"
+        pretty_print: true
+      notify: restart openvpn
+      with_subelements:
+        - "{{ opn_openvpn_servers | default([]) }}"
+        - settings
+      when: item.1.b64_value is defined
+
+    # remove the default empty <openvpn-server/> node remains after configuring the first one
+    - name: OpenVPN Servers - remove default empty node
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: /opnsense/openvpn/openvpn-server[not(node())]
+        state: absent
+# end block OpenVPN legacy server configuration
+
+...

@@ -1,0 +1,14 @@
+---
+
+- name: OpenVPN StaticKey settings
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/OpenVPN/StaticKeys/StaticKey[@uuid='{{ uuid }}']/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: restart openvpn
+  with_dict:
+    - "{{ statickeycfg | default({}) }}"
+
+...

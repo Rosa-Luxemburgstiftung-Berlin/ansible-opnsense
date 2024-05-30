@@ -10,3 +10,26 @@ local_config_path: /tmp/config-{{ inventory_hostname }}.xml
 opn_sort_values:
   filter:
     - interface
+
+# default values for opn_openvpn_instances
+opn_openvpn_instances_defaults:
+  enabled: 1
+  dev_type: tun
+  verb: 3
+  proto: udp
+  topology: subnet
+  role: server
+  register_dns: 0
+  verify_client_cert: require
+  use_ocsp: 0
+  username_as_common_name: 0
+  strictusercn: 0
+
+# defaults for opn_openvpn_instances
+opn_openvpn_overwrites_defaults:
+  enabled: 1
+  block: 0
+  push_reset: 0
+  register_dns: 0
+
+...

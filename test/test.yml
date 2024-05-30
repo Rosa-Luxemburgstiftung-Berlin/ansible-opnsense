@@ -11,7 +11,13 @@
     - name: reconfigure aliases
       debug:
         msg: fake handler - reconfigure aliases
+    - name: restart openvpn
+      debug:
+        msg: fake handler - restart openvpn
   tasks:
+    - name: include default vars
+      ansible.builtin.include_vars:
+        file: ../defaults/main.yml
     - name: "simple task test {{ _testtask }} ..."
       ansible.builtin.include_tasks: testsimpletask.yml
       loop_control:
@@ -23,8 +29,10 @@
         - wireguard
         - ipsec
         - dnsserver
+        - openvpn
       when:
         - test | default(_testtask) == _testtask
+    - ansible.builtin.meta: flush_handlers
     - name: report all tests
       ansible.builtin.debug:
         var: all_tests

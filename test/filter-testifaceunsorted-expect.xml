@@ -39,7 +39,7 @@
     </rule>
     <rule>
       <descr>new rule</descr>
-      <interface>opt1,opt2,lan</interface>
+      <interface>lan,opt1,opt2</interface>
       <type>pass</type>
       <ipprotocol>inet</ipprotocol>
       <statetype>keep state</statetype>
