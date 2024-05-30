@@ -13,7 +13,7 @@ We like to thank [@rudibroekhuizen](https://github.com/rudibroekhuizen) and all 
 ## Requirements
 
 * OPNsense firewall with shell access
-* python lxml <= 5.1.0 (see: ansible-collections/community.general#8435 )
+* python lxml
 
 ## Role Variables
 
@@ -26,7 +26,7 @@ We try to provide some example variable definitions in the coresponding task and
 
 or
 
-    pip install lxml==5.1.0
+    pip install lxml
 
 
 ### optional
