@@ -14,6 +14,12 @@
 #   - system/enablenatreflectionhelper: "yes"
 #   - system/optimization: conservative
 #
+# for business edition:
+# opn_general:
+#   - system//firmware/mirror: https://opnsense-update.deciso.com
+#   - system/firmware/type: business
+#   - system/firmware/subscription: XYZ...
+#
 # opn_unset:
 #   - system/ipv6allow
 #   - trigger_initial_wizard
