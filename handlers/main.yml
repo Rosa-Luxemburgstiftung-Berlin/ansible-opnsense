@@ -92,7 +92,7 @@
     - config is defined
     - config.changed | bool
 
-- name: update firmware settings
+- name: update firmware settings  # noqa no-changed-when
   ansible.builtin.command: /usr/local/sbin/pluginctl -c firmware_reload
   when:
     - config is defined
