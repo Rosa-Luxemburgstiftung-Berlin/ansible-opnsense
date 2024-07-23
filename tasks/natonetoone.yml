@@ -1,0 +1,27 @@
+---
+# example definition
+#
+# One-to-one: Firewall A example from https://docs.opnsense.org/manual/how-tos/ipsec-s2s-binat.html
+#
+# opn_nat_onetoone:
+#   rules:
+#     $UUID:
+#       interface: enc0
+#       type: binat
+#       source_net: 10.0.1.0/24
+#       destination_net: 192.168.2.0/24
+#       external: 192.168.1.0
+#       description: IPsec BINAT example
+#       ...
+
+- name: nat - onetoone rules
+  delegate_to: localhost
+  xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Firewall/Filter/onetoone/rule[@uuid='{{ uuid }}']/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  with_dict:
+    - "{{ cfg | default({}) }}"
+
+...
