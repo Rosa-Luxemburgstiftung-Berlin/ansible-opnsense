@@ -16,7 +16,7 @@
 
 - name: nat - onetoone rules
   delegate_to: localhost
-  xml:
+  community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/Firewall/Filter/onetoone/rule[@uuid='{{ uuid }}']/{{ item.key }}"
     value: "{{ item.value }}"
