@@ -49,6 +49,7 @@
     xpath: "/opnsense/gateways/gateway_item[interface/text()='{{ item.0.interface }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: configure routing
   with_subelements:
     - "{{ opn_gateways | default([]) }}"
     - settings
@@ -95,6 +96,7 @@
     xpath: "/opnsense/gateways/gateway_item[interface/text()='{{ item.0.interface }}' and name/text()='{{ item.0.name }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: configure routing
   with_subelements:
     - "{{ opn_gateways | default([]) }}"
     - settings
@@ -106,6 +108,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/gateways/gateway_group[name/text()='{{ item.name }}']"
     pretty_print: true
+  notify: configure routing
   with_items: "{{ opn_gateway_groups | default([]) }}"
 
 - name: gateway groups settings
@@ -115,6 +118,7 @@
     xpath: "/opnsense/gateways/gateway_group[name/text()='{{ item.name }}']"
     set_children: "{{ item.settings + [{'name': item.name}] }}"
     pretty_print: true
+  notify: configure routing
   with_items: "{{ opn_gateway_groups | default([]) }}"
 
 ...

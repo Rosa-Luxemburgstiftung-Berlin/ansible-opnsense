@@ -92,6 +92,14 @@
     - config is defined
     - config.changed | bool
 
+# routing and gateways
+- name: configure routing  # noqa no-changed-when
+  ansible.builtin.command: /usr/local/etc/rc.routing_configure
+  when:
+    - config is defined
+    - config.changed | bool
+
+# firmware
 - name: update firmware settings  # noqa no-changed-when
   ansible.builtin.command: /usr/local/sbin/pluginctl -c firmware_reload
   when:
