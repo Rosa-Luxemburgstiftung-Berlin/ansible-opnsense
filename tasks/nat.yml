@@ -52,7 +52,7 @@
   when: opn_nat_port_forward is defined
 
 - name: nat - onetoone
-  include_tasks: natonetoone.yml
+  ansible.builtin.include_tasks: natonetoone.yml
   vars:
     uuid: "{{ rule.key }}"
     cfg: "{{ rule.value }}"
