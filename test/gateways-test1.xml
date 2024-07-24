@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<opnsense>
+  <system>
+  </system>
+  <OPNsense>
+    <Gateways version="1.0.0"/>
+  </OPNsense>
+  <gateways>
+    <gateway_item />
+  </gateways>
+</opnsense>
