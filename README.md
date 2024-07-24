@@ -77,4 +77,5 @@ Apache 2.0
   * Privazio - hello@privaz.io - https://github.com/privazio
   * Foppe Pieters - foppe.pieters@naturalis.nl
   * Klaus Zerwes - https://github.com/zerwes
+  * Jonybat - https://github.com/Jonybat
 
