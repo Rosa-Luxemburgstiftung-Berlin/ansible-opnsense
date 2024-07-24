@@ -186,9 +186,6 @@
     - item.uuid is not defined
     - item.name is not defined
 
-- debug:
-    var: _xml_gatewaays_uuid
-
 - name: add uuid attribute
   delegate_to: localhost
   community.general.xml:
@@ -200,8 +197,7 @@
   with_items: "{{ _xml_gatewaays_uuid.results }}"
   when:
     - item.matches[0].gateway_item.uuid is not defined
-    - item.skipped is not defined
-    - not item.skipped
+    - not (item.skipped | default(false))
 
 - name: read uuid attribute for gateway by interface and name
   delegate_to: localhost
@@ -215,10 +211,7 @@
     - item.uuid is not defined
     - item.name is defined
 
-- debug:
-    var: _xml_gatewaays_uuid
-
-- name: add uuid attribute
+- name: add uuid attribute (2)
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -229,8 +222,7 @@
   with_items: "{{ _xml_gatewaays_uuid.results }}"
   when:
     - item.matches[0].gateway_item.uuid is not defined
-    - item.skipped is not defined
-    - not item.skipped
+    - not (item.skipped | default(false))
 
 # issue #70 - groups still in the old place using old syntax
 - name: gateway groups
