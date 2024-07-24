@@ -39,6 +39,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/gateways/gateway_item"
     state: absent
+    pretty_print: true
   when:
     - opn_gateways is defined
     - opn_gateways | length > 0
@@ -139,11 +140,41 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/gateways"
     state: absent
+    pretty_print: true
   when:
     - opn_gateways is defined
     - opn_gateways | length > 0
     - opn_gateway_groups is defined
     - opn_gateway_groups | length > 0
     - opn_gateways_remove_legacy_entry | default(true) | bool
+
+# finisage
+- name: read Gateways version attribute
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways"
+    #attribute: version
+    content: attribute
+  register: xml_Gateways
+  when:
+    - opn_gateways is defined
+    - opn_gateways | length > 0
+
+- debug:
+    var: xml_Gateways
+
+- name: add versio attribute to Gateways
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways"
+    attribute: version
+    value: "{{ opn_Gateways_version | default('1.0.0') }}"
+    pretty_print: true
+  when:
+    - opn_gateways is defined
+    - opn_gateways | length > 0
+    - xml_Gateways.matches[0].Gateways.version is not defined
 
 ...
