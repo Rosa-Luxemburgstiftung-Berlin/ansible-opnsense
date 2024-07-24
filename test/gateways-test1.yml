@@ -1,3 +1,23 @@
 ---
 
+opn_gateways:
+  - interface: wan
+    settings:
+      - key: gateway
+        value: 192.168.192.168
+      - key: name
+        value: GW_WAN
+      - key: weight
+        value: '1'
+      - key: ipprotocol
+        value: inet
+      - key: defaultgw
+        value: '1'
+      - key: priority
+        value: 255
+      - key: descr
+        value: default gateway via WAN
+      - key: interval
+        value: '1'
 
+...
