@@ -110,7 +110,9 @@
   with_subelements:
     - "{{ opn_gateways | default([]) }}"
     - settings
-  when: item.0.name is not defined
+  when:
+    - item.0.uuid is not defined
+    - item.0.name is not defined
 
 # deprecated! use uuid notation!
 # in order to allow multiple GW definitions per iface
@@ -157,7 +159,9 @@
   with_subelements:
     - "{{ opn_gateways | default([]) }}"
     - settings
-  when: item.0.name is defined
+  when:
+    - item.0.uuid is not defined
+    - item.0.name is defined
 
 - name: deprecation warning for gateways with name per iface
   delegate_to: localhost
@@ -165,7 +169,68 @@
     msg: "found deprecated notation in opn_gateways with name {{ item.name }} for interface {{ item.interface }} - please use new uuid notation"
   ignore_errors: true
   with_items: "{{ opn_gateways | default([]) }}"
-  when: item.name is defined
+  when:
+    - item.0.uuid is not defined
+    - item.0.name is defined
+
+# fix missing uuid
+- name: read uuid attribute for gateway by interface
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.interface }}']"
+    content: attribute
+  register: _xml_gatewaays_uuid
+  with_items: "{{ opn_gateways | default([]) }}"
+  when:
+    - item.uuid is not defined
+    - item.name is not defined
+
+- debug:
+    var: _xml_gatewaays_uuid
+
+- name: add uuid attribute
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.item.interface }}']"
+    attribute: uuid
+    value: "{{ item.item.interface | to_uuid }}"
+    pretty_print: true
+  with_items: "{{ _xml_gatewaays_uuid.results }}"
+  when:
+    - item.matches[0].gateway_item.uuid is not defined
+    - item.skipped is not defined
+    - not item.skipped
+
+- name: read uuid attribute for gateway by interface and name
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.interface }}' and name/text()='{{ item.name }}']"
+    content: attribute
+  register: _xml_gatewaays_uuid
+  with_items: "{{ opn_gateways | default([]) }}"
+  when:
+    - item.uuid is not defined
+    - item.name is defined
+
+- debug:
+    var: _xml_gatewaays_uuid
+
+- name: add uuid attribute
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.item.interface }}' and name/text()='{{ item.item.name }}']"
+    attribute: uuid
+    value: "{{ item.item.interface ~ item.item.name | to_uuid }}"
+    pretty_print: true
+  with_items: "{{ _xml_gatewaays_uuid.results }}"
+  when:
+    - item.matches[0].gateway_item.uuid is not defined
+    - item.skipped is not defined
+    - not item.skipped
 
 # issue #70 - groups still in the old place using old syntax
 - name: gateway groups
