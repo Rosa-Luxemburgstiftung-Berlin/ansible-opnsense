@@ -32,11 +32,23 @@
 #       - descr: WAN gateway group
 #
 
+# see issue #70
+- name: remove legacy gateway_items
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/gateways/gateway_item"
+    state: absent
+  when:
+    - opn_gateways is defined
+    - opn_gateways | length > 0
+    - opn_gateways_remove_legacy_entry | default(true) | bool
+
 - name: remove default empty gateways node
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/gateways/gateway_item[not(node())]
+    xpath: /opnsense/OPNsense/Gateways/gateway_item[not(node())]
     state: absent
   when:
     - opn_gateways is defined
@@ -46,7 +58,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/gateways/gateway_item[interface/text()='{{ item.0.interface }}']/{{ item.1.key }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.0.interface }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   notify: configure routing
@@ -88,12 +100,11 @@
 #    weight: 1
 #    ipprotocol: inet
 
-
 - name: gateways with name per iface
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/gateways/gateway_item[interface/text()='{{ item.0.interface }}' and name/text()='{{ item.0.name }}']/{{ item.1.key }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.0.interface }}' and name/text()='{{ item.0.name }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   notify: configure routing
@@ -102,6 +113,7 @@
     - settings
   when: item.0.name is defined
 
+# issue #70 - groups still in the old place
 - name: gateway groups
   delegate_to: localhost
   community.general.xml:
@@ -120,5 +132,18 @@
     pretty_print: true
   notify: configure routing
   with_items: "{{ opn_gateway_groups | default([]) }}"
+
+- name: remove legacy gateways entry
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/gateways"
+    state: absent
+  when:
+    - opn_gateways is defined
+    - opn_gateways | length > 0
+    - opn_gateway_groups is defined
+    - opn_gateway_groups | length > 0
+    - opn_gateways_remove_legacy_entry | default(true) | bool
 
 ...
