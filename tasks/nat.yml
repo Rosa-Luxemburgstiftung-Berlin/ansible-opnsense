@@ -1,22 +1,4 @@
 ---
-# example definition
-#
-# One-to-one: Firewall A example from https://docs.opnsense.org/manual/how-tos/ipsec-s2s-binat.html
-#
-# opn_nat_onetoone:
-#   - descr: IPsec BINAT
-#     settings:
-#       - key: interface
-#         value: enc0
-#       - key: type
-#         value: binat
-#       - key: external
-#         value: '192.168.1.0'
-#       - key: source/address
-#         value: '10.0.1.0/24'
-#       - key: destination/address
-#         value: '192.168.2.0/24'
-
 
 - name: nat - settings
   delegate_to: localhost
@@ -70,24 +52,13 @@
   when: opn_nat_port_forward is defined
 
 - name: nat - onetoone
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: "/opnsense/nat/onetoone[descr/text()='{{ item.0.descr }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
-    pretty_print: true
-  with_subelements:
-    - "{{ opn_nat_onetoone | default([]) }}"
-    - settings
-
-# remove the default empty <rule/> node remains after configuring the first one
-
-- name: nat - remove default empty node
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: /opnsense/nat/onetoone[not(node())]
-    state: absent
-  when: opn_nat_onetoone is defined
+  ansible.builtin.include_tasks: natonetoone.yml
+  vars:
+    uuid: "{{ rule.key }}"
+    cfg: "{{ rule.value }}"
+  with_dict:
+    - "{{ opn_nat_onetoone.rules | default({}) }}"
+  loop_control:
+    loop_var: rule
 
 ...
