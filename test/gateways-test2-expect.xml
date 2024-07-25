@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+  </system>
+  <OPNsense>
+    <Gateways version="1.0.0">
+      <gateway_item uuid="e53f7a69-4dc6-434a-bc8f-fb30c486364b">
+        <interface>guest</interface>
+        <gateway>192.168.192.1</gateway>
+        <name>GW_GUESTplus</name>
+        <weight>1</weight>
+        <ipprotocol>inet</ipprotocol>
+        <defaultgw>0</defaultgw>
+        <priority>255</priority>
+        <descr>gateway via GUEST</descr>
+        <interval>1</interval>
+      </gateway_item>
+      <gateway_item uuid="370d35b5-ddb7-56bb-b196-5db1d5e13d12">
+        <interface>wan</interface>
+        <gateway>192.168.192.168</gateway>
+        <name>GW_WAN</name>
+        <weight>1</weight>
+        <ipprotocol>inet</ipprotocol>
+        <defaultgw>1</defaultgw>
+        <priority>255</priority>
+        <descr>default gateway via WAN</descr>
+        <interval>1</interval>
+      </gateway_item>
+      <gateway_item uuid="opt181e665e3-3037-5b8c-98b9-51c30b91c4c0">
+        <interface>opt1</interface>
+        <name>testgw1</name>
+        <gateway>10.10.0.1</gateway>
+      </gateway_item>
+      <gateway_item uuid="opt1d20f9721-5e26-5166-8154-665c3fc4652b">
+        <interface>opt1</interface>
+        <name>testgw2</name>
+        <gateway>10.10.0.2</gateway>
+      </gateway_item>
+    </Gateways>
+  </OPNsense>
+  <gateways/>
+</opnsense>

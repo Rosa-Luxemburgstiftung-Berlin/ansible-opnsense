@@ -1,0 +1,27 @@
+---
+
+opn_gateways:
+  - uuid: e53f7a69-4dc6-434a-bc8f-fb30c486364b
+    settings:
+      - key: interface
+        value: guest
+      - key: gateway
+        value: 192.168.192.1
+      - key: name
+        value: GW_GUESTplus
+  - name: testgw1
+    interface: opt1
+    settings:
+      - key: gateway
+        value: 10.10.0.1
+      - key: name
+        value: testgw1
+  - name: testgw2
+    interface: opt1
+    settings:
+      - key: gateway
+        value: 10.10.0.2
+      - key: name
+        value: testgw2
+
+...
