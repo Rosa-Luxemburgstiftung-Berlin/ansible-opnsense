@@ -167,11 +167,11 @@
   delegate_to: localhost
   ansible.builtin.fail:
     msg: "found deprecated notation in opn_gateways with name {{ item.name }} for interface {{ item.interface }} - please use new uuid notation"
-  ignore_errors: true
+  ignore_errors: "{{ ignore_deprecate_gateways_with_names_per_iface | default(true) }}"  # noqa ignore-errors
   with_items: "{{ opn_gateways | default([]) }}"
   when:
-    - item.0.uuid is not defined
-    - item.0.name is defined
+    - item.uuid is not defined
+    - item.name is defined
 
 # fix missing uuid
 - name: read uuid attribute for gateway by interface
