@@ -248,14 +248,13 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/gateways"
+    xpath: "/opnsense/gateways[not(node())]"
     state: absent
     pretty_print: true
   when:
     - opn_gateways is defined
     - opn_gateways | length > 0
-    - opn_gateway_groups is defined
-    - opn_gateway_groups | length > 0
+    - opn_gateway_groups | default([]) | length == 0
     - opn_gateways_remove_legacy_entry | default(true) | bool
 
 # finisage

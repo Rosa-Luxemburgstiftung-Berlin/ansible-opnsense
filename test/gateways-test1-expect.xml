@@ -28,5 +28,4 @@
       </gateway_item>
     </Gateways>
   </OPNsense>
-  <gateways/>
 </opnsense>

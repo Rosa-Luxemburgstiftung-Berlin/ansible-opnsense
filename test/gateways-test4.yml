@@ -1,0 +1,20 @@
+---
+
+opn_gateways:
+  - interface: opt6
+    settings:
+      - key: gateway
+        value: 192.168.0.123
+      - key: name
+        value: SIPGW
+      - key: priority
+        value: '255'
+      - key: weight
+        value: '1'
+      - key: ipprotocol
+        value: inet
+      - key: descr
+        value: SIP Gateway
+
+
+...
