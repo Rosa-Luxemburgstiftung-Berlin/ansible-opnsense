@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+  </system>
+  <OPNsense>
+    <Gateways version="1.0.0">
+      <gateway_item uuid="eb9d8a75-7d26-562d-8c0b-cde467eed23f">
+        <interface>opt6</interface>
+        <gateway>192.168.0.123</gateway>
+        <name>SIPGW</name>
+        <priority>255</priority>
+        <weight>1</weight>
+        <ipprotocol>inet</ipprotocol>
+        <descr>SIP Gateway</descr>
+      </gateway_item>
+    </Gateways>
+  </OPNsense>
+  <gateways>
+    <gateway_group>
+      <name>GW_WAN</name>
+      <item>GW_WAN1|2</item>
+      <item>GW_WAN2|3</item>
+      <item>GW_FMP1_WAN|1</item>
+      <trigger>down</trigger>
+      <descr>WAN gateway group</descr>
+    </gateway_group>
+  </gateways>
+</opnsense>

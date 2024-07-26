@@ -1,0 +1,43 @@
+---
+
+opn_gateways:
+  - interface: wan
+    settings:
+      - key: gateway
+        value: 192.168.192.168
+      - key: name
+        value: GW_WAN
+      - key: weight
+        value: '1'
+      - key: ipprotocol
+        value: inet
+      - key: defaultgw
+        value: '1'
+      - key: priority
+        value: 255
+      - key: descr
+        value: default gateway via WAN
+      - key: interval
+        value: '1'
+  - uuid: e53f7a69-4dc6-434a-bc8f-fb30c486364b
+    settings:
+      - key: interface
+        value: guest
+      - key: gateway
+        value: 192.168.192.1
+      - key: name
+        value: GW_GUEST
+      - key: weight
+        value: '1'
+      - key: ipprotocol
+        value: inet
+      - key: defaultgw
+        value: '0'
+      - key: priority
+        value: 255
+      - key: descr
+        value: gateway via GUEST
+      - key: interval
+        value: '1'
+
+...

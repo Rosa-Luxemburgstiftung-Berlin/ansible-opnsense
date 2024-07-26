@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<opnsense>
+  <system>
+  </system>
+  <OPNsense>
+    <Gateways version="1.0.0"/>
+  </OPNsense>
+  <gateways>
+    <gateway_item>
+      <interface>opt6</interface>
+      <gateway>192.168.0.123</gateway>
+      <name>SIPGW</name>
+      <priority>255</priority>
+      <weight>1</weight>
+      <ipprotocol>inet</ipprotocol>
+      <descr>SIP Gateway</descr>
+    </gateway_item>
+  </gateways>
+</opnsense>

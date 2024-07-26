@@ -13,6 +13,8 @@
 #       - key: ipprotocol
 #         value: inet
 #   - interface: WAN2
+#     # since BE 24.4 and CE 24.1.6 gateways have UUIDs
+#     uuid: e53f7a69-4dc6-434a-bc8f-fb30c486364b
 #     settings:
 #       - key: gateway
 #         value: 192.168.44.1
@@ -22,6 +24,20 @@
 #         value: 2
 #       - key: ipprotocol
 #         value: inet
+#   # with uuid you should set interface as a attribute
+#   - uuid: e53f7a69-4dc6-434a-bc8f-fb30c486364b
+#     settings:
+#       - key: interface:
+#       - value: WAN3
+#       - key: gateway
+#         value: 192.168.33.1
+#       - key: name
+#         value: GW_WAN3
+#       - key: weight
+#         value: 2
+#       - key: ipprotocol
+#         value: inet
+
 #
 # opn_gateway_groups:
 #   - name: GW_WAN
@@ -32,30 +48,75 @@
 #       - descr: WAN gateway group
 #
 
+# see issue #70
+- name: remove legacy gateway_items
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/gateways/gateway_item"
+    state: absent
+    pretty_print: true
+  when:
+    - opn_gateways is defined
+    - opn_gateways | length > 0
+    - opn_gateways_remove_legacy_entry | default(true) | bool
+
 - name: remove default empty gateways node
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/gateways/gateway_item[not(node())]
+    xpath: /opnsense/OPNsense/Gateways/gateway_item[not(node())]
     state: absent
   when:
     - opn_gateways is defined
     - opn_gateways | length > 0
 
-- name: gateways
+- name: gateways by uuid
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/gateways/gateway_item[interface/text()='{{ item.0.interface }}']/{{ item.1.key }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: configure routing
   with_subelements:
     - "{{ opn_gateways | default([]) }}"
     - settings
-  when: item.0.name is not defined
+  when: item.0.uuid is defined
 
+- name: gateways by uuid - set legacy interface setting
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[@uuid='{{ item.0.uuid }}']/interface"
+    value: "{{ item.0.interface }}"
+    pretty_print: true
+  notify: configure routing
+  with_subelements:
+    - "{{ opn_gateways | default([]) }}"
+    - settings
+  when:
+    - item.0.uuid is defined
+    - item.0.interface is defined
+
+- name: gateways by interface (legacy notation)
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.0.interface }}']/{{ item.1.key }}"
+    value: "{{ item.1.value }}"
+    pretty_print: true
+  notify: configure routing
+  with_subelements:
+    - "{{ opn_gateways | default([]) }}"
+    - settings
+  when:
+    - item.0.uuid is not defined
+    - item.0.name is not defined
+
+# deprecated! use uuid notation!
 # in order to allow multiple GW definitions per iface
-# use a name per iface (should be the same as in settings
+# use a name per iface (should be the same as in settings)
 # opn_gateways:
 #  - interface: fwlink
 #    name: GW_01
@@ -87,25 +148,90 @@
 #    weight: 1
 #    ipprotocol: inet
 
-
 - name: gateways with name per iface
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/gateways/gateway_item[interface/text()='{{ item.0.interface }}' and name/text()='{{ item.0.name }}']/{{ item.1.key }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.0.interface }}' and name/text()='{{ item.0.name }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
+  notify: configure routing
   with_subelements:
     - "{{ opn_gateways | default([]) }}"
     - settings
-  when: item.0.name is defined
+  when:
+    - item.0.uuid is not defined
+    - item.0.name is defined
 
+- name: deprecation warning for gateways with name per iface
+  delegate_to: localhost
+  ansible.builtin.fail:
+    msg: "found deprecated notation in opn_gateways with name {{ item.name }} for interface {{ item.interface }} - please use new uuid notation"
+  ignore_errors: "{{ ignore_deprecate_gateways_with_names_per_iface | default(true) }}"  # noqa ignore-errors
+  with_items: "{{ opn_gateways | default([]) }}"
+  when:
+    - item.uuid is not defined
+    - item.name is defined
+
+# fix missing uuid
+- name: read uuid attribute for gateway by interface
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.interface }}']"
+    content: attribute
+  register: _xml_gatewaays_uuid
+  with_items: "{{ opn_gateways | default([]) }}"
+  when:
+    - item.uuid is not defined
+    - item.name is not defined
+
+- name: add uuid attribute
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.item.interface }}']"
+    attribute: uuid
+    value: "{{ item.item.interface | to_uuid }}"
+    pretty_print: true
+  with_items: "{{ _xml_gatewaays_uuid.results }}"
+  when:
+    - item.matches[0].gateway_item.uuid is not defined
+    - not (item.skipped | default(false))
+
+- name: read uuid attribute for gateway by interface and name
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.interface }}' and name/text()='{{ item.name }}']"
+    content: attribute
+  register: _xml_gatewaays_uuid
+  with_items: "{{ opn_gateways | default([]) }}"
+  when:
+    - item.uuid is not defined
+    - item.name is defined
+
+- name: add uuid attribute (2)
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways/gateway_item[interface/text()='{{ item.item.interface }}' and name/text()='{{ item.item.name }}']"
+    attribute: uuid
+    value: "{{ item.item.interface ~ item.item.name | to_uuid }}"
+    pretty_print: true
+  with_items: "{{ _xml_gatewaays_uuid.results }}"
+  when:
+    - item.matches[0].gateway_item.uuid is not defined
+    - not (item.skipped | default(false))
+
+# issue #70 - groups still in the old place using old syntax
 - name: gateway groups
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/gateways/gateway_group[name/text()='{{ item.name }}']"
     pretty_print: true
+  notify: configure routing
   with_items: "{{ opn_gateway_groups | default([]) }}"
 
 - name: gateway groups settings
@@ -115,6 +241,45 @@
     xpath: "/opnsense/gateways/gateway_group[name/text()='{{ item.name }}']"
     set_children: "{{ item.settings + [{'name': item.name}] }}"
     pretty_print: true
+  notify: configure routing
   with_items: "{{ opn_gateway_groups | default([]) }}"
+
+- name: remove legacy gateways entry
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/gateways[not(node())]"
+    state: absent
+    pretty_print: true
+  when:
+    - opn_gateways is defined
+    - opn_gateways | length > 0
+    - opn_gateway_groups | default([]) | length == 0
+    - opn_gateways_remove_legacy_entry | default(true) | bool
+
+# finisage
+- name: read Gateways version attribute
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways"
+    content: attribute
+  register: _xml_gateways
+  when:
+    - opn_gateways is defined
+    - opn_gateways | length > 0
+
+- name: add version attribute to Gateways
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Gateways"
+    attribute: version
+    value: "{{ opn_gateways_version | default('1.0.0') }}"
+    pretty_print: true
+  when:
+    - opn_gateways is defined
+    - opn_gateways | length > 0
+    - _xml_gateways.matches[0].Gateways.version is not defined
 
 ...
