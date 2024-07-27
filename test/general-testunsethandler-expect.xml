@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+  </system>
+  <theme>opnsense</theme>
+  <ipsechandler>unchanged</ipsechandler>
+</opnsense>

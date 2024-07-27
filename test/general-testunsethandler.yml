@@ -1,0 +1,9 @@
+---
+
+opn_unset:
+  - system/ipv6allow
+  - trigger_initial_wizard
+  - system/disablenatreflection
+  - OPNsense/Firewall/Alias/aliases/alias[name='SIP_VOIP']
+  - ipsec
+
