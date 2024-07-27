@@ -79,4 +79,11 @@
   with_items: "{{ opn_unset }}"
   when: opn_unset is defined
 
+- name: general - unset - notify handlers
+  ansible.builtin.include_tasks: generalunsethandlers.yml
+  with_items: "{{ opn_unset }}"
+  loop_control:
+    loop_var: unsetitem
+  when: opn_unset is defined
+
 ...
