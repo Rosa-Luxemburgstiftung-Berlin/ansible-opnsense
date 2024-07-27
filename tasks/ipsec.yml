@@ -56,6 +56,7 @@
     xpath: "/opnsense/ipsec/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: true
+  notify: restart ipsec
   with_dict:
     - "{{ opn_ipsec | default({}) }}"
   when:
@@ -69,6 +70,7 @@
     xpath: "/opnsense/ipsec/{{ item.key }}"
     state: absent
     pretty_print: true
+  notify: stop ipsec
   with_dict:
     - "{{ opn_ipsec | default({}) }}"
   when:

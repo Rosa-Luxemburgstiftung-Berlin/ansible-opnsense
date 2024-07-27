@@ -8,6 +8,7 @@
     xpath: "/opnsense/ipsec/phase1[ikeid/text()='{{ ikeid }}']/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: true
+  notify: restart ipsec
   with_dict:
     - "{{ ipsecphasevar.phase1 | default({}) }}"
   when:
@@ -21,6 +22,7 @@
     xpath: "/opnsense/ipsec/phase1[ikeid/text()='{{ ikeid }}']/{{ item.key }}"
     state: absent
     pretty_print: true
+  notify: restart ipsec
   with_dict:
     - "{{ ipsecphasevar.phase1 | default({}) }}"
   when:
@@ -33,6 +35,7 @@
     xpath: "/opnsense/ipsec/phase1[ikeid/text()='{{ ikeid }}']/encryption-algorithm/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: true
+  notify: restart ipsec
   with_dict:
     - "{{ ipsecphasevar.phase1['encryption-algorithm'] | default({}) }}"
 
@@ -71,6 +74,7 @@
       - "<phase2><ikeid>{{ ikeid }}</ikeid><uniqid>{{ item.item.key }}</uniqid></phase2>"
     input_type: xml
     pretty_print: true
+  notify: restart ipsec
   when: item.count == 0
   with_items: "{{ phase2ikeiduniqid_count.results }}"
 
@@ -99,6 +103,7 @@
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ item.uniqid }}']"
     state: absent
     pretty_print: true
+  notify: restart ipsec
   when: item.uniqid not in ipsecphasevar.phase2
   with_items: "{{ phase2ikeiduniqid_all.matches }}"
 

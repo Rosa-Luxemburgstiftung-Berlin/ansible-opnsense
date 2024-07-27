@@ -8,6 +8,7 @@
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: true
+  notify: restart ipsec
   with_dict:
     - "{{ ipsecphasevar2[uniqid] | default({}) }}"
   when:
@@ -24,6 +25,7 @@
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/{{ item.key }}"
     state: absent
     pretty_print: true
+  notify: restart ipsec
   with_dict:
     - "{{ ipsecphasevar2[uniqid] | default({}) }}"
   when:
@@ -36,6 +38,7 @@
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/localid/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: true
+  notify: restart ipsec
   with_dict:
     - "{{ ipsecphasevar2[uniqid].localid | default({}) }}"
 
@@ -46,6 +49,7 @@
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/remoteid/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: true
+  notify: restart ipsec
   with_dict:
     - "{{ ipsecphasevar2[uniqid].remoteid | default({}) }}"
 
@@ -135,6 +139,7 @@
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option"
     state: absent
     pretty_print: true
+  notify: restart ipsec
   when:
     - encalgopt_reset | default(false)
 
@@ -159,6 +164,7 @@
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option[name='{{ item.name }}']/keylen"
     value: "{{ item.keylen }}"
     pretty_print: true
+  notify: restart ipsec
   with_items:
     - "{{ ipsecphasevar2[uniqid]['encryption-algorithm-options'] | default([]) }}"
   when: item.keylen is defined
@@ -226,6 +232,7 @@
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/hash-algorithm-option"
     state: absent
     pretty_print: true
+  notify: restart ipsec
   when:
     - change_hashalgopt | default(false)
     - hashalgopt is defined
@@ -239,6 +246,7 @@
     add_children:
       - hash-algorithm-option: "{{ item }}"
     pretty_print: true
+  notify: restart ipsec
   with_items:
     - "{{ ipsecphasevar2[uniqid]['hash-algorithm-options'] | default([]) }}"
   when: change_hashalgopt | default(False)

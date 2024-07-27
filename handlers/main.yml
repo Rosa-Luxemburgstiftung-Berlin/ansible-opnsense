@@ -67,6 +67,23 @@
     - config is defined
     - config.changed | bool
 
+# ipsec
+- name: restart ipsec  # noqa no-changed-when
+  ansible.builtin.command: configctl ipsec restart
+  listen:
+    - restart ipsec
+  when:
+    - config is defined
+    - config.changed | bool
+
+- name: stop ipsec  # noqa no-changed-when
+  ansible.builtin.command: configctl ipsec stop
+  listen:
+    - stop ipsec
+  when:
+    - config is defined
+    - config.changed | bool
+
 # interfaces, vlans etc
 - name: reconfigure vlans  # noqa no-changed-when
   ansible.builtin.command: /usr/local/opnsense/scripts/interfaces/reconfigure_vlans.php
