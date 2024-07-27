@@ -11,6 +11,10 @@ opn_sort_values:
   filter:
     - interface
 
+# unset handlers: regex to match in opn_unset -> handler to call
+opn_unset_handlers:
+  '^ipsec$': 'stop ipsec'
+
 # default values for opn_openvpn_instances
 opn_openvpn_instances_defaults:
   enabled: 1
@@ -25,7 +29,7 @@ opn_openvpn_instances_defaults:
   username_as_common_name: 0
   strictusercn: 0
 
-# defaults for opn_openvpn_instances
+# defaults for opn_openvpn_overwrites
 opn_openvpn_overwrites_defaults:
   enabled: 1
   block: 0

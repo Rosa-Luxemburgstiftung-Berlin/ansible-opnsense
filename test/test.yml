@@ -17,6 +17,12 @@
     - name: configure routing
       debug:
         msg: fake handler - configure routing
+    - name: restart ipsec
+      debug:
+        msg: fake handler - restart ipsec
+    - name: stop ipsec  # TODO: test this action; use community.general.xml and add a tag to the resulting xml
+      debug:
+        msg: fake handler - stop ipsec
   tasks:
     - name: include default vars
       ansible.builtin.include_vars:
@@ -27,6 +33,7 @@
         label: "{{ _testtask }}"
         loop_var: _testtask
       with_items:
+        - general
         - filter
         - alias
         - gateways

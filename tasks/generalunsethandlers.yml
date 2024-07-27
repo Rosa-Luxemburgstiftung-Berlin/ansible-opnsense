@@ -1,0 +1,10 @@
+---
+
+- name: general - unset - notify handlers
+  ansible.builtin.debug:
+    msg: "notify {{ item.value }} for {{ unsetitem }} matching {{ item.key }}"
+  with_dict: "{{ opn_unset_handlers }}"
+  notify: "{{ item.value }}"
+  when: unsetitem is regex(item.key)
+
+...
