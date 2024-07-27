@@ -69,7 +69,7 @@
 
 # ipsec
 - name: restart ipsec  # noqa no-changed-when
-  ansible.builtin.command: configctl ipsec restart
+  ansible.builtin.command: configctl ipsec reload  # restart is available too
   listen:
     - restart ipsec
   when:
