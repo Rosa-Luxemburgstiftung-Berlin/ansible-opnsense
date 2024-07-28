@@ -76,6 +76,19 @@
     - config is defined
     - config.changed | bool
 
+# wireguard
+- name: reconfigure wireguard  # noqa no-changed-when
+  ansible.builtin.command: "{{ item }}"
+  listen:
+    - reconfigure wireguard
+  with_items:
+    - "configctl interface invoke registration"
+    - "configctl template reload OPNsense/Wireguard"
+    - "configctl wireguard configure"
+  when:
+    - config is defined
+    - config.changed | bool
+
 - name: stop ipsec  # noqa no-changed-when
   ansible.builtin.command: configctl ipsec stop
   listen:

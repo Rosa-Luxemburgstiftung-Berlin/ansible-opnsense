@@ -29,6 +29,7 @@
     xpath: "/opnsense/OPNsense/wireguard/general/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: true
+  notify: reconfigure wireguard
   with_dict:
     - "{{ opn_wireguard.general | default({}) }}"
 
