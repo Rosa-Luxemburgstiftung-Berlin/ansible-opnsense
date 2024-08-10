@@ -1,0 +1,28 @@
+---
+
+# handle filter without uuid
+- name: "detect interface changes in filter '{{ _filter.descr }}'"
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/filter/rule[descr/text()='{{ _filter.descr }}']/interface"
+    content: text
+  register: _configured_filter_interface
+  ignore_errors: true  # do not fail if node not exists
+
+- name: "configure filter '{{ _filter.descr }}'"
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/filter/rule[descr/text()='{{ _filter.descr }}']/{{ _filtersettings.key }}"
+    value: "{% if _filtersettings.key in opn_sort_values.filter | default([]) %}{{ _filtersettings.value.split(',') | sort | join(',') }}{% else %}{{ _filtersettings.value }}{% endif %}"  # noqa yaml[line-length]
+    pretty_print: true
+  with_items:
+    - "{{ _filter.settings }}"
+  loop_control:
+    label: "{{ _filter.descr }} {{ _filtersettings.key }}"
+    loop_var: _filtersettings
+  when:
+    - _filtersettings.key != 'interface' or (_configured_filter_interface.failed | bool) or ( _configured_filter_interface.matches[0].interface.split(',') | sort != _filtersettings.value.split(',') | sort )  # noqa yaml[line-length]
+
+...
