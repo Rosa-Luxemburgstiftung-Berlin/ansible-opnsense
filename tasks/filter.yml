@@ -1,5 +1,32 @@
 ---
 
+# example
+# opn_filter:
+#   - descr: icmp allow
+#     uuid: ... # uuid definition is optional but recommended
+#     settings:
+#       - key: type
+#         value: pass
+#       - key: ipprotocol
+#         value: inet
+#       - key: statetype
+#         value: keep state
+#       - key: direction
+#         value: any
+#       - key: quick
+#         value: '1'
+#       - key: category
+#         value: TEST
+#       - key: floating
+#         value: 'yes'
+#       - key: protocol
+#         value: icmp
+#       - key: source/any
+#         value: '1'
+#       - key: destination/any
+#         value: '1'
+# if uuid is not defined, the description is used to identify rules
+
 - name: process filter ...
   ansible.builtin.include_tasks: filterdo.yml
   with_items:
