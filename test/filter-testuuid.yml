@@ -1,0 +1,28 @@
+---
+
+test_name: simple filter test by uuid
+
+opn_filter:
+  - descr: icmp allow
+    uuid: 12ec1449-90eb-47c9-afe9-481725cb5769
+    settings:
+      - key: type
+        value: pass
+      - key: ipprotocol
+        value: inet
+      - key: statetype
+        value: keep state
+      - key: direction
+        value: any
+      - key: quick
+        value: '1'
+      - key: category
+        value: TEST
+      - key: floating
+        value: 'yes'
+      - key: protocol
+        value: icmp
+      - key: source/any
+        value: '1'
+      - key: destination/any
+        value: '1'
