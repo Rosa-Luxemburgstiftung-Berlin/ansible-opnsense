@@ -25,6 +25,11 @@
 #         value: '1'
 #       - key: destination/any
 #         value: '1'
+#   - uuid: ... # if uuid is provided, descr can be a normal settings
+#     settings:
+#       - key: descr
+#         value: icmp allow
+#       ....
 # if uuid is not defined, the description is used to identify rules
 
 - name: process filter ...
