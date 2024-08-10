@@ -3,7 +3,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/filter/rule[descr/text()='{{ _filter.descr }}']/{{ _srcdst }}/{{ _checkelements }}"
+    xpath: "/opnsense/filter/rule[{% if _filter.uuid is defined %}@uuid='{{ _filter.uuid }}'{% else %}descr/text()='{{ _filter.descr }}'{% endif %}]/{{ _srcdst }}/{{ _checkelements }}"
     count: true
   register: _checkelementscount
   with_items:
