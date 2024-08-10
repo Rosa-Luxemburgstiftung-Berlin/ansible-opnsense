@@ -32,7 +32,7 @@
   with_items:
     - "{{ opn_filter | default([]) + opn_vlan_filter | default([]) }}"
   loop_control:
-    label: "{{ _filter.descr }}"
+    label: "{{ _filter.descr | default(_filter.uuid) }}"
     loop_var: _filter
 
 ...
