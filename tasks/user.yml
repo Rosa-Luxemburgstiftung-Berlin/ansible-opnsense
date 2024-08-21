@@ -10,6 +10,7 @@
   with_subelements:
     - "{{ opn_user | default([]) }}"
     - settings
+  notify: local user sync
   when: item.1.value is defined
 
 - name: b64 user fields
@@ -22,6 +23,7 @@
   with_subelements:
     - "{{ opn_user | default([]) }}"
     - settings
+  notify: local user sync
   when: item.1.b64_value is defined
 
 - name: user - nextid
