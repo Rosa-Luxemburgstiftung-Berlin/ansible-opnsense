@@ -289,14 +289,17 @@
   tags: clean
   when: delete_local_xml_file | default(false)
 
-- name: create opnsense service mimic script
+- name: create handler helper scripts
   ansible.builtin.template:
-    src: opnsense_service_mimic.php.j2
-    dest: /usr/local/sbin/opnsense_service_mimic.php
+    src: "{{ item }}.j2"
+    dest: "/usr/local/sbin/{{ item }}"
     owner: root
     group: wheel
     mode: "0750"
   tags: copy
+  with_items:
+    - opnsense_service_mimic.php
+    - opnsense_synclocalaccounts.php
   when:
     - config is defined
     - config.changed | bool
