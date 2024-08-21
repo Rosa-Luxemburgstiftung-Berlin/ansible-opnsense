@@ -136,4 +136,12 @@
     - config is defined
     - config.changed | bool
 
+# user
+- name: local user sync  # noqa no-changed-when
+  ansible.builtin.command: /usr/local/sbin/opnsense_synclocalaccounts.php
+  listen:
+    - local user sync
+  when:
+    - config is defined
+    - config.changed | bool
 ...
