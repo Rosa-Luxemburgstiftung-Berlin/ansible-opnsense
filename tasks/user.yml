@@ -1,5 +1,29 @@
 ---
 
+# to add a new user , you must user something like:
+# opn_user:
+#   - name: ruth
+#     settings:
+#       - key: uid
+#         value: 1000
+#       - key: password
+#         value: "$...."
+#       - key: authorizedkeys
+#         b64_value: |
+#           ssh-rsa ....
+#       - key: groupname
+#         value: admins
+#       - key: shell
+#         value: /usr/local/bin/bash
+#
+# opn_group:
+#   - name: admins
+#     settings:
+#       - key: member
+#         value: 0  # root
+#       - key: member
+#         value: 1000  # ruth
+
 - name: user
   delegate_to: localhost
   community.general.xml:
