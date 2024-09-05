@@ -86,7 +86,7 @@
     var: configured_unbound_domainoverrides_ip
     verbosity: 1
 
-# descr is otional
+# descr is optional
 # FIXME: here the detection is not working in all cases
 # i.e. if you do not use descr in the first element of the
 # domainoverrides list
