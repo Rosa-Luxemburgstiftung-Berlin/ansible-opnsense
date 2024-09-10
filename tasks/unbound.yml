@@ -50,7 +50,7 @@
 
 # this is just a hackish fix for the strange empty tag handling in community.general.xml
 # https://github.com/ansible-collections/community.general/issues/8361
-- name: ensure all empty tags are shortened
+- name: ensure all empty tags are shortened  # noqa no-handler
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
