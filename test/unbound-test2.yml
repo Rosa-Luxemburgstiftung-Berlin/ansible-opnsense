@@ -1,0 +1,9 @@
+---
+
+# reset VARs
+
+opn_unboundplus:
+  general:
+    active_interface:
+    regdhcpdomain:
+    #enabled: 0

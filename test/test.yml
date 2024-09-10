@@ -43,6 +43,7 @@
         - wireguard
         - ipsec
         - dnsserver
+        - unbound
         - openvpn
       when:
         - test | default(_testtask) == _testtask

@@ -1,0 +1,6 @@
+---
+
+opn_unboundplus:
+  general:
+    active_interface: lan,wan
+    regdhcpdomain: test.de
