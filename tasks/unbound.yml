@@ -3,7 +3,9 @@
 
 # example definition
 #
-# opn_unbound:
+# ! opn_unbound is deprecated, please use opn_unboundplus !
+#
+# opn_unboundplus:
 #   enable: 1
 #   forwarding: 1
 #   active_interface: lan
@@ -29,6 +31,11 @@
 #                                   # entries apply here
 #     ...
 
+- name: fail if we have a deprecated config
+  delegate_to: localhost
+  ansible.builtin.fail:
+    msg: "found deprectated 'opn_unbound' setting! please use 'opn_unboundplus'!"
+  when: opn_unbound is defined
 
 - name: unbound general settings
   delegate_to: localhost
