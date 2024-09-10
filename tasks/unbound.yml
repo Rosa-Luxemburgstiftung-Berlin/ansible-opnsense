@@ -6,12 +6,12 @@
 # ! opn_unbound is deprecated, please use opn_unboundplus !
 #
 # opn_unboundplus:
-#   enable: 1
-#   forwarding: 1
-#   active_interface: lan
-#   noreglladdr6: 1
-#   regdhcp: 1
-#   serveexpired: 1
+#   general
+#     enabled: 1
+#     port: 53
+#     active_interface: lan,wan  # default: empty => all
+#     outgoing_interface:
+#     local_zone_type: transparent
 #   ...
 #   domainoverrides: # list of domainoverrides dicts
 #     - domain: example.xor
@@ -41,14 +41,11 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/unbound/{{ item.key }}
+    xpath: /opnsense/OPNsense/unboundplus/general/{{ item.key }}
     value: "{{ item.value }}"
     pretty_print: true
   with_dict:
-    - "{{ opn_unbound | default({}) }}"
-  when:
-    - item.key != 'domainoverrides'
-    - item.key != 'acls'
+    - "{{ opn_unboundplus.general | default({}) }}"
 
 # unbound/domainoverrides
 
