@@ -50,6 +50,41 @@
     - config is defined
     - config.changed | bool
 
+# unbound
+- name: reconfig unbound  # noqa no-changed-when
+  ansible.builtin.command: configctl 'template reload OPNsense/Unbound/'
+  listen:
+    - reconfig unbound
+    - update dnsbl
+  when:
+    - config is defined
+    - config.changed | bool
+
+- name: update dnsbl  # noqa no-changed-when
+  ansible.builtin.command: configctl unbound dnsbl
+  listen:
+    - update dnsbl
+  notify: reconfig unbound
+  when:
+    - config is defined
+    - config.changed | bool
+
+- name: reload dns  # noqa no-changed-when
+  ansible.builtin.command: configctl dns reload
+  listen:
+    - reconfig unbound
+  when:
+    - config is defined
+    - config.changed | bool
+
+- name: restart unbound  # noqa no-changed-when
+  ansible.builtin.command: configctl unbound restart
+  listen:
+    - reconfig unbound
+  when:
+    - config is defined
+    - config.changed | bool
+
 # openvpn
 - name: configure openvpn instances  # noqa no-changed-when
   ansible.builtin.command: configctl openvpn configure

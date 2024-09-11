@@ -8,6 +8,7 @@
     value: "{{ item.value }}"
     pretty_print: true
   register: _unbound_settings_uuid
+  notify: reconfig unbound
   with_dict: "{{ _uuidvalues }}"
 
 

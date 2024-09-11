@@ -26,6 +26,12 @@
     - name: stop ipsec  # TODO: test this action; use community.general.xml and add a tag to the resulting xml
       debug:
         msg: fake handler - stop ipsec
+    - name: reconfig unbound
+      debug:
+        msg: fake handler - reconfig unbound
+    - name: update dnsbl
+      debug:
+        msg: fake handler - update dnsbl
   tasks:
     - name: include default vars
       ansible.builtin.include_vars:
