@@ -36,4 +36,10 @@ opn_openvpn_overwrites_defaults:
   push_reset: 0
   register_dns: 0
 
+opn_unboundplus_uuid_sections:
+  dots: dot
+  hosts: host
+  aliases: alias
+  domains: domain
+
 ...
