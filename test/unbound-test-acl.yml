@@ -1,0 +1,28 @@
+---
+
+opn_unboundplus:
+  acls:
+    default_action: deny
+    "195c3a6f-1307-4cf5-bec3-009cf956457d":
+      enabled: 0
+      name: block the bad
+      action: deny
+      networks: 8.8.8.8/32,1.1.1.1/32
+      description: do not allow dns queries from 666
+    "72b8f6c5-780b-4d32-83f0-b51e84bd194b":
+      enabled: 1
+      name: the good son
+      action: allow
+      networks: 192.168.0.0/20,10.0.0.0/12
+      description: not the wayward son
+  dnsbl:
+    enabled: 1
+    safesearch: 0
+    type: atf,bla0,blm,blp,blr
+    lists:
+    whitelists: rozarobota.org,esterwajcblum.org
+    blocklists: goo.gl,google.com
+    wildcards: microsoft.com,mcs.com
+    address:
+    nxdomain: 0
+
