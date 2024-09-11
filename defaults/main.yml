@@ -41,5 +41,6 @@ opn_unboundplus_uuid_sections:
   hosts: host
   aliases: alias
   domains: domain
+  acls: acl
 
 ...
