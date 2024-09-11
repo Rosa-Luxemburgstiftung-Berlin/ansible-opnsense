@@ -1,6 +1,6 @@
 ---
 
-- name: unboundplus settings {{ unboundplussection }}
+- name: unboundplus settings {{ unboundplussection }} uuid {{ _uuid }}
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"

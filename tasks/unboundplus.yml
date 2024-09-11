@@ -14,7 +14,7 @@
   with_dict: "{{ unboundplussectionsettings }}"
   when:
     - unboundplussectionsettings is defined
-    - unboundplussection not in opn_unboundplus_uuid_sections.keys()
+    - unboundplussection not in opn_unboundplus_uuid_sections.keys() or item.value is string
 
 - name: unboundplus uuid settings for {{ unboundplussection }}
   ansible.builtin.include_tasks: unboundplusuuid.yml
@@ -27,5 +27,6 @@
   when:
     - unboundplussectionsettings is defined
     - unboundplussection in opn_unboundplus_uuid_sections.keys()
+    - _opnunbndsettingsuuid.value is not string
 
 ...
