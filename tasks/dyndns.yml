@@ -1,17 +1,17 @@
 ---
-#
-#opn_dyndns_general:
-#  - key: enabled
-#    value: "1"
-#  - key: verbose
-#    value: "0"
-#  - key: allowipv6nano 
-#    value: "0"
-#  - key: daemon_delay
-#    value: "300"
-#  - key: backend
-#    value: "opnsense"
-#opn_dyndns_accounts:
+# opn_dyndns_general:
+#  settings:
+#    - key: enabled
+#      value: "1"
+#    - key: verbose
+#      value: "0"
+#    - key: allowipv6
+#      value: "0"
+#    - key: daemon_delay
+#      value: "300"
+#    - key: backend
+#      value: "opnsense"
+# opn_dyndns_accounts:
 #  - uuid: "8e4627c4-21ff-4252-a331-3d1adee0a023"
 #    settings:
 #      - key: enabled
@@ -45,7 +45,7 @@
 #      - key: interface
 #        value: "wan"
 #      - key: description
-#        value: "dyndns-description" 
+#        value: "dyndns-description"
 
 - name: DynDNS -  Update general DynDNS settings
   delegate_to: localhost
@@ -56,7 +56,8 @@
     state: present
     pretty_print: true
   notify: restart dyndns
-  loop: "{{ opn_dyndns_general }}"
+  with_items:
+    - "{{ opn_dyndns_general }}"
   when:
     - opn_dyndns_general is defined
 
@@ -73,5 +74,5 @@
     - "{{ opn_dyndns_accounts }}"
     - settings
   when:
-    - opn_dyndns_accounts_ng is defined
+    - opn_dyndns_accounts is defined
     - item.1.key != 'enable'

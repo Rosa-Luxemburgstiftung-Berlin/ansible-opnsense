@@ -1,17 +1,16 @@
 ---
-test_name: simple filter test
 
 opn_dyndns_general:
-  - key: enabled
-    value: "1"
-  - key: verbose
-    value: "0"
-  - key: allowipv6nano 
-    value: "0"
-  - key: daemon_delay
-    value: "300"
-  - key: backend
-    value: "opnsense"
+    - key: enabled
+      value: "1"
+    - key: verbose
+      value: "0"
+    - key: allowipv6nano 
+      value: "0"
+    - key: daemon_delay
+      value: "300"
+    - key: backend
+      value: "opnsense"
 opn_dyndns_accounts:
   - uuid: "8e4627c4-21ff-4252-a331-3d1adee0a023"
     settings:
