@@ -37,7 +37,7 @@
     msg: "found deprectated 'opn_unbound' setting! please use 'opn_unboundplus'!"
   when: opn_unbound is defined
 
-- name: clean upold unbound tag
+- name: clean up old unbound tag
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
