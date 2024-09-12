@@ -1,0 +1,49 @@
+---
+test_name: simple filter test
+
+opn_dyndns_general:
+  - key: enabled
+    value: "1"
+  - key: verbose
+    value: "0"
+  - key: allowipv6nano 
+    value: "0"
+  - key: daemon_delay
+    value: "300"
+  - key: backend
+    value: "opnsense"
+opn_dyndns_accounts:
+  - uuid: "8e4627c4-21ff-4252-a331-3d1adee0a023"
+    settings:
+      - key: enabled
+        value: "1"
+      - key: service
+        value: "noip"
+      - key: protocol
+        value: ""
+      - key: server
+        value: ""
+      - key: username
+        value: ""
+      - key: password
+        value: "user"
+      - key: resourceId
+        value: "pass"
+      - key: hostnames
+        value: "all.ddnskey.com"
+      - key: wildcard
+        value: "0"
+      - key: zone
+        value: ""
+      - key: checkip
+        value: "web_noip-ipv4"
+      - key: checkip_timeout
+        value: "10"
+      - key: force_ssl
+        value: "1"
+      - key: ttl
+        value: "300"
+      - key: interface
+        value: "wan"
+      - key: description
+        value: "dyndns-description" 

@@ -48,6 +48,7 @@
         - ipsec
         - dnsserver
         - openvpn
+        - dyndns
       when:
         - test | default(_testtask) == _testtask
     - ansible.builtin.meta: flush_handlers
