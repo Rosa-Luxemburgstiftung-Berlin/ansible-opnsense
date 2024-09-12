@@ -26,6 +26,10 @@
     - name: stop ipsec  # TODO: test this action; use community.general.xml and add a tag to the resulting xml
       debug:
         msg: fake handler - stop ipsec
+    - name: restart dyndns
+      debug:
+        msg: fake handler - restart dyndns
+
   tasks:
     - name: include default vars
       ansible.builtin.include_vars:

@@ -1,0 +1,41 @@
+---
+
+- name: DynDNS - remove DynDNS
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/DynDNS{{ item }}
+    state: absent
+    pretty_print: true
+  notify: register dyndns
+  with_items: "{{ opn_dyndns_accounts_remove }}"
+  when: opn_dyndns_accouts_remove is defined
+
+- name: DynDNS -  Update general DynDNS settings
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/DynDNS/general/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    pretty_print: true
+  notify: register dyndns
+  loop: "{{ opn_dyndns_general }}"
+  when:
+    - opn_dyndns_general is defined
+
+- name: DynDNS - Apply settings for each DynDNS account
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/DynDNS/accounts/account[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
+    value: "{{ item.1.value }}"
+    state: present
+    pretty_print: true
+  notify: register dyndns
+  with_subelements:
+    - "{{ opn_dyndns_accounts }}"
+    - settings
+  when:
+    - opn_dyndns_accounts_ng is defined
+    - item.1.key != 'enable'

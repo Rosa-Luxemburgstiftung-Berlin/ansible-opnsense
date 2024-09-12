@@ -144,4 +144,11 @@
   when:
     - config is defined
     - config.changed | bool
+
+# dyndns
+- name: restart dyndns  # noqa no-changed-when
+  ansible.builtin.command: /usr/local/etc/rc.d/ddclient_opn restart
+  when:
+    - config is defined
+    - config.changed | bool
 ...
