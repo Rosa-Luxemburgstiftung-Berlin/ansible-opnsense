@@ -29,7 +29,6 @@
     - name: restart dyndns
       debug:
         msg: fake handler - restart dyndns
-
   tasks:
     - name: include default vars
       ansible.builtin.include_vars:

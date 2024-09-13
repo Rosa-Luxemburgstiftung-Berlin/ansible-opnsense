@@ -75,4 +75,3 @@
     - settings
   when:
     - opn_dyndns_accounts is defined
-    - item.1.key != 'enable'
