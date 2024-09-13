@@ -25,6 +25,15 @@
         - dnsserver
         - dns
 
+- name: dyndns
+  tags:
+    - always
+  ansible.builtin.include_tasks:
+    file: dyndns.yml
+    apply:
+      tags:
+        - dyndns
+
 - name: user
   tags:
     - always
