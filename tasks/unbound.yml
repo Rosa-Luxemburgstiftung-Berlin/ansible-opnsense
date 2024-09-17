@@ -31,6 +31,8 @@
 # opn_unset:
 #   - OPNsense/unboundplus/hosts/host[@uuid='04ac0d40-ecd0-4a1c-8603-91ce9aed08ad']
 #   - OPNsense/unboundplus/domains/domain[domain="test.de"]
+# # unset this to use the local unbound instance as first dns server for the opnsense node itself
+#   - system/dnslocalhost
 
 - name: fail if we have a deprecated config
   delegate_to: localhost
