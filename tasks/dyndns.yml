@@ -1,0 +1,77 @@
+---
+# opn_dyndns_general:
+#  settings:
+#    - key: enabled
+#      value: "1"
+#    - key: verbose
+#      value: "0"
+#    - key: allowipv6
+#      value: "0"
+#    - key: daemon_delay
+#      value: "300"
+#    - key: backend
+#      value: "opnsense"
+# opn_dyndns_accounts:
+#  - uuid: "8e4627c4-21ff-4252-a331-3d1adee0a023"
+#    settings:
+#      - key: enabled
+#        value: "1"
+#      - key: service
+#        value: "testservice"
+#      - key: protocol
+#        value: ""
+#      - key: server
+#        value: ""
+#      - key: username
+#        value: "user"
+#      - key: password
+#        value: "pass"
+#      - key: resourceId
+#        value: ""
+#      - key: hostnames
+#        value: "all.ddnskey.com"
+#      - key: wildcard
+#        value: "0"
+#      - key: zone
+#        value: ""
+#      - key: checkip
+#        value: "web_noip-ipv4"
+#      - key: checkip_timeout
+#        value: "10"
+#      - key: force_ssl
+#        value: "1"
+#      - key: ttl
+#        value: "300"
+#      - key: interface
+#        value: "wan"
+#      - key: description
+#        value: "dyndns-description"
+
+- name: DynDNS -  Update general DynDNS settings
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/DynDNS/general/{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    pretty_print: true
+  notify: restart dyndns
+  with_items:
+    - "{{ opn_dyndns_general }}"
+  when:
+    - opn_dyndns_general is defined
+
+- name: DynDNS - Apply settings for each DynDNS account
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/DynDNS/accounts/account[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
+    value: "{{ item.1.value }}"
+    state: present
+    pretty_print: true
+  notify: restart dyndns
+  with_subelements:
+    - "{{ opn_dyndns_accounts }}"
+    - settings
+  when:
+    - opn_dyndns_accounts is defined
