@@ -1,0 +1,61 @@
+---
+
+opn_unboundplus:
+  general:
+    enabled: 1
+  forwarding:
+    enabled: 1
+  dots:
+    06ee6261-e787-4434-8fac-b8a5d5412243:
+      enabled: 1
+      type: forward
+      domain: fck.fascists.org
+      server: 6.6.6.6
+      port: 53
+      verify:
+  hosts:
+    "04ac0d40-ecd0-4a1c-8603-91ce9aed08ad":
+      enabled: 1
+      hostname: "*"
+      domain: test.de
+      rr: A
+      mxprio:
+      mx:
+      server: 10.11.12.13
+      description: test de
+    "87c2cf23-aece-4c66-9ae4-171b9c7aa964":
+      enabled: 1
+      hostname: pudding
+      domain: toast.it
+      rr: A
+      mxprio:
+      mx:
+      server: 10.1.2.3
+      description: toast it
+  aliases:
+    "50621c24-479b-4dae-97b6-ae35b285136a":
+      enabled: 1
+      host: 04ac0d40-ecd0-4a1c-8603-91ce9aed08ad
+      hostname: cloud
+      domain: nosense.org
+      description: no sense cloud
+    "9535a83c-7bbc-4cd1-ad67-f775ca23000a":
+      enabled: 1
+      host: 04ac0d40-ecd0-4a1c-8603-91ce9aed08ad
+      hostname: mail
+      domain: nosense.org
+      description: no sense mail service
+    "44a62f0c-9a0e-4890-9c03-c314573ee713":
+      enabled: 1
+      host: 87c2cf23-aece-4c66-9ae4-171b9c7aa964
+      hostname: pudding
+      domain: tick.tack
+      description: pudding time
+  domains:
+    848c33e3-7541-45e6-8c96-4507489ff978:
+      enabled: 0
+      domain: pudding.time
+      server: 10.0.0.1
+      forward_tcp_upstream: 0
+      description: pudding time dom fwd
+

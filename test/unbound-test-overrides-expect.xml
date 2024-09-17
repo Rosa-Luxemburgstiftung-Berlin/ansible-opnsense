@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+  </system>
+  <OPNsense>
+    <unboundplus version="1.0.9">
+      <general>
+        <enabled>1</enabled>
+        <port>53</port>
+        <stats/>
+        <active_interface/>
+        <dnssec/>
+        <dns64/>
+        <dns64prefix/>
+        <noarecords/>
+        <regdhcp/>
+        <regdhcpdomain/>
+        <regdhcpstatic/>
+        <noreglladdr6/>
+        <noregrecords/>
+        <txtsupport/>
+        <cacheflush/>
+        <local_zone_type>transparent</local_zone_type>
+        <outgoing_interface/>
+        <enable_wpad/>
+      </general>
+      <advanced>
+        <hideidentity/>
+        <hideversion/>
+        <prefetch/>
+        <prefetchkey/>
+        <dnssecstripped/>
+        <aggressivensec>1</aggressivensec>
+        <serveexpired/>
+        <serveexpiredreplyttl/>
+        <serveexpiredttl/>
+        <serveexpiredttlreset/>
+        <serveexpiredclienttimeout/>
+        <qnameminstrict/>
+        <extendedstatistics/>
+        <logqueries/>
+        <logreplies/>
+        <logtagqueryreply/>
+        <logservfail/>
+        <loglocalactions/>
+        <logverbosity>1</logverbosity>
+        <valloglevel>0</valloglevel>
+        <privatedomain/>
+        <privateaddress>0.0.0.0/8,10.0.0.0/8,100.64.0.0/10,169.254.0.0/16,172.16.0.0/12,192.0.2.0/24,192.168.0.0/16,198.18.0.0/15,198.51.100.0/24,203.0.113.0/24,233.252.0.0/24,::1/128,2001:db8::/32,fc00::/8,fd00::/8,fe80::/10</privateaddress>
+        <insecuredomain/>
+        <msgcachesize/>
+        <rrsetcachesize/>
+        <outgoingnumtcp/>
+        <incomingnumtcp/>
+        <numqueriesperthread/>
+        <outgoingrange/>
+        <jostletimeout/>
+        <cachemaxttl/>
+        <cachemaxnegativettl/>
+        <cacheminttl/>
+        <infrahostttl/>
+        <infrakeepprobing/>
+        <infracachenumhosts/>
+        <unwantedreplythreshold/>
+      </advanced>
+      <acls>
+        <default_action>allow</default_action>
+      </acls>
+      <dnsbl>
+        <enabled>0</enabled>
+        <safesearch/>
+        <type/>
+        <lists/>
+        <whitelists/>
+        <blocklists/>
+        <wildcards/>
+        <address/>
+        <nxdomain/>
+      </dnsbl>
+      <forwarding>
+        <enabled>1</enabled>
+      </forwarding>
+      <dots>
+        <dot uuid="06ee6261-e787-4434-8fac-b8a5d5412243">
+          <enabled>1</enabled>
+          <type>forward</type>
+          <domain>fck.fascists.org</domain>
+          <server>6.6.6.6</server>
+          <port>53</port>
+          <verify/>
+        </dot>
+      </dots>
+      <hosts>
+        <host uuid="04ac0d40-ecd0-4a1c-8603-91ce9aed08ad">
+          <enabled>1</enabled>
+          <hostname>*</hostname>
+          <domain>test.de</domain>
+          <rr>A</rr>
+          <mxprio/>
+          <mx/>
+          <server>10.11.12.13</server>
+          <description>test de</description>
+        </host>
+        <host uuid="87c2cf23-aece-4c66-9ae4-171b9c7aa964">
+          <enabled>1</enabled>
+          <hostname>pudding</hostname>
+          <domain>toast.it</domain>
+          <rr>A</rr>
+          <mxprio/>
+          <mx/>
+          <server>10.1.2.3</server>
+          <description>toast it</description>
+        </host>
+      </hosts>
+      <aliases>
+        <alias uuid="50621c24-479b-4dae-97b6-ae35b285136a">
+          <enabled>1</enabled>
+          <host>04ac0d40-ecd0-4a1c-8603-91ce9aed08ad</host>
+          <hostname>cloud</hostname>
+          <domain>nosense.org</domain>
+          <description>no sense cloud</description>
+        </alias>
+        <alias uuid="9535a83c-7bbc-4cd1-ad67-f775ca23000a">
+          <enabled>1</enabled>
+          <host>04ac0d40-ecd0-4a1c-8603-91ce9aed08ad</host>
+          <hostname>mail</hostname>
+          <domain>nosense.org</domain>
+          <description>no sense mail service</description>
+        </alias>
+        <alias uuid="44a62f0c-9a0e-4890-9c03-c314573ee713">
+          <enabled>1</enabled>
+          <host>87c2cf23-aece-4c66-9ae4-171b9c7aa964</host>
+          <hostname>pudding</hostname>
+          <domain>tick.tack</domain>
+          <description>pudding time</description>
+        </alias>
+      </aliases>
+      <domains>
+        <domain uuid="848c33e3-7541-45e6-8c96-4507489ff978">
+          <enabled>0</enabled>
+          <domain>pudding.time</domain>
+          <server>10.0.0.1</server>
+          <forward_tcp_upstream>0</forward_tcp_upstream>
+          <description>pudding time dom fwd</description>
+        </domain>
+      </domains>
+    </unboundplus>
+  </OPNsense>
+</opnsense>

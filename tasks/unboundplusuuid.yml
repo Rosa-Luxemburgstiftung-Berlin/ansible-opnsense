@@ -1,0 +1,15 @@
+---
+
+- name: unboundplus settings {{ unboundplussection }} uuid {{ _uuid }}
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/unboundplus/{{ unboundplussection }}/{{ opn_unboundplus_uuid_sections[unboundplussection] }}[@uuid='{{ _uuid }}']/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  register: _unbound_settings_uuid
+  notify: reconfig unbound
+  with_dict: "{{ _uuidvalues }}"
+
+
+...

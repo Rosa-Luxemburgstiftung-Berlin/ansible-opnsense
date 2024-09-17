@@ -18,6 +18,10 @@ A check consists of:
 
 `ansible-playbook -e test=filter test.yml`
 
+### run test for just a task and one test-file
+
+`ansible-playbook  -e test=unbound -e testfile=unbound-test-acl.yml -D test.yml`
+
 ## Notes
 
 This is work in progress ...

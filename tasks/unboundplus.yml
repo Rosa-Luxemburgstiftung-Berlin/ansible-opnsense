@@ -1,36 +1,33 @@
 # vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
 ---
 
-# example definition:
-#
-# opn_unboundplus:
-#   dnsbl:
-#     enabled: 1
-#     type: "aa,ag,bla0,bla"
-#     whitelists: "*.example.com,*.another.xyz"
-#   dots: DNSoverTLS is NOT YET IMPLEMENTED!
-#   miscellaneous:
-#     privatedomain: "..."
-#     insecuredomain: "..."
+# handle different unboundlus sections
 
-- name: unboundplus dnsbl
+- name: unboundplus settings {{ unboundplussection }}
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/OPNsense/unboundplus/dnsbl/{{ item.key }}"
+    xpath: "/opnsense/OPNsense/unboundplus/{{ unboundplussection }}/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: true
-  with_dict: "{{ opn_unboundplus.dnsbl }}"
-  when: opn_unboundplus.dnsbl is defined
+  register: _unbound_settings
+  notify: "{{ (unboundplussection == 'dnsbl') | ternary('update dnsbl', 'reconfig unbound') }}"
+  with_dict: "{{ unboundplussectionsettings }}"
+  when:
+    - unboundplussectionsettings is defined
+    - unboundplussection not in opn_unboundplus_uuid_sections.keys() or item.value is string
 
-- name: unboundplus miscellaneous
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: "/opnsense/OPNsense/unboundplus/miscellaneous/{{ item.key }}"
-    value: "{{ item.value }}"
-    pretty_print: true
-  with_dict: "{{ opn_unboundplus.miscellaneous }}"
-  when: opn_unboundplus.miscellaneous is defined
+- name: unboundplus uuid settings for {{ unboundplussection }}
+  ansible.builtin.include_tasks: unboundplusuuid.yml
+  vars:
+    _uuid: "{{ _opnunbndsettingsuuid.key }}"
+    _uuidvalues: "{{  _opnunbndsettingsuuid.value }}"
+  with_dict: "{{ unboundplussectionsettings }}"
+  loop_control:
+    loop_var: _opnunbndsettingsuuid
+  when:
+    - unboundplussectionsettings is defined
+    - unboundplussection in opn_unboundplus_uuid_sections.keys()
+    - _opnunbndsettingsuuid.value is not string
 
 ...

@@ -7,7 +7,7 @@
 
 - name: register tasks to run for {{ _testtask }}
   ansible.builtin.set_fact:
-    _taskfiles: "{{ query('ansible.builtin.fileglob', _testtask ~ '-test*.yml') | sort }}"
+    _taskfiles: "{{ query('ansible.builtin.fileglob', testfile  | default(_testtask ~ '-test*.yml')) | sort }}"
 
 - name: "{{ _testtask }} test loop ..."
   ansible.builtin.include_tasks: testsimpletaskgeneric.yml
