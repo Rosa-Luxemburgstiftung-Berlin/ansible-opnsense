@@ -1,0 +1,11 @@
+---
+
+- name: cron job {{ uuid }}
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/cron/jobs/job[@uuid='{{ uuid }}']/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: cron restart
+  with_dict: "{{ cronjobcfg }}"

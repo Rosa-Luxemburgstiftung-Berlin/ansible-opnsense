@@ -43,4 +43,15 @@ opn_unboundplus_uuid_sections:
   domains: domain
   acls: acl
 
+opn_cron_jobs_defaults:
+  origin: cron
+  enabled: 1
+  minutes: 0
+  hours: 0
+  days: '*'
+  months: '*'
+  weekdays: '*'
+  who: root
+  parameters:
+
 ...
