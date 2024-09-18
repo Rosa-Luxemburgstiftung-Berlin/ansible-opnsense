@@ -186,4 +186,11 @@
   when:
     - config is defined
     - config.changed | bool
+
+# cron
+- name: cron restart  # noqa no-changed-when
+  ansible.builtin.command: configctl cron restart
+  when:
+    - config is defined
+    - config.changed | bool
 ...

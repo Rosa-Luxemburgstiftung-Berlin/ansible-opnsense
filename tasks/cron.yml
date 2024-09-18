@@ -1,0 +1,69 @@
+---
+# cron jobs
+#
+# opn_cron_jobs:
+#   9b30c307-dd3b-470f-bf38-c894215a3016:
+#     origin: cron
+#     enabled: 1
+#     minutes: '*/15'
+#     hours: '*'
+#     days: '*'
+#     months: '*'
+#     weekdays: '*'
+#     who: root
+#     command: unbound dnsbl
+#     parameters: 
+#     description: update unbound dnsbl
+#
+# see opn_cron_jobs_defaults
+#
+# valid commands as per 24.7.4
+# command : descr
+# captiveportal restart : Restart Captive Portal service
+# cron restart : Restart Cron service
+# ddclient force : Force ddclient update
+# ddclient restart : Restart ddclient service
+# dhcpd6 restart : Restart DHCPd6
+# dhcpd6 start : Start DHCPd6
+# dhcpd6 stop : Stop DHCPd6
+# dhcpd restart : Restart DHCPd
+# dhcpd start : Start DHCPd
+# dhcpd stop : Stop DHCPd
+# dns reload : Reload system DNS resolver configuration
+# filter refresh_aliases : Update and reload firewall aliases
+# firmware auto-update : Automatic firmware update
+# firmware changelog cron : Firmware changelog update
+# firmware poll : Firmware update check
+# ids reload : Reload intrusion detection rules
+# ids restart : Restart Intrusion Detection service
+# ids update : Update and reload intrusion detection rules
+# interface reconfigure : Periodic interface reset
+# interface routes alarm : Manual gateway switch
+# ipsec reload : Reload IPsec service
+# ipsec restart : Restart IPsec service
+# kea restart : Restart kea daemon
+# monit restart : Restart Monit service
+# netflow restart : Restart NetFlow service
+# openssh restart : Restart OpenSSH service
+# syslog archive : Rotate log files
+# syslog restart : Restart System Logging service
+# system ha_reconfigure_backup : HA update and reconfigure backup
+# system reboot : Issue a reboot
+# system remote backup : Remote backup
+# unbound dnsbl : Update Unbound DNSBLs
+# unbound restart : Restart Unbound DNS service
+# webgui restart : Restart web GUI service
+# wireguard renew : Renew DNS for WireGuard on stale connections
+# wireguard restart : Restart WireGuard
+# zfs scrub : ZFS pool scrub
+# zfs trim : ZFS pool trim
+
+- name: cron jobs
+  ansible.builtin.include_tasks: cronjobs.yml
+  vars:
+    uuid: "{{ job.key }}"
+    cronjobcfg: "{{ opn_cron_jobs_defaults | combine(job.value) }}"
+  with_dict:
+    - "{{ opn_cron_jobs | default({}) }}"
+  loop_control:
+    loop_var: job

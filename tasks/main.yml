@@ -261,6 +261,14 @@
     apply:
       tags: haproxy
 
+- name: cron
+  tags:
+    - always
+  ansible.builtin.include_tasks:
+    file: cron.yml
+    apply:
+      tags: cron
+
 - name: trim EOF
   delegate_to: localhost
   ansible.builtin.lineinfile:
