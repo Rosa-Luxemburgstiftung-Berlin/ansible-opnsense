@@ -9,4 +9,3 @@
     pretty_print: true
   notify: cron restart
   with_dict: "{{ cronjobcfg }}"
-

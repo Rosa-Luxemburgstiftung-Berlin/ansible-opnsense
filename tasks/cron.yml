@@ -12,7 +12,7 @@
 #     weekdays: '*'
 #     who: root
 #     command: unbound dnsbl
-#     parameters: 
+#     parameters:
 #     description: update unbound dnsbl
 #
 # see opn_cron_jobs_defaults
