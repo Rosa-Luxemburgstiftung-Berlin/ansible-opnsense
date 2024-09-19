@@ -1,14 +1,12 @@
 ---
+# see https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/issues/12
 
 # some configctl infos
 # https://docs.opnsense.org/manual/settingsmenu.html
 
 # alias handlers
 # see: src/opnsense/mvc/app/controllers/OPNsense/Firewall/Api/AliasController.php
-
 # api endpoint /api/firewall/alias/reconfigure
-
-# alias
 - name: template reload OPNsense/Filter  # noqa no-changed-when
   ansible.builtin.command: configctl template reload OPNsense/Filter
   listen:
