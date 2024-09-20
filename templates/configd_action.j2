@@ -1,0 +1,10 @@
+#jinja2: lstrip_blocks: True
+{% for action, params in _configd_action.value.items() %}
+[{{ action }}]
+{% for k, v in params.items() %}
+{{ k }}:{{ v }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}

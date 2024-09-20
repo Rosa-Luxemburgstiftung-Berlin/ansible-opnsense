@@ -8,6 +8,10 @@
 
 # api endpoint /api/firewall/alias/reconfigure
 
+# configd
+- name: service configd restart  # noqa no-changed-when
+  ansible.builtin.command: service configd restart
+
 # alias
 - name: template reload OPNsense/Filter  # noqa no-changed-when
   ansible.builtin.command: configctl template reload OPNsense/Filter
