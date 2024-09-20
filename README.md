@@ -78,4 +78,5 @@ Apache 2.0
   * Foppe Pieters - foppe.pieters@naturalis.nl
   * Klaus Zerwes - https://github.com/zerwes
   * Jonybat - https://github.com/Jonybat
+  * fnateghi - https://github.com/fnateghi
 
