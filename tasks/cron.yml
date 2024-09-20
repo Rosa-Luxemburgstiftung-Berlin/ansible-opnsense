@@ -59,6 +59,9 @@
 # zfs trim : ZFS pool trim
 #
 # you can extend the commands by adding custom configd_actions
+# in oerder to make them visible in the gui, you need to add a description!
+# so if you create a configd_action named xyz with a command abc
+# the new comand for cron will be: xyz abc
 # see: tasks/configd.yml
 
 - name: cron jobs
