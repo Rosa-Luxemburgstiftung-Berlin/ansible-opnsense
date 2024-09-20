@@ -57,6 +57,9 @@
 # wireguard restart : Restart WireGuard
 # zfs scrub : ZFS pool scrub
 # zfs trim : ZFS pool trim
+#
+# you can extend the commands by adding custom configd_actions
+# see: tasks/configd.yml
 
 - name: cron jobs
   ansible.builtin.include_tasks: cronjobs.yml
