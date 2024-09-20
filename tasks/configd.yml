@@ -1,0 +1,40 @@
+---
+
+# see:
+# https://docs.opnsense.org/development/backend/configd.html
+#
+# configd_actions:
+#   template_name:  # example myservice -> will create /usr/local/opnsense/service/conf/actions.d/actions_myservice.conf
+#     actionname:  # something like start, stop, ...
+#       command:
+#       parameters:
+#       type:
+#       message:
+#       description:
+#
+# scripts required for the configd_actions commands can be listed in
+# configd_actions_scripts
+# and will be uploaded to
+# /usr/local/sbin/
+
+- name: upload custom scripts for configd actions
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/usr/local/sbin/{{ item }}"
+    mode: '0750'
+    owner: root
+    group: wheel
+  with_list: "{{ configd_actions_scripts | default([]) }}"
+
+- name: install action templates
+  ansible.builtin.template:
+    src: configd_action.j2
+    dest: /usr/local/opnsense/service/conf/actions.d/actions_{{ _configd_action.key }}.conf
+    mode: '0644'
+    owner: root
+    group: wheel
+  with_dict: "{{ configd_actions | default({}) }}"
+  loop_control:
+    loop_var: _configd_action
+    label: "{{ _configd_action.key }}"
+  notify: service configd restart

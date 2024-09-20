@@ -15,6 +15,15 @@
         - fetch
         - always
 
+- name: configd
+  tags:
+    - always
+  ansible.builtin.include_tasks:
+    file: configd.yml
+    apply:
+      tags:
+        - configd
+
 - name: dnsserver
   tags:
     - always

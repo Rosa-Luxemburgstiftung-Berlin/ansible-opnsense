@@ -4,6 +4,10 @@
 # some configctl infos
 # https://docs.opnsense.org/manual/settingsmenu.html
 
+# configd
+- name: service configd restart  # noqa no-changed-when command-instead-of-module
+  ansible.builtin.command: service configd restart
+
 # alias handlers
 # see: src/opnsense/mvc/app/controllers/OPNsense/Firewall/Api/AliasController.php
 # api endpoint /api/firewall/alias/reconfigure
