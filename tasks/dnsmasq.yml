@@ -1,0 +1,16 @@
+---
+
+- name: Configure dnsmasq advanced settings
+  ansible.builtin.template:
+    src: 'usr/local/etc/dnsmasq.conf.d/ansible.conf.j2'
+    dest: '/usr/local/etc/dnsmasq.conf.d/ansible.conf'
+    validate: 'dnsmasq --test --conf-file=%s'
+  when: (lookup("xmlfile", local_config_path, xpath="//opnsense/dnsmasq/custom_options") != '')
+  notify: [ 'Restart dns subsystem' ]
+
+- name: Remove dnsmasq advanced settings
+  ansible.builtin.file:
+    state: 'absent'
+    path: '/usr/local/etc/dnsmasq.conf.d/ansible.conf'
+  when: (lookup("xmlfile", local_config_path, xpath="//opnsense/dnsmasq/custom_options") == '')
+  notify: [ 'Restart dns subsystem' ]
