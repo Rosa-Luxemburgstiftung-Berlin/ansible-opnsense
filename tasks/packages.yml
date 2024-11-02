@@ -1,0 +1,6 @@
+---
+
+- name: package - install
+  ansible.builtin.package:
+    name: '{{ opnsense_all_packages }}'
+    state: 'present'
