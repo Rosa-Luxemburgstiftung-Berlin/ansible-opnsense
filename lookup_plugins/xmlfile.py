@@ -86,4 +86,4 @@ class LookupModule(LookupBase):
 if __name__ == '__main__':
     import sys
     xmlfile_lookup = LookupModule()
-    print('\n'.join(xmlfile_lookup._get_xml_matches(sys.argv[1], xpath=sys.argv[2])))
+    print('"' + '\n'.join(xmlfile_lookup._get_xml_matches(sys.argv[1], xpath=sys.argv[2])) + '"')
