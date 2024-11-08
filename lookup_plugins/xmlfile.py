@@ -69,11 +69,11 @@ class LookupModule(LookupBase):
 
             # Find the file in the expected search path.
             lookupfile = self.find_file_in_search_path(variables, 'files', term)
-            display.vvvv(u"File lookup using %s as file" % lookupfile)
+            display.vvvv("File lookup using %s as file" % lookupfile)
             try:
                 if lookupfile:
                     xml_string = '\n'.join(self._get_xml_matches(lookupfile, kwargs.get('xpath')))
-                    display.vvvv(u"Content %s" % xml_string)
+                    display.vvvv("Content %s" % xml_string)
                     ret.append(xml_string)
                 else:
                     raise AnsibleParserError()
