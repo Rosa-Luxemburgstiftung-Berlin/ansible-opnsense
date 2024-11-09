@@ -1,0 +1,30 @@
+---
+
+# requres plugin os-nut to be installed
+#
+#opn_nut:
+#  general:
+#    enable: 1
+#    mode: standalone
+#    name: UPSName
+#    listen: "127.0.0.1,::1"
+#  account:
+#    admin_password: ...
+#    mon_password:
+#  snmp:  # nut driver
+#    enable: 1
+#    args: "community=public,port=IPofUPS,override.battery.runtime.low=2700"
+#  OtherNutDriver:
+#    enable: 0
+#    may: have different settings, depending on the nut driver
+#
+
+- name: nut sections
+  ansible.builtin.include_tasks: nutsection.yml
+  vars:
+    nutsection: "{{ _nutsection.key }}"
+    nutsectioncfg: "{{ _nutsection.value }}"
+  with_dict:
+    - "{{ opn_nut | default({}) }}"
+  loop_control:
+    loop_var: _nutsection

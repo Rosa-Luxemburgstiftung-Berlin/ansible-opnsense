@@ -1,0 +1,13 @@
+---
+
+- name: nut section {{ nutsection }} cfg
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Nut/{{ nutsection }}/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: nut restart
+  with_dict:
+    - "{{ nutsectioncfg | default({}) }}"
+
