@@ -278,6 +278,14 @@
     apply:
       tags: cron
 
+- name: nut
+  tags:
+    - always
+  ansible.builtin.include_tasks:
+    file: nut.yml
+    apply:
+      tags: nut
+
 - name: trim EOF
   delegate_to: localhost
   ansible.builtin.lineinfile:
