@@ -44,9 +44,12 @@ display = Display()
 
 
 class LookupModule(LookupBase):
-    def _get_xml_matches(self, xml_file, xpath):
-        with open(xml_file, 'r') as fh:
-            tree = etree.parse(fh)
+    def _get_xml_matches(self, file_or_string, xpath):
+        if file_or_string.startswith('<?xml'):
+            tree = etree.fromstring(file_or_string)
+        else:
+            with open(file_or_string, 'r') as fh:
+                tree = etree.parse(fh)
 
         xml_string_list = []
         for match in tree.xpath(xpath):
@@ -68,11 +71,15 @@ class LookupModule(LookupBase):
             display.debug("File lookup term: %s" % term)
 
             # Find the file in the expected search path.
-            lookupfile = self.find_file_in_search_path(variables, 'files', term)
-            display.vvvv("File lookup using %s as file" % lookupfile)
+            if term.startswith('<?xml'):
+                display.vvvv("Lookup XML path in provided XML string")
+                file_or_string = term
+            else:
+                file_or_string = self.find_file_in_search_path(variables, 'files', term)
+                display.vvvv("File lookup using %s as file" % file_or_string)
             try:
-                if lookupfile:
-                    xml_string = '\n'.join(self._get_xml_matches(lookupfile, kwargs.get('xpath')))
+                if file_or_string:
+                    xml_string = '\n'.join(self._get_xml_matches(file_or_string, kwargs.get('xpath')))
                     display.vvvv("Content %s" % xml_string)
                     ret.append(xml_string)
                 else:
