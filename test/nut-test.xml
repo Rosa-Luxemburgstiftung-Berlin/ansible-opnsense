@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<opnsense>
+  <system>
+  </system>
+  <OPNsense>
+    <Nut version="1.0.4">
+    </Nut>
+  </OPNsense>
+</opnsense>
