@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+  </system>
+  <OPNsense>
+    <Nut version="1.0.4">
+      <general>
+        <enable>1</enable>
+        <mode>standalone</mode>
+        <name>UPSName</name>
+        <listen>127.0.0.1,::1</listen>
+      </general>
+      <snmp>
+        <enable>1</enable>
+        <args>community=public,port=1.2.3.4:161,override.battery.runtime.low=180</args>
+      </snmp>
+    </Nut>
+  </OPNsense>
+</opnsense>

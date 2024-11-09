@@ -35,6 +35,9 @@
     - name: restart dyndns
       debug:
         msg: fake handler - restart dyndns
+    - name: nut restart
+      debug:
+        msg: fake handler - nut restart
   tasks:
     - name: include default vars
       ansible.builtin.include_vars:
@@ -55,6 +58,7 @@
         - unbound
         - openvpn
         - dyndns
+        - nut
       when:
         - test | default(_testtask) == _testtask
     - ansible.builtin.meta: flush_handlers

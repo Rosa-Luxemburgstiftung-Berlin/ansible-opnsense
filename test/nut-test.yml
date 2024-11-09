@@ -1,0 +1,11 @@
+---
+
+opn_nut:
+  general:
+    enable: 1
+    mode: standalone
+    name: UPSName
+    listen: "127.0.0.1,::1"
+  snmp:
+    enable: 1
+    args: "community=public,port=1.2.3.4:161,override.battery.runtime.low=180"
