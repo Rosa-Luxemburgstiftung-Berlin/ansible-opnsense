@@ -10,4 +10,3 @@
   notify: nut restart
   with_dict:
     - "{{ nutsectioncfg | default({}) }}"
-
