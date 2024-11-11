@@ -198,7 +198,11 @@
 
 # cron
 - name: nut restart  # noqa no-changed-when
-  ansible.builtin.command: configctl nut restart
+  ansible.builtin.command: "{{ item }}"
+  with_items:
+    - configctl nut stop
+    - configctl template reload OPNsense/Nut
+    - configctl nut start
   when:
     - config is defined
     - config.changed | bool
