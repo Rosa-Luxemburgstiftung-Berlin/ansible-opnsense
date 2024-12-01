@@ -3,13 +3,13 @@
   <system>
   </system>
   <vlans>
-    <vlan>
+    <vlan uuid="e4f4bc10-1718-550b-bb20-972318edf556">
       <tag>110</tag>
       <descr>110_USR</descr>
       <if>lagg1</if>
       <vlanif>lagg1_vlan110</vlanif>
     </vlan>
-    <vlan>
+    <vlan uuid="bdf28cf6-e4d0-5782-aee4-e4d8c8946032">
       <tag>220</tag>
       <descr>220_SRV</descr>
       <if>lagg2</if>
