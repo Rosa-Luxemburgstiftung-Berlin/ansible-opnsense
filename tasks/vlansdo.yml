@@ -4,36 +4,32 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/vlans/vlan[tag/text()='{{ item.0.tag }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    xpath: "/opnsense/vlans/vlan[tag/text()='{{ _vlan.tag }}']/{{ _vlansettings.key }}"
+    value: "{{ _vlansettings.value }}"
     pretty_print: true
   notify: reconfigure vlans
-  with_subelements:
-    - "{{ opn_vlans }}"
-    - settings
+  with_items:
+    - "{{ _vlan.settings }}"
+  loop_control:
+    label: "{{ _vlan.tag }} {{ _vlansettings.key }}"
+    loop_var: _vlansettings
 
 - name: vlans - setting if
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/vlans/vlan[tag/text()='{{ item.0.tag }}']/if"
-    value: "{{ item.0.vlan_parent_interface | default(opn_interfaces_vlan_parent_interface) }}"
+    xpath: "/opnsense/vlans/vlan[tag/text()='{{ _vlan.tag }}']/if"
+    value: "{{ _vlan.vlan_parent_interface | default(opn_interfaces_vlan_parent_interface) }}"
     pretty_print: true
   notify: reconfigure vlans
-  with_subelements:
-    - "{{ opn_vlans }}"
-    - settings
 
 - name: vlans - setting vlanif
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/vlans/vlan[tag/text()='{{ item.0.tag }}']/vlanif"
-    value: "{{ item.0.vlan_parent_interface | default(opn_interfaces_vlan_parent_interface) }}_vlan{{ item.0.tag }}"
+    xpath: "/opnsense/vlans/vlan[tag/text()='{{ _vlan.tag }}']/vlanif"
+    value: "{{ _vlan.vlan_parent_interface | default(opn_interfaces_vlan_parent_interface) }}_vlan{{ _vlan.tag }}"
     pretty_print: true
   notify: reconfigure vlans
-  with_subelements:
-    - "{{ opn_vlans }}"
-    - settings
 
 ...
