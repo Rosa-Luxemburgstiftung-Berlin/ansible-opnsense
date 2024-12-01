@@ -1,0 +1,25 @@
+---
+# example:
+# opn_vlans:
+#   - tag: 110
+#     uuid: ... # uuid definition is optional but recommended
+#     vlan_parent_interface: lagg1
+#     settings:
+#       - key: descr
+#         value: 110_USR
+#   - tag: 220
+#     vlan_parent_interface: lagg2
+#     settings:
+#       - key: descr
+#         value: 220_SRV
+#
+# if uuid is not defined, the tag is used to generate a uuid
+
+- name: vlans - process vlans
+  ansible.builtin.include_tasks: vlansdo.yml
+  with_items:
+    - "{{ opn_vlans }}"
+  loop_control:
+    label: "{{ _vlan.tag }}"
+    loop_var: _vlan
+
