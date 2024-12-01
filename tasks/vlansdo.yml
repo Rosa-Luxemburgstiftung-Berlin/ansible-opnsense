@@ -32,4 +32,18 @@
     pretty_print: true
   notify: reconfigure vlans
 
+- name: vlans - define uuid
+  ansible.builtin.set_fact:
+    _uuid: "{{ _vlan.uuid | default(_vlan.tag | to_uuid) }}"
+
+- name: vlans - set uuid
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/vlans/vlan[tag/text()='{{ _vlan.tag }}']"
+    attribute: uuid
+    value: "{{ _uuid }}"
+    pretty_print: true
+  notify: reconfigure vlans
+
 ...
