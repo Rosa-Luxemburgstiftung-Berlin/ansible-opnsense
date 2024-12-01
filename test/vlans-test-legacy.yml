@@ -1,0 +1,13 @@
+---
+
+opn_vlans:
+  - tag: 110
+    vlan_parent_interface: lagg1
+    settings:
+      - key: descr
+        value: 110_USR
+  - tag: 220
+    vlan_parent_interface: lagg2
+    settings:
+      - key: descr
+        value: 220_SRV

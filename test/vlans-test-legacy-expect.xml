@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+  </system>
+  <vlans>
+    <vlan>
+      <tag>110</tag>
+      <descr>110_USR</descr>
+      <if>lagg1</if>
+      <vlanif>lagg1_vlan110</vlanif>
+    </vlan>
+    <vlan>
+      <tag>220</tag>
+      <descr>220_SRV</descr>
+      <if>lagg2</if>
+      <vlanif>lagg2_vlan220</vlanif>
+    </vlan>
+  </vlans>
+</opnsense>
