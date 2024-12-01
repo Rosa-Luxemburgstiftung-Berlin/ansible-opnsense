@@ -38,6 +38,9 @@
     - name: nut restart
       debug:
         msg: fake handler - nut restart
+    - name: reconfigure vlans
+      debug:
+        msg: fake handler - reconfigure vlans
   tasks:
     - name: include default vars
       ansible.builtin.include_vars:
@@ -51,6 +54,7 @@
         - general
         - filter
         - alias
+        - vlans
         - gateways
         - wireguard
         - ipsec
