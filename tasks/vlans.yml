@@ -22,4 +22,3 @@
   loop_control:
     label: "{{ _vlan.tag }}"
     loop_var: _vlan
-
