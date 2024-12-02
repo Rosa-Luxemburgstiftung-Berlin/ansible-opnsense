@@ -2,9 +2,6 @@
 
 # examples
 #
-# some notes regarding uuid
-# see https://github.com/naturalis/ansible-opnsense/issues/61
-#
 # if the settings of a alias are missing the 'enabled' key, the
 # task will set enabled to 1 (as opnsense itself handles a missing enabled tag this way)
 #
