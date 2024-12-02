@@ -18,7 +18,7 @@
 - name: vlans - process vlans
   ansible.builtin.include_tasks: vlansdo.yml
   with_items:
-    - "{{ opn_vlans }}"
+    - "{{ opn_vlans | default([]) }}"
   loop_control:
     label: "{{ _vlan.tag }}"
     loop_var: _vlan
