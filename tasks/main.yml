@@ -286,6 +286,14 @@
     apply:
       tags: nut
 
+- name: zabbix agent
+  tags:
+    - always
+  ansible.builtin.include_tasks:
+    file: zabbixagent.yml
+    apply:
+      tags: zabbix-agent
+
 - name: trim EOF
   delegate_to: localhost
   ansible.builtin.lineinfile:
