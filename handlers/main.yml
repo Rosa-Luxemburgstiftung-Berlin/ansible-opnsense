@@ -207,4 +207,11 @@
     - config is defined
     - config.changed | bool
 
+# zabbix agent
+- name: restart zabbix agent  # noqa no-changed-when
+  ansible.builtin.command: configctl zabbixagent restart
+  when:
+    - config is defined
+    - config.changed | bool
+
 ...

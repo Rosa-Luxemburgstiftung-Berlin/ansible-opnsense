@@ -1,0 +1,77 @@
+---
+
+# requires plugin os-zabbix*-agent to be installed
+#
+# opn_zabbixagent:
+#   local:
+#     hostname: my-opnsense-instance
+#   settings:
+#     main:
+#       enabled: 1
+#       serverList: <proxy/server IP>
+#       listenPort: 10050
+#       listenIP: 0.0.0.0
+#       sudoRoot: 1
+#     tuning:
+#       timeout: 10
+#     features:
+#       enableActiveChecks: 1
+#       activeCheckServers: <proxy/server IP>
+#       enableRemoteCommands: 1
+#       encryption: 1
+#       encryptionidentity: my-opnsense-instance
+#       encryptionpsk: zabbixpsk
+#   userparameters:
+#     980e7ff4-6f59-4072-82a1-e78655ecd70b:
+#       key: opn.version
+#       command: opnsense-version
+
+- name: zabbix agent - hostname
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/ZabbixAgent/local/{{ item.key }}
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: restart zabbix agent
+  with_dict: "{{ opn_zabbixagent.local | default({}) }}"
+
+- name: zabbix agent - main settings
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/ZabbixAgent/settings/main/{{ item.key }}
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: restart zabbix agent
+  with_dict: "{{ opn_zabbixagent.settings.main | default({}) }}"
+
+- name: zabbix agent - tuning
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/ZabbixAgent/settings/tuning/{{ item.key }}
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: restart zabbix agent
+  with_dict: "{{ opn_zabbixagent.settings.tuning | default({}) }}"
+
+- name: zabbix agent - features
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/OPNsense/ZabbixAgent/settings/features/{{ item.key }}
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: restart zabbix agent
+  with_dict: "{{ opn_zabbixagent.settings.features | default({}) }}"
+
+- name: zabbix agent - userparameters
+  ansible.builtin.include_tasks: zabbixagentuserparameters.yml
+  vars:
+    uuid: "{{ userparameter.key }}"
+    cfg: "{{ userparameter.value }}"
+  with_dict:
+    - "{{ opn_zabbixagent.userparameters | default({}) }}"
+  loop_control:
+    loop_var: userparameter
