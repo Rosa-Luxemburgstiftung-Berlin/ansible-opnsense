@@ -6,6 +6,11 @@ config_path: /conf/config.xml
 # local path for the config
 local_config_path: /tmp/config-{{ inventory_hostname }}.xml
 
+# set this to true in order to adjust the encoding of the xml before uploading it
+# recommendet to set this to true!
+# requires php-cli and php-xml to be installed on the ansible runner
+opn_fix_xml_encoding: false
+
 # list of keys per task to sort values
 opn_sort_values:
   filter:
