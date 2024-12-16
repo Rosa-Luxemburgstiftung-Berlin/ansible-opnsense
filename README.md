@@ -31,8 +31,12 @@ or
 
 ### optional
 
-    sudo apt install secure-delete (optional)
-    
+    sudo apt install secure-delete php-cli php-xml # (optional)
+
+`php-cli` and `php-xml` are required for the xml re-encoding (recommended! set `opn_fix_xml_encoding: true`)
+
+`secure-delete` is required for safe deleting the local xml file.
+
 ## Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
