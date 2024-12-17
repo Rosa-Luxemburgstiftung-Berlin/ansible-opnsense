@@ -37,4 +37,4 @@ jobs:
       - name: run ansible test
         working-directory: ./test
         run: |
-          ansible-playbook -v test.yml
+          ansible-playbook -e ansible_python_interpreter=$(which python) -v test.yml
