@@ -22,11 +22,17 @@ jobs:
           pip install ansible lxml cryptography
       - name: debug versions
         run: |
+          echo "which python ..."
           which python
+          echo "python -VV ..."
           python -VV
+          echo "pip list ..."
+          pip list
+          echo "ansible --version ..."
           ansible --version
+          echo "ansible-config dump --only-changed -t all ..."
           ansible-config dump --only-changed -t all
       - name: run ansible test
         working-directory: ./test
         run: |
-          ansible-playbook test.yml
+          ansible-playbook -v test.yml
