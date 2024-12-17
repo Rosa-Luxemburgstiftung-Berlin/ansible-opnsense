@@ -296,6 +296,7 @@
 
 - name: trim EOF
   delegate_to: localhost
+  when: not opn_fix_xml_encoding | bool
   ansible.builtin.lineinfile:
     state: absent
     insertafter: EOF
@@ -304,15 +305,23 @@
   changed_when: false
   tags: trim
 
-- name: fix xml start tag
-  delegate_to: localhost
-  ansible.builtin.lineinfile:
-    line: '<?xml version="1.0"?>'
-    regexp: '^<\?xml.*>'
-    insertbefore: BOF
-    path: "{{ local_config_path }}"
-  changed_when: false
-  tags: trim
+- name: fix xml encoding
+  when: opn_fix_xml_encoding | bool
+  tags:
+    - trim
+    - fix-encoding
+    - copy
+  block:
+    - name: detect current declared encoding  # noqa no-changed-when
+      delegate_to: localhost
+      ansible.builtin.command: grep -q "<?xml version='1.0' encoding='UTF-8'?>" {{ local_config_path }}
+      register: _grep_xml_encoding
+      changed_when: false
+
+    - name: fix encoding of xml  # noqa no-changed-when
+      delegate_to: localhost
+      ansible.builtin.command: "php -f {{ role_path }}/scripts/opn-xml-fix-encoding.php {{ local_config_path }}"
+      when: _grep_xml_encoding.rc | int == 0
 
 - name: copy
   ansible.builtin.copy:
