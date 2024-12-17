@@ -26,6 +26,8 @@ jobs:
           which python
           echo "python -VV ..."
           python -VV
+          echo "pip --version ..."
+          pip --version
           echo "pip list ..."
           pip list
           echo "ansible --version ..."
