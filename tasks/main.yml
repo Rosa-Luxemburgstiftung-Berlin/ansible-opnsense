@@ -316,6 +316,7 @@
       delegate_to: localhost
       ansible.builtin.command: grep -q "<?xml version='1.0' encoding='UTF-8'?>" {{ local_config_path }}
       register: _grep_xml_encoding
+      failed_when: _grep_xml_encoding.rc > 2
       changed_when: false
 
     - name: fix encoding of xml  # noqa no-changed-when
