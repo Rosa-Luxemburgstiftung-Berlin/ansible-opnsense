@@ -47,12 +47,25 @@
     xpath: /opnsense/unbound
     state: absent
 
+- name: detect deprecated unboundplus serctions
+  delegate_to: localhost
+  ansible.builtin.fail:
+    msg: "found deprectated '{{ _opnunbndsettings.key }}' setting in 'opn_unboundplus'!"
+  when:
+    - opn_unboundplus is defined
+    - _opnunbndsettings.key in ['domain']
+  with_dict: "{{ opn_unboundplus }}"
+  loop_control:
+    loop_var: _opnunbndsettings
+
 - name: unboundplus
   ansible.builtin.include_tasks: unboundplus.yml
   vars:
     unboundplussection: "{{ _opnunbndsettings.key }}"
     unboundplussectionsettings: "{{ _opnunbndsettings.value }}"
-  when: opn_unboundplus is defined
+  when:
+    - opn_unboundplus is defined
+    - not _opnunbndsettings.key in ['domain']
   with_dict: "{{ opn_unboundplus }}"
   loop_control:
     loop_var: _opnunbndsettings
