@@ -21,7 +21,7 @@
   ansible.builtin.include_tasks: unboundplusuuid.yml
   vars:
     _uuid: "{{ _opnunbndsettingsuuid.key }}"
-    _uuidvalues: "{{ (opn_unboundplus_uuid_sections_defaults[unboundplussection][opn_unboundplus_uuid_sections[unboundplussection]] | default({})) | combine(_opnunbndsettingsuuid.value) }}"
+    _uuidvalues: "{{ (opn_unboundplus_uuid_sections_defaults[unboundplussection][opn_unboundplus_uuid_sections[unboundplussection]] | default({})) | combine(_opnunbndsettingsuuid.value) }}"  # noqa yaml[line-length]
   with_dict: "{{ unboundplussectionsettings }}"
   loop_control:
     loop_var: _opnunbndsettingsuuid
