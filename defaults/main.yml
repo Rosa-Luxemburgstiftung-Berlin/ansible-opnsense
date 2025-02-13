@@ -45,8 +45,19 @@ opn_unboundplus_uuid_sections:
   dots: dot
   hosts: host
   aliases: alias
-  domains: domain
+  # domains: domains / domain is gone in favor of dots : see #111
   acls: acl
+
+# defaults for some elements
+opn_unboundplus_uuid_sections_defaults:
+  dots:
+    dot:
+      enabled: 1
+      type: forward
+      port:
+      verify:
+      forward_tcp_upstream: 0
+      description:
 
 opn_cron_jobs_defaults:
   origin: cron
