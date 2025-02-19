@@ -30,7 +30,7 @@
 # to unset a acl, host, etc. subsection, use opn_unset, for example
 # opn_unset:
 #   - OPNsense/unboundplus/hosts/host[@uuid='04ac0d40-ecd0-4a1c-8603-91ce9aed08ad']
-#   - OPNsense/unboundplus/domains/domain[domain="test.de"]
+#   - OPNsense/unboundplus/dots/dot[domain="test.de"]
 # # unset this to use the local unbound instance as first dns server for the opnsense node itself
 #   - system/dnslocalhost
 
@@ -47,12 +47,25 @@
     xpath: /opnsense/unbound
     state: absent
 
+- name: detect deprecated unboundplus serctions
+  delegate_to: localhost
+  ansible.builtin.fail:
+    msg: "found deprectated '{{ _opnunbndsettings.key }}' setting in 'opn_unboundplus'!"
+  when:
+    - opn_unboundplus is defined
+    - _opnunbndsettings.key in ['domain']
+  with_dict: "{{ opn_unboundplus }}"
+  loop_control:
+    loop_var: _opnunbndsettings
+
 - name: unboundplus
   ansible.builtin.include_tasks: unboundplus.yml
   vars:
     unboundplussection: "{{ _opnunbndsettings.key }}"
     unboundplussectionsettings: "{{ _opnunbndsettings.value }}"
-  when: opn_unboundplus is defined
+  when:
+    - opn_unboundplus is defined
+    - not _opnunbndsettings.key in ['domain']
   with_dict: "{{ opn_unboundplus }}"
   loop_control:
     loop_var: _opnunbndsettings

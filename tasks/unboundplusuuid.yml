@@ -11,5 +11,4 @@
   notify: reconfig unbound
   with_dict: "{{ _uuidvalues }}"
 
-
 ...

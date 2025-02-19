@@ -83,7 +83,6 @@
       <dots/>
       <hosts/>
       <aliases/>
-      <domains/>
     </unboundplus>
   </OPNsense>
   <unbound>

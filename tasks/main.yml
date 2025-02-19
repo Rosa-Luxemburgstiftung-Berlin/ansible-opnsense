@@ -65,7 +65,10 @@
   ansible.builtin.include_tasks:
     file: general.yml
     apply:
-      tags: general
+      tags:
+        - general
+        - set
+        - unset
 
 - name: sysctl
   tags:
