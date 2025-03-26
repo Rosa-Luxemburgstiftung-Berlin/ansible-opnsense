@@ -54,9 +54,11 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/{{ item.key }}"
+    xpath: "/opnsense/system/{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: true
   with_dict: "{{ opn_nextid }}"
-  when: opn_nextid is defined
+  when:
+    - opn_nextid is defined
+    - item.key in ['nextuid', 'nextgid']
 ...
