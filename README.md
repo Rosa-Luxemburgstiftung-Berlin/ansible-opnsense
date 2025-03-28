@@ -31,9 +31,12 @@ or
 
 ### optional
 
-    sudo apt install secure-delete php-cli php-xml # (optional)
+    sudo apt install secure-delete php-cli php-xml ldb-tools samba-dsdb-modules # (optional)
 
 `php-cli` and `php-xml` are required for the xml re-encoding (recommended! set `opn_fix_xml_encoding: true`)
+
+`ldb-tools`and `samba-dsdb-modules` are required for syncing users from Active Directory / LDAP
+(set `opn_sync_users_from_ldap: true` and configure the required VARs `opn_sync_users_ldap_*`)
 
 `secure-delete` is required for safe deleting the local xml file.
 
