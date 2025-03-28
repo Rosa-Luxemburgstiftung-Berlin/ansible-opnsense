@@ -29,7 +29,7 @@
                           {% for uf, lf in opn_sync_users_ldap_fields.items() %}
                             {% if line.startswith(lf~': ') %}
                               {% if uf == 'otp_seed' %}
-                                "{{ uf }}": "{{ line | replace(lf~': ', '') | regex_replace('#@[-+_.a-zA-Z0-9]*=', '') | regex_replace('&.*', '') }}' }}",
+                                "{{ uf }}": "{{ line | replace(lf~': ', '') | regex_replace('#@[-+_.a-zA-Z0-9]*=', '') | regex_replace('&.*', '') }}",
                               {% else %}
                                 "{{ uf }}": "{{ line | replace(lf~': ', '') }}",
                               {% endif %}
