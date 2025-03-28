@@ -1,0 +1,111 @@
+---
+
+- name: construct argv for ldbsearch
+  ansible.builtin.set_fact:
+    _ldbsearch_argv: "{{ ['ldbsearch'] + opn_sync_users_ldap_args + ['--url='~opn_sync_users_ldap_url, '--scope='~opn_sync_users_ldap_scope, '--basedn='~opn_sync_users_ldap_basedn] + opn_sync_users_ldap_auth + [opn_sync_users_ldap_filter] + (opn_sync_users_ldap_fields.values() | list) }}"  # noqa yaml[line-length]
+
+- name: fetch user data from ldap  # noqa no-changed-when
+  delegate_to: localhost
+  ansible.builtin.command:
+    argv: "{{ _ldbsearch_argv }}"
+  no_log: "{{ nolog_ldapusersync | default(true) }}"
+  register: _ldbsearch
+
+- name: debug ldbsearch result
+  ansible.builtin.debug:
+    var: _ldbsearch
+    verbosity: 1
+
+- name: parse ldbsearch result
+  ansible.builtin.set_fact:
+    _opnldapusers: |
+                    [
+                      {% for line in _ldbsearch.stdout_lines %}
+                        {% if line.startswith('# record ') %}
+                        {
+                        {% elif (line | trim) == '' %}
+                        },
+                        {% elif not (line.startswith('dn: ') or line.startswith('#')) %}
+                          {% for uf, lf in opn_sync_users_ldap_fields.items() %}
+                            {% if line.startswith(lf~': ') %}
+                              {% if uf == 'otp_seed' %}
+                                "{{ uf }}": "{{ line | replace(lf~': ', '') | regex_replace('#@[-+_.a-zA-Z0-9]*=', '') | regex_replace('&.*', '') }}' }}",
+                              {% else %}
+                                "{{ uf }}": "{{ line | replace(lf~': ', '') }}",
+                              {% endif %}
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                      {% endfor %}
+                    ]
+
+- name: debug _opnldapusers
+  ansible.builtin.debug:
+    var: _opnldapusers
+    verbosity: 1
+
+- name: read configured users in saved xml
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/system/user[scope='user']/name
+    content: text
+  register: _configured_user
+
+- name: debug configured users from saved xml
+  ansible.builtin.debug:
+    var: _configured_user
+    verbosity: 1
+
+- name: get configured users as list
+  ansible.builtin.set_fact:
+    _current_user: "{{ _configured_user.matches | map(attribute='name') }}"
+
+- name: debug configured users as list
+  ansible.builtin.debug:
+    var: _current_user
+    verbosity: 1
+
+- name: get current nextuid from saved xml
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/system/nextuid
+    content: text
+  register: _current_nextuid_matches
+
+- name: extract current nextuid
+  ansible.builtin.set_fact:
+    _current_nextuid: "{{ _current_nextuid_matches.matches[0]['nextuid'] | int }}"
+
+- name: debug current nextuid from saved xml
+  ansible.builtin.debug:
+    var: _current_nextuid
+    verbosity: 1
+
+- name: convert ldap users to opn users
+  delegate_to: localhost
+  ansible.builtin.template:
+    src: ldap2opnusers.j2
+    dest: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/ldap2opnusers.yml"
+    mode: '0600'
+
+- name: read ldap users
+  ansible.builtin.include_vars:
+    file: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/ldap2opnusers.yml"
+
+- name: append ldap users to opn users
+  ansible.builtin.set_fact:
+    opn_user: "{{ opn_user | default([]) + opn_user_from_ldap }}"
+
+- name: debug updated opn_user
+  ansible.builtin.debug:
+    var: opn_user
+    verbosity: 1
+
+- name: debug opn_nextid
+  ansible.builtin.debug:
+    var: opn_nextid
+    verbosity: 1
+
+...
