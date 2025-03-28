@@ -70,4 +70,28 @@ opn_cron_jobs_defaults:
   who: root
   parameters:
 
+# sync user from ldap
+opn_sync_users_from_ldap: false
+opn_sync_users_ldap_url: ldaps://dc.example.org
+opn_sync_users_ldap_scope: sub  # one|sub|base
+opn_sync_users_ldap_basedn: OU=Users,...
+opn_sync_users_ldap_auth: []
+# example opn_sync_users_ldap_auth
+# opn_sync_users_ldap_auth:
+#  - --user=ldapaccount
+#  - --workgroup=WGP
+#  - --password={{ ldappw }}
+# and define the ldappw vaulted
+# ldappw: !vault | ...
+opn_sync_users_ldap_args:
+  - '--show-binary'
+  - '--sorted'
+# ldap fields to fetch and map to opn user
+opn_sync_users_ldap_fields:
+  name: sAMAccountName
+  descr: cn
+  email: mail
+# otp_seed: anotherLdapAttribute
+opn_sync_users_ldap_filter: '(&(objectCategory=organizationalPerson)(objectClass=User)(userAccountControl:1.2.840.113556.1.4.803:=512)(!(|(userAccountControl:1.2.840.113556.1.4.803:=2)(userAccountControl:1.2.840.113556.1.4.803:=32))))'  # noqa yaml[line-length]
+
 ...
