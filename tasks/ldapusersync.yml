@@ -94,6 +94,12 @@
   ansible.builtin.include_vars:
     file: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/ldap2opnusers-{{ inventory_hostname }}.yml"
 
+- name: remove tmp file
+  ansible.builtin.file:
+    path: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/ldap2opnusers-{{ inventory_hostname }}.yml"
+    state: absent
+  when: opn_sync_users_ldap_remove_tmp | default(false) | bool
+
 - name: append ldap users to opn users
   ansible.builtin.set_fact:
     opn_user: "{{ opn_user | default([]) + opn_user_from_ldap }}"
