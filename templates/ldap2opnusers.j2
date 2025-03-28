@@ -10,6 +10,8 @@ opn_user_from_ldap:
 {% if user.name not in _current_user %}
       - key: scope
         value: user
+      - key: password
+        value: "{{ lookup('community.general.random_string', base64=true, length=50) | password_hash('bcrypt') }}"
       - key: uid
         value: {{ ns.nextuid }}
 {% set ns.nextuid = ns.nextuid + 1 %}
