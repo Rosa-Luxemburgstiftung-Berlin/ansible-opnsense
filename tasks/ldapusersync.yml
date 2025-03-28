@@ -87,12 +87,12 @@
   delegate_to: localhost
   ansible.builtin.template:
     src: ldap2opnusers.j2
-    dest: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/ldap2opnusers.yml"
+    dest: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/ldap2opnusers-{{ inventory_hostname }}.yml"
     mode: '0600'
 
 - name: read ldap users
   ansible.builtin.include_vars:
-    file: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/ldap2opnusers.yml"
+    file: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/ldap2opnusers-{{ inventory_hostname }}.yml"
 
 - name: append ldap users to opn users
   ansible.builtin.set_fact:
