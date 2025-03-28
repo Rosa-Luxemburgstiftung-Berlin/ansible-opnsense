@@ -3,6 +3,7 @@
 - name: construct argv for ldbsearch
   ansible.builtin.set_fact:
     _ldbsearch_argv: "{{ ['ldbsearch'] + opn_sync_users_ldap_args + ['--url='~opn_sync_users_ldap_url, '--scope='~opn_sync_users_ldap_scope, '--basedn='~opn_sync_users_ldap_basedn] + opn_sync_users_ldap_auth + [opn_sync_users_ldap_filter] + (opn_sync_users_ldap_fields.values() | list) }}"  # noqa yaml[line-length]
+  no_log: "{{ nolog_ldapusersync | default(true) }}"
 
 - name: fetch user data from ldap  # noqa no-changed-when
   delegate_to: localhost
@@ -46,27 +47,49 @@
     var: _opnldapusers
     verbosity: 1
 
-- name: read configured users in saved xml
+- name: check if we have configured users in saved xml
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/system/user[scope='user']/name
-    content: text
-  register: _configured_user
+    count: true
+  register: _configured_user_count
 
-- name: debug configured users from saved xml
+- name: debug configured users count from saved xml
   ansible.builtin.debug:
-    var: _configured_user
+    var: _configured_user_count
     verbosity: 1
 
-- name: get configured users as list
+- name: read configured users
+  when: _configured_user_count.count | int > 0
+  block:
+
+    - name: read configured users from saved xml
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: /opnsense/system/user[scope='user']/name
+        content: text
+      register: _configured_user
+
+    - name: debug configured users from saved xml
+      ansible.builtin.debug:
+        var: _configured_user
+        verbosity: 1
+
+    - name: get configured users as list
+      ansible.builtin.set_fact:
+        _current_user: "{{ _configured_user.matches | map(attribute='name') }}"
+
+    - name: debug configured users as list
+      ansible.builtin.debug:
+        var: _current_user
+        verbosity: 1
+
+- name: set configured users as empty list
   ansible.builtin.set_fact:
-    _current_user: "{{ _configured_user.matches | map(attribute='name') }}"
-
-- name: debug configured users as list
-  ansible.builtin.debug:
-    var: _current_user
-    verbosity: 1
+    _current_user: []
+  when: _configured_user_count.count | int == 0
 
 - name: get current nextuid from saved xml
   delegate_to: localhost
