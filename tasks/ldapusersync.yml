@@ -28,11 +28,13 @@
                         {% elif not (line.startswith('dn: ') or line.startswith('#')) %}
                           {% for uf, lf in opn_sync_users_ldap_fields.items() %}
                             {% if line.startswith(lf~': ') %}
-                              {% if uf == 'otp_seed' %}
-                                "{{ uf }}": "{{ line | replace(lf~': ', '') | regex_replace('#@[-+_.a-zA-Z0-9]*=', '') | regex_replace('&.*', '') }}",
-                              {% else %}
-                                "{{ uf }}": "{{ line | replace(lf~': ', '') }}",
+                              {% set ns = namespace(ufval = line | replace(lf~': ', '')) %}
+                              {% if uf in opn_sync_users_ldap_fields_jinja2regexreplace.keys() %}
+                                {% for regs, regr in opn_sync_users_ldap_fields_jinja2regexreplace[uf].items() %}
+                                  {% set ns.ufval = ns.ufval | regex_replace(regs, regr) %}
+                                {%  endfor %}
                               {% endif %}
+                              "{{ uf }}": "{{ ns.ufval }}",
                             {% endif %}
                           {% endfor %}
                         {% endif %}

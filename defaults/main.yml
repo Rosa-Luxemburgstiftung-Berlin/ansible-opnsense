@@ -70,11 +70,15 @@ opn_cron_jobs_defaults:
   who: root
   parameters:
 
-# sync user from ldap
+#######################
+# sync user from ldap #
+#######################
 opn_sync_users_from_ldap: false
 opn_sync_users_ldap_url: ldaps://dc.example.org
 opn_sync_users_ldap_scope: sub  # one|sub|base
 opn_sync_users_ldap_basedn: OU=Users,...
+
+# ldap auth params
 opn_sync_users_ldap_auth: []
 # example opn_sync_users_ldap_auth
 # opn_sync_users_ldap_auth:
@@ -83,15 +87,31 @@ opn_sync_users_ldap_auth: []
 #  - --password={{ ldappw }}
 # and define the ldappw vaulted
 # ldappw: !vault | ...
+
+# additional args for ldbsearch
 opn_sync_users_ldap_args:
   - '--show-binary'
   - '--sorted'
+
 # ldap fields to fetch and map to opn user
+# map of opnsense user field -> ldap field
 opn_sync_users_ldap_fields:
   name: sAMAccountName
   descr: cn
   email: mail
 # otp_seed: anotherLdapAttribute
+
+# map of opnsense user field -> map of reges search -> replace to manipulate the value
+opn_sync_users_ldap_fields_jinja2regexreplace: {}
+# example
+# opn_sync_users_ldap_fields_jinja2regexreplace:
+#   otp_seed:
+#     '#@[-+_.a-zA-Z0-9]*=': ''
+#     '&.*': ''
+# this will be evaluated to the equivalent of:
+# ... | regex_replace('#@[-+_.a-zA-Z0-9]*=', '') | regex_replace('&.*', '')
+
+# ldap filter
 opn_sync_users_ldap_filter: '(&(objectCategory=organizationalPerson)(objectClass=User)(userAccountControl:1.2.840.113556.1.4.803:=512)(!(|(userAccountControl:1.2.840.113556.1.4.803:=2)(userAccountControl:1.2.840.113556.1.4.803:=32))))'  # noqa yaml[line-length]
 
 ...
