@@ -15,6 +15,17 @@
         - fetch
         - always
 
+- name: ldapusersync
+  when: opn_sync_users_from_ldap | bool
+  tags:
+    - always
+  ansible.builtin.include_tasks:
+    file: ldapusersync.yml
+    apply:
+      tags:
+        - ldapusersync
+        - user
+
 - name: configd
   tags:
     - always
