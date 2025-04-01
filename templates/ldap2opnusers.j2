@@ -8,6 +8,13 @@
 opn_user_from_ldap:
 {% for user in _opnldapusers %}
   - name: {{ user.name }}
+{% if user.uuid is defined %}
+    uuid: {{ user.uuid }}
+{% else %}
+{% if user.name not in _current_user %}
+    uuid: {{ user.name | to_uuid }}
+{% endif %}
+{% endif %}
     settings:
 {% if user.name not in _current_user %}
       - key: scope
