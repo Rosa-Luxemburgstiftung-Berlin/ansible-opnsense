@@ -128,11 +128,13 @@
 - name: append ldap users to opn users
   ansible.builtin.set_fact:
     opn_user: "{{ opn_user | default([]) + opn_user_from_ldap }}"
+  when: opn_user_from_ldap is defined and opn_user_from_ldap
 
 - name: debug updated opn_user
   ansible.builtin.debug:
     var: opn_user
     verbosity: 1
+  when: opn_user_from_ldap is defined and opn_user_from_ldap
 
 - name: debug opn_nextid
   ansible.builtin.debug:
