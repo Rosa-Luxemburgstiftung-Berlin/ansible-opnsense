@@ -1,7 +1,9 @@
 # vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
 ---
 
-{% set ns = namespace(nextuid=(_current_nextuid | int)) %}
+{% set ns = namespace() %}
+{% set ns.nextuid= ( _current_nextuid | int) %}
+{% set ns.vanishedusers = _current_user %}
 
 opn_user_from_ldap:
 {% for user in _opnldapusers %}
@@ -15,7 +17,8 @@ opn_user_from_ldap:
       - key: uid
         value: {{ ns.nextuid }}
 {% set ns.nextuid = ns.nextuid + 1 %}
-# {{ ns.nextuid }}
+{% else %}
+{% set _ = ns.vanishedusers.remove(user.name) %}
 {% endif %}
 {% for k, v in user.items() %}
 {% if k != 'name' %}
@@ -28,5 +31,13 @@ opn_user_from_ldap:
 {% if ns.nextuid != (_current_nextuid | int) %}
 opn_nextid:
   nextuid: {{ ns.nextuid }}
+{% endif %}
+
+{% if opn_sync_users_from_ldap_remove_vanished and ns.vanishedusers %}
+opn_unset:
+{{ opn_unset | default([]) | to_nice_yaml(indent=2) | indent(2, true) }}
+{% for user in ns.vanishedusers %}
+  - system/user[name="{{ user }}"]
+{% endfor %}
 {% endif %}
 ...

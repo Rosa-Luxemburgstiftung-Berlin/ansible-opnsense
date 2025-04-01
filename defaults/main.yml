@@ -73,7 +73,13 @@ opn_cron_jobs_defaults:
 #######################
 # sync user from ldap #
 #######################
+# set this to true in order to enable the sync
 opn_sync_users_from_ldap: false
+
+# remove all users with scope=user that are not present in the ldap sync
+opn_sync_users_from_ldap_remove_vanished: false
+
+# ldap settings
 opn_sync_users_ldap_url: ldaps://dc.example.org
 opn_sync_users_ldap_scope: sub  # one|sub|base
 opn_sync_users_ldap_basedn: OU=Users,...
