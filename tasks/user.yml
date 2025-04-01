@@ -3,6 +3,7 @@
 # to add a new user , you must user something like:
 # opn_user:
 #   - name: ruth
+#     uuid: ... (optional)
 #     settings:
 #       - key: uid
 #         value: 1000
@@ -24,7 +25,54 @@
 #       - key: member
 #         value: 1000  # ruth
 
-- name: user
+- name: user name (by uuid)
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/system/user[@uuid='{{ item.uuid }}']/name"
+    value: "{{ item.name }}"
+    pretty_print: true
+  with_items:
+    - "{{ opn_user | default([]) }}"
+  notify: local user sync
+  when:
+    - item.uuid is defined
+    - item.name is defined
+    - ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+
+- name: user settings (by uuid)
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/system/user[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
+    value: "{{ item.1.value }}"
+    pretty_print: true
+  with_subelements:
+    - "{{ opn_user | default([]) }}"
+    - settings
+  notify: local user sync
+  when:
+    - item.0.uuid is defined
+    - ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+    - item.1.value is defined
+
+- name: b64 user fields (by uuid)
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/system/user[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
+    value: "{{ item.1.b64_value | b64encode }}"
+    pretty_print: true
+  with_subelements:
+    - "{{ opn_user | default([]) }}"
+    - settings
+  notify: local user sync
+  when:
+    - item.0.uuid is defined
+    - ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+    - item.1.b64_value is defined
+
+- name: user (legacy by name)
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -35,9 +83,12 @@
     - "{{ opn_user | default([]) }}"
     - settings
   notify: local user sync
-  when: item.1.value is defined
+  when:
+    - item.0.uuid is not defined
+    - not ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+    - item.1.value is defined
 
-- name: b64 user fields
+- name: b64 user fields (legacy by name)
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -48,7 +99,10 @@
     - "{{ opn_user | default([]) }}"
     - settings
   notify: local user sync
-  when: item.1.b64_value is defined
+  when:
+    - item.0.uuid is not defined
+    - not ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+    - item.1.b64_value is defined
 
 - name: user - nextid
   delegate_to: localhost
