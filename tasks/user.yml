@@ -25,6 +25,13 @@
 #       - key: member
 #         value: 1000  # ruth
 
+- name: ensure required facts are available
+  ansible.builtin.fail:
+    msg: opnsense user handling requires role ansible-opnsense-factse
+  when:
+    - ansible_local.opnsense.core.product_version is not defined
+    - opn_user is defined and opn_user
+
 - name: user name (by uuid)
   delegate_to: localhost
   community.general.xml:
