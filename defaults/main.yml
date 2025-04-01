@@ -105,6 +105,7 @@ opn_sync_users_ldap_fields:
   name: sAMAccountName
   descr: cn
   email: mail
+# uuid: objectGUID
 # otp_seed: anotherLdapAttribute
 
 # map of opnsense user field -> map of reges search -> replace to manipulate the value
