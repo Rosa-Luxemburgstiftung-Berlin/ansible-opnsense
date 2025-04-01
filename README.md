@@ -14,6 +14,7 @@ We like to thank [@rudibroekhuizen](https://github.com/rudibroekhuizen) and all 
 
 * OPNsense firewall with shell access
 * python lxml
+* some tasks require [role ansible-opnsense-facts](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-facts)
 
 ## Role Variables
 
@@ -46,9 +47,10 @@ Including an example of how to use your role (for instance, with variables passe
 
     ---
     - hosts: firewalls
-      gather_facts: false
+      gather_facts: true
       become: false
       roles:
+        - ansible-opnsense-facts  # optional - required for some tasks
         - ansible-opnsense
     ...
 
