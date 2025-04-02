@@ -28,7 +28,7 @@ opn_user_from_ldap:
 {% set _ = ns.vanishedusers.remove(user.name) %}
 {% endif %}
 {% for k, v in user.items() %}
-{% if k != 'name' %}
+{% if k not in ['name', 'uuid'] %}
       - key: {{ k }}
         value: {{ v }}
 {% endif %}
