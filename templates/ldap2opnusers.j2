@@ -5,7 +5,11 @@
 {% set ns.nextuid= ( _current_nextuid | int) %}
 {% set ns.vanishedusers = _current_user %}
 
+{% if _opnldapusers is defined and _opnldapusers %}
 opn_user_from_ldap:
+{% else %}
+opn_user_from_ldap: []
+{% endif %}
 {% for user in _opnldapusers %}
   - name: {{ user.name }}
 {% if user.uuid is defined %}
