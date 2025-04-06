@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<opnsense>
+  <system>
+    <user>
+      <uid>0</uid>
+      <name>root</name>
+      <disabled>0</disabled>
+      <scope>system</scope>
+      <expires/>
+      <authorizedkeys/>
+      <ipsecpsk/>
+      <otp_seed/>
+    </user>
+    <user>
+      <scope>user</scope>
+      <name>zerwes</name>
+      <descr>test user</descr>
+      <password>$2y$11$H6i8FqkSOTJQNcDUM8vcdufmKYEoQeMldIEizEyPtpsZCeEMfKW6O</password>
+      <uid>2000</uid>
+    </user>
+  </system>
+</opnsense>

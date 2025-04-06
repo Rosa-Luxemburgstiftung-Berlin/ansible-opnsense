@@ -41,6 +41,9 @@
     - name: reconfigure vlans
       debug:
         msg: fake handler - reconfigure vlans
+    - name: local user sync
+      debug:
+        msg: fake handler - local user sync
   tasks:
     - name: include default vars
       ansible.builtin.include_vars:
@@ -63,6 +66,7 @@
         - openvpn
         - dyndns
         - nut
+        - user
       when:
         - test | default(_testtask) == _testtask
     - ansible.builtin.meta: flush_handlers

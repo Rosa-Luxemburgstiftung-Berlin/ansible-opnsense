@@ -1,0 +1,27 @@
+---
+
+ansible_local:
+  opnsense:
+    core:
+      product_version: 24.10.2
+
+opn_user:
+  - name: root
+    settings:
+      - key: authorizedkeys
+        b64_value: |
+            ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDDSjWfJ1alVkTh9zkBZhcUvqRq4oiMP2LAqTknq4wOFnGlfyzIeCsbXuwCpDP1O4a7PcmDH7igxgbhQSJWHU0HDzi3Y7bM7ICapaHLITbfirlzRHTVXw9qjLAcVw3/lNk2QmKhZV8xL4hAKAUeRidSomxLimkrYAheJi/pDP4qztGFi+jacYqSty2sNzZsSG7DfRFgsCUALCxbM1K3HMSdOg6FgJ0vXcoNlWNmH8DyGDK72RF4v3wUPS0LvoU3MNB0ggtTdJ1eUi5VM7lBnT7VOx0wPj4GX4LuYbPliFVeNl+oBxxS3kXF6FLzCJq6dw86jEn3yYKags9xYqOdJkGwPvv6LHXWYurLOD/KVkKcTiwdQ/ieTHSK7nGZrmwVfg7woXrwW6kRa7X5iijYbfcUgfNTGt9uY2ANC7O3sWHl4025LuklrOLYI1aptxnkXwJ5LQBZexGv1aVxc+TBYsuIToOB9+4fahnA78gFsJ1F5mj3nHsq1W8iObbxvuKYlDBNEpSw5cKAxI+R49DmQVpBI0tHmecnV7jGkgMHUAC8oXty2JtvMjhduwju8utqtVtkWQx+rd70rCbst33Q92xC9R4oZ0vgLKvld/K0i0G7KFgNWr/sJmRE+FP6QuTNTZfYX2/TEPX73cAKGfx7ZVZpK4aP1sk7qGHwlWRzdcYb8w==
+            ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPABifMuqnowPpUnXL9+EQei/muYKKkISW0lPtHRQcGWY0QMQoqgGwiX4xlKBnPON188UKPz2ss95RdhWScPqEtEpOT0IH8FInJjgF/iFQeinG0qCvfVmPCjO73bbAbqQp473vhonS20i8fmnKgczIcx/2/mS/A6j69LJARg33Soe/zn2wdFVvEQtt8QBhSPRXMhHr6D4+rydiLTBXyXVyByy+IJibrrp1lCQAmeYvWeC2TOfZ106ZPrejkVxPNwcwyN3//8Uqd3MhhdsTSpASTosDgRXBjdc3cbXABqudJBjvfYLwTlQYPFILmKF0e/CDCxOzM+j1nMqBb6m0Iaov
+  - name: zerwes
+    uuid: a1f03475-8f5f-47ab-8ff3-cf9fa8cd6e34
+    settings:
+      - key: descr
+        value: moi
+      - key: email
+        value: moi@doi.coi
+  - name: test
+    settings:
+      - key: descr
+        value: new test user
+      - key: email
+        value: nou@doi.coi
