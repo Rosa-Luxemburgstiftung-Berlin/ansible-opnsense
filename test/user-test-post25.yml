@@ -3,7 +3,7 @@
 ansible_local:
   opnsense:
     core:
-      product_version: 24.10.2
+      product_version: 25.1.1
 
 opn_user:
   - name: root
