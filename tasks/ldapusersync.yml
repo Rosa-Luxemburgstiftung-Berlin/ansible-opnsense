@@ -11,6 +11,7 @@
     argv: "{{ _ldbsearch_argv }}"
   no_log: "{{ nolog_ldapusersync | default(true) }}"
   register: _ldbsearch
+  changed_when: false
 
 - name: debug ldbsearch result
   ansible.builtin.debug:
@@ -114,6 +115,7 @@
     src: ldap2opnusers.j2
     dest: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/ldap2opnusers-{{ inventory_hostname }}.yml"
     mode: '0600'
+  changed_when: false
 
 - name: read ldap users
   ansible.builtin.include_vars:
@@ -124,6 +126,7 @@
     path: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/ldap2opnusers-{{ inventory_hostname }}.yml"
     state: absent
   when: opn_sync_users_ldap_remove_tmp | default(false) | bool
+  changed_when: false
 
 - name: append ldap users to opn users
   ansible.builtin.set_fact:
