@@ -3,7 +3,7 @@
 # to add a new user , you must user something like:
 # opn_user:
 #   - name: ruth
-#     uuid: ... (optional)
+#     uuid: ... (optional, but starting from version 25.x recommedet)
 #     settings:
 #       - key: uid
 #         value: 1000
@@ -32,18 +32,54 @@
     - ansible_local.opnsense.core.product_version is not defined
     - opn_user is defined and opn_user
 
+- name: check if we have configured users with uuid in saved xml
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/system/user[@uuid]/name
+    count: true
+  register: _configured_user_count
+  when: ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+
+- name: get uuid for users from saved cfg
+  when:
+    - ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+    - _configured_user_count.count | int > 0
+  block:
+
+    - name: read configured users from saved cfg
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: /opnsense/system/user[@uuid]/name
+        content: text
+      register: _configured_user
+
+    - name: read uuid for configured users from saved cfg
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: "/opnsense/system/user[name/text()='{{ item }}']"
+        content: attribute
+      register: _configured_user_uuid
+      with_items: "{{ _configured_user.matches | map(attribute='name') }}"
+
+    - name: construct map of configured user with uuid
+      ansible.builtin.set_fact:
+        _configured_user2uuid: "{{ (_configured_user2uuid | default({})) | combine({item['item']:item['matches'][0]['user']['uuid']}) }}"
+      with_items: "{{ _configured_user_uuid.results }}"
+
 - name: user name (by uuid)
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/system/user[@uuid='{{ item.uuid }}']/name"
+    xpath: "/opnsense/system/user[@uuid='{{ item.uuid  | default(_configured_user2uuid[item.name]) | default(item.name | to_uuid) }}']/name"
     value: "{{ item.name }}"
     pretty_print: true
   with_items:
     - "{{ opn_user | default([]) }}"
   notify: local user sync
   when:
-    - item.uuid is defined
     - item.name is defined
     - ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
 
@@ -51,7 +87,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/system/user[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
+    xpath: "/opnsense/system/user[@uuid='{{ item.0.uuid | default(_configured_user2uuid[item.0.name]) | default(item.0.name | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -59,7 +95,6 @@
     - settings
   notify: local user sync
   when:
-    - item.0.uuid is defined
     - ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
     - item.1.value is defined
 
@@ -67,7 +102,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/system/user[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
+    xpath: "/opnsense/system/user[@uuid='{{ item.0.uuid | default(_configured_user2uuid[item.0.name]) | default(item.0.name | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: true
   with_subelements:
@@ -75,7 +110,6 @@
     - settings
   notify: local user sync
   when:
-    - item.0.uuid is defined
     - ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
     - item.1.b64_value is defined
 
@@ -91,7 +125,6 @@
     - settings
   notify: local user sync
   when:
-    - item.0.uuid is not defined
     - not ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
     - item.1.value is defined
 
@@ -107,7 +140,6 @@
     - settings
   notify: local user sync
   when:
-    - item.0.uuid is not defined
     - not ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
     - item.1.b64_value is defined
 
