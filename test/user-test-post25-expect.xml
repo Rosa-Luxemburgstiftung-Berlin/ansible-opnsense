@@ -19,7 +19,7 @@
       <uid>2000</uid>
       <email>moi@doi.coi</email>
     </user>
-    <user>
+    <user uuid="f4fb6740-9e00-5ac4-9581-f24b6ecfe71e">
       <name>test</name>
       <descr>new test user</descr>
       <email>nou@doi.coi</email>
