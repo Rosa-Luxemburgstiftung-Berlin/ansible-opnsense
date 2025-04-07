@@ -67,14 +67,14 @@
 
     - name: construct map of configured user with uuid
       ansible.builtin.set_fact:
-        _configured_user2uuid: "{{ (_configured_user2uuid | default({})) | combine({item['item']:item['matches'][0]['user']['uuid']}) }}"
+        _configured_user2uuid: "{{ (_configured_user2uuid | default({})) | combine({item['item']: item['matches'][0]['user']['uuid']}) }}"
       with_items: "{{ _configured_user_uuid.results }}"
 
 - name: user name (by uuid)
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/system/user[@uuid='{{ item.uuid  | default(_configured_user2uuid[item.name]) | default(item.name | to_uuid) }}']/name"
+    xpath: "/opnsense/system/user[@uuid='{{ item.uuid | default(_configured_user2uuid[item.name]) | default(item.name | to_uuid) }}']/name"
     value: "{{ item.name }}"
     pretty_print: true
   with_items:
