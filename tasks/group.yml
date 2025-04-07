@@ -55,7 +55,7 @@
 
     - name: construct map of configured group with uuid
       ansible.builtin.set_fact:
-        _configured_group2uuid: "{{ (_configured_group2uuid | default({})) | combine({item['item']:item['matches'][0]['group']['uuid']}) }}"
+        _configured_group2uuid: "{{ (_configured_group2uuid | default({})) | combine({item['item']: item['matches'][0]['group']['uuid']}) }}"
       with_items: "{{ _configured_group_uuid.results }}"
 
 
@@ -63,7 +63,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/system/group[@uuid='{{ item.uuid  | default(_configured_group2uuid[item.name]) | default(item.name | to_uuid) }}']/name"
+    xpath: "/opnsense/system/group[@uuid='{{ item.uuid | default(_configured_group2uuid[item.name]) | default(item.name | to_uuid) }}']/name"
     value: "{{ item.name }}"
     pretty_print: true
   with_items:
