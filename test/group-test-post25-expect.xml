@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+    <group uuid="934650ef-1190-4e63-b776-9ab3a9be4ed0">
+      <gid>1999</gid>
+      <name>admins</name>
+      <scope>system</scope>
+      <description>System Administrators</description>
+      <priv>page-all</priv>
+      <member>0</member>
+    </group>
+    <group uuid="4fb7fd07-a5b1-51d3-92c0-75c1d01c3666">
+      <name>g1</name>
+      <gid>2000</gid>
+      <description>group one</description>
+      <member>2000</member>
+    </group>
+    <group uuid="a1f03475-8f5f-47ab-8ff3-cf9fa8cd6e34">
+      <name>g2</name>
+      <gid>2001</gid>
+      <description>group two</description>
+      <member>2000</member>
+      <member>2001</member>
+    </group>
+    <group uuid="1e31f60b-38cc-5455-86ff-d500eff80845">
+      <name>g3</name>
+      <gid>2002</gid>
+      <description>group tree</description>
+      <member>2001</member>
+    </group>
+  </system>
+</opnsense>

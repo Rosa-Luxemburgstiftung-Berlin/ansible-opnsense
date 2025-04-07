@@ -1,0 +1,35 @@
+---
+
+ansible_local:
+  opnsense:
+    core:
+      product_version: '25.1'
+
+opn_group:
+  - name: g1
+    settings:
+      - key: gid
+        value: 2000
+      - key: description
+        value: group one
+      - key: member
+        value: 2000
+  - name: g2
+    uuid: a1f03475-8f5f-47ab-8ff3-cf9fa8cd6e34
+    settings:
+      - key: gid
+        value: 2001
+      - key: description
+        value: group two
+      - key: member
+        value: 2000
+      - key: member
+        value: 2001
+  - name: g3
+    settings:
+      - key: gid
+        value: 2002
+      - key: description
+        value: group tree
+      - key: member
+        value: 2001
