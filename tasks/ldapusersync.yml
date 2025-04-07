@@ -1,5 +1,7 @@
 ---
 
+# see defaults/main.yml
+
 - name: ensure required facts are available
   ansible.builtin.fail:
     msg: opnsense user from ldap sync requires role ansible-opnsense-factse
