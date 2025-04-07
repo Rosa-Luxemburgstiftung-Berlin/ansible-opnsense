@@ -143,15 +143,12 @@
     - not ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
     - item.1.b64_value is defined
 
-- name: user - nextid
+- name: user - nextid is obsolet
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/system/{{ item.key }}"
-    value: "{{ item.value }}"
+    xpath: "/opnsense/system/{{ item }}"
+    state: absent
     pretty_print: true
-  with_dict: "{{ opn_nextid }}"
-  when:
-    - opn_nextid is defined
-    - item.key in ['nextuid', 'nextgid']
+  with_items: ['nextuid', 'nextgid']
 ...
