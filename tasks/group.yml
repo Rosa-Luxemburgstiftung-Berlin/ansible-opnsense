@@ -3,6 +3,7 @@
 # definition:
 # opn_group:
 #   - name: g2
+#     uuid: .... (optional)
 #     settings:
 #       - key: gid
 #         value: 2001
@@ -13,7 +14,81 @@
 #       - key: member
 #         value: 2001
 
-- name: groups - create
+- name: ensure required facts are available
+  ansible.builtin.fail:
+    msg: opnsense group handling requires role ansible-opnsense-factse
+  when:
+    - ansible_local.opnsense.core.product_version is not defined
+    - opn_group is defined and opn_group
+
+- name: check if we have configured groups with uuid in saved xml
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/system/group[@uuid]/name
+    count: true
+  register: _configured_group_count
+  when: ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+
+- name: get uuid for groups from saved cfg
+  when:
+    - ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+    - _configured_group_count.count | int > 0
+  block:
+
+    - name: read configured groups from saved cfg
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: /opnsense/system/group[@uuid]/name
+        content: text
+      register: _configured_group
+
+    - name: read uuid for configured groups from saved cfg
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: "/opnsense/system/group[name/text()='{{ item }}']"
+        content: attribute
+      register: _configured_group_uuid
+      with_items: "{{ _configured_group.matches | map(attribute='name') }}"
+
+    - name: construct map of configured group with uuid
+      ansible.builtin.set_fact:
+        _configured_group2uuid: "{{ (_configured_group2uuid | default({})) | combine({item['item']:item['matches'][0]['group']['uuid']}) }}"
+      with_items: "{{ _configured_group_uuid.results }}"
+
+
+- name: groups - create (by uuid)
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/system/group[@uuid='{{ item.uuid  | default(_configured_group2uuid[item.name]) | default(item.name | to_uuid) }}']/name"
+    value: "{{ item.name }}"
+    pretty_print: true
+  with_items:
+    - "{{ opn_group | default([]) }}"
+  when:
+    - ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+    - item.name is defined
+
+- name: groups - settings (by uuid)
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/system/group[@uuid='{{ item.0.uuid  | default(_configured_group2uuid[item.0.name]) | default(item.0.name | to_uuid) }}']/{{ item.1.key }}"
+    value: "{{ item.1.value }}"
+    pretty_print: true
+  with_subelements:
+    - "{{ opn_group | default([]) }}"
+    - settings
+  when:
+    - ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+    - opn_group is defined
+    - item.1.key is defined
+    - not item.1.key == "member"
+
+- name: groups - create (legacy by name)
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -24,10 +99,12 @@
     - "{{ opn_group }}"
     - settings
   when:
+    - not ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
     - opn_group is defined
     - item.1.key is defined
     - not item.1.key == "member"
 
+# TODO: as soon as the legacy 'by name' support will be removed this should use uuid too
 - name: groups - members
   ansible.builtin.include_tasks: groupmembers.yml
   with_items:
