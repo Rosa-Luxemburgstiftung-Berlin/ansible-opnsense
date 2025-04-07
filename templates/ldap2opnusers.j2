@@ -46,4 +46,12 @@ opn_unset:
   - system/user[name="{{ user }}"]
 {% endfor %}
 {% endif %}
+
+{% if not ansible_local.opnsense.core.product_version is version_compare('25.1', '>=') %}
+{% if ns.nextuid != (_current_nextuid | int) %}
+opn_nextid:
+  nextuid: {{ ns.nextuid }}
+{% endif %}
+{% endif %}
+
 ...

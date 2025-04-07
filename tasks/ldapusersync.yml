@@ -1,5 +1,25 @@
 ---
 
+- name: ensure required facts are available
+  ansible.builtin.fail:
+    msg: opnsense user from ldap sync requires role ansible-opnsense-factse
+  when:
+    - ansible_local.opnsense.core.product_version is not defined
+
+- name: get current nextuid from saved xml
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/system/nextuid
+    content: text
+  register: _current_nextuid_matches
+  when:
+    - not ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+
+- name: set default nextuid
+  ansible.builtin.set_fact:
+    _current_nextuid: "{{ _current_nextuid_matches.matches[0]['nextuid'] | default(2000) | int }}"
+
 - name: construct argv for ldbsearch
   ansible.builtin.set_fact:
     _ldbsearch_argv: "{{ ['ldbsearch'] + opn_sync_users_ldap_args + ['--url='~opn_sync_users_ldap_url, '--scope='~opn_sync_users_ldap_scope, '--basedn='~opn_sync_users_ldap_basedn] + opn_sync_users_ldap_auth + [opn_sync_users_ldap_filter] + (opn_sync_users_ldap_fields.values() | list) }}"  # noqa yaml[line-length]
@@ -87,24 +107,42 @@
         var: _current_user
         verbosity: 1
 
+    - name: read user id from xml
+      when: ansible_local.opnsense.core.product_version is version_compare('25.1', '>=')
+      block:
+
+        - name: read configured user id's from saved xml
+          delegate_to: localhost
+          community.general.xml:
+            path: "{{ local_config_path }}"
+            xpath: /opnsense/system/user[scope='user']/uid
+            content: text
+          register: _configured_user_uid
+
+        - name: debug configured user id's from saved xml
+          ansible.builtin.debug:
+            var: _configured_user_uid
+            verbosity: 1
+
+        - name: get configured user id's as list
+          ansible.builtin.set_fact:
+            _current_user_uid: "{{ _configured_user_uid.matches | map(attribute='uid') }}"
+
+        - name: debug configured user id's as list
+          ansible.builtin.debug:
+            var: _current_user_uid
+            verbosity: 1
+
+        - name: set nextuid from user id's
+          ansible.builtin.set_fact:
+            _current_nextuid: "{{ (_current_user_uid | max | int) + 1 }}"
+
 - name: set configured users as empty list
   ansible.builtin.set_fact:
     _current_user: []
   when: _configured_user_count.count | int == 0
 
-- name: get current nextuid from saved xml
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: /opnsense/system/nextuid
-    content: text
-  register: _current_nextuid_matches
-
-- name: extract current nextuid
-  ansible.builtin.set_fact:
-    _current_nextuid: "{{ _current_nextuid_matches.matches[0]['nextuid'] | int }}"
-
-- name: debug current nextuid from saved xml
+- name: debug current nextuid
   ansible.builtin.debug:
     var: _current_nextuid
     verbosity: 1
