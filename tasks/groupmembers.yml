@@ -1,5 +1,10 @@
 ---
 
+# required for loop in test
+- name: groups - set vars to sane state
+  ansible.builtin.set_fact:
+    configuredmemberlist: []
+
 - name: groups - count members from xml
   delegate_to: localhost
   community.general.xml:
