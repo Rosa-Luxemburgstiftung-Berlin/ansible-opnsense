@@ -139,9 +139,4 @@
     verbosity: 1
   when: opn_user_from_ldap is defined and opn_user_from_ldap
 
-- name: debug opn_nextid
-  ansible.builtin.debug:
-    var: opn_nextid
-    verbosity: 1
-
 ...

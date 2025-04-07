@@ -39,11 +39,6 @@ opn_user_from_ldap: []
 {% endfor %}
 {% endfor %}
 
-{% if ns.nextuid != (_current_nextuid | int) %}
-opn_nextid:
-  nextuid: {{ ns.nextuid }}
-{% endif %}
-
 {% if opn_sync_users_from_ldap_remove_vanished and ns.vanishedusers %}
 opn_unset:
 {{ opn_unset | default([]) | to_nice_yaml(indent=2) | indent(2, true) }}
