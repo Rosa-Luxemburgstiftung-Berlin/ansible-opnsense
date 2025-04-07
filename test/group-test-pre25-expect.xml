@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+    <group>
+      <gid>1999</gid>
+      <name>admins</name>
+      <scope>system</scope>
+      <description>System Administrators</description>
+      <priv>page-all</priv>
+      <member>0</member>
+    </group>
+    <group>
+      <name>g2</name>
+      <gid>2001</gid>
+      <description>group two</description>
+      <member>2000</member>
+      <member>2001</member>
+    </group>
+  </system>
+</opnsense>
