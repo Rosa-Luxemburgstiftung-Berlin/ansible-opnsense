@@ -17,6 +17,7 @@
 #       - key: shell
 #         value: /usr/local/bin/bash
 #
+# opn_group is handeled in tasks/group.yml
 # opn_group:
 #   - name: admins
 #     settings:
