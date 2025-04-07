@@ -67,6 +67,7 @@
         - dyndns
         - nut
         - user
+        - group
       when:
         - test | default(_testtask) == _testtask
     - ansible.builtin.meta: flush_handlers
