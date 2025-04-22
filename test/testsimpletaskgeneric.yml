@@ -34,13 +34,13 @@
 
 - name: "register diff between result and expected state for {{ _test }} due to failed cmp ..."
   ansible.builtin.command: "diff -Naur '{{ local_config_path }}' '{{ _test }}-expect.xml'"
-  register: diff
+  register: _diff
   failed_when: false
   when: cmp.rc > 0
 
 - name: "print diff between result and expected state for {{ _test }} due to failed cmp ..."
   debug:
-    var: diff.stdout_lines
+    var: _diff.stdout_lines
   when: cmp.rc > 0
 
 - name: "fail due to diff between result and expected state for {{ _test }}"
