@@ -2,11 +2,84 @@
 ---
 
 # definition:
+# connections cfg
+# see opn_Swanctl_defaults var too!
+# opn_ipsec:
+#   enable: 1  # set to 0 to disable ipsec and explicit to 1 do enable a disabled ipsec service
+# opn_Swanctl:
+#   Connections:
+#     $uuid$:
+#       enabled: 1
+#       description: s2s tunnel to nowhere
+#       ...
+#   locals:
+#     $uuid$:
+#       connection: connection-uuid
+#       auth: pubkey
+#       ...
+#   remotes:
+#     $uuid$:
+#       enabled: 1
+#       connection: connection-uuid
+#       ...
+#   children:
+#     $uuid$:
+#       enabled: 1
+#       connection: connection-uuid
+#       ...
+#   Pools:
+#     $uuid$:
+#       enabled: 1
+#       name: SwimmingPool
+#       addrs: 10.11.12.0/24
+#       dns: 1.1.1.1,8.8.8.8
+#   VTIs: # Virtual Tunnel Interfaces
+#     $uuid$:
+#       enabled: 1
+#       reqid: ...
+#   SPDs: # Security Policy Database
+#     $uuid$:
+#       reqid: ...
+# opn_IPsec:
+#   general:
+#     # enable: 1  # ? will this be the replacement for opn_ipsec.enable ?
+#     preferred_oldsa: 0
+#     disablevpnrules: 0
+#     passthrough_networks:
+#   charon:
+#     threads: 16
+#     ikesa_table_size: 32
+#     syslog:
+#       daemon:
+#         log_level: 1
+#   keyPairs:
+#      $uuid$:  # keyPair
+#       name: testkey
+#       keyType: rsa
+#       publicKey: |
+#         -----BEGIN PUBLIC KEY-----
+#         ...
+#       privateKey: |
+#         -----BEGIN PRIVATE KEY-----
+#         ...
+#       keySize: 4096
+#       keyFingerprint: aa:bb:...
+#   preSharedKeys:
+#     $uuid$:  #  preSharedKey
+#       ident: hq.vpn.example.org
+#       remote_ident: remote.vpn.example.org
+#       keyType: PSK
+#       Key: Sup3rC@l1fragilistic3xpialidocious
+#       description: you know it or not
+#
+# ...
+# legacy tunnel cfg
+# deprecated!
 # opn_ipsec:
 #   enable: 1  # set to 0 to disable ipsec and explicit to 1 do enable a disabled ipsec service
 #   ipsec_asn: 1
 #   ipsec_chd: 1
-#   ... # other globalsettings like passthrough_networks, ...
+#   ... # other global settings like passthrough_networks, ...
 #   ikeids: # dict: ikeid is the key !
 #     1:
 #       phase1: # dict
@@ -76,6 +149,7 @@
   when:
     - item.key == 'enable' and item.value|int != 1
 
+# legacy tunnel settings
 - name: IPSec loop ikeids for phase1 ...
   ansible.builtin.include_tasks: ipsecphase1.yml
   vars:
