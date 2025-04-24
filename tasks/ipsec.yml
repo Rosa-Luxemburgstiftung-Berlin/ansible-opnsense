@@ -122,7 +122,7 @@
 #         ...
 # ...
 
-- name: IPSec settings
+- name: ipsec settings
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -136,7 +136,7 @@
     - item.key != 'ikeids'
     - not (item.key == 'enable' and item.value|int != 1)
 
-- name: IPSec disable
+- name: ipsec disable
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -150,7 +150,7 @@
     - item.key == 'enable' and item.value|int != 1
 
 # legacy tunnel settings
-- name: IPSec loop ikeids for phase1 ...
+- name: ipsec legacy tunnel - loop ikeids for phase1 ...
   ansible.builtin.include_tasks: ipsecphase1.yml
   vars:
     ikeid: "{{ ikeids.key }}"

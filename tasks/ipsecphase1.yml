@@ -1,7 +1,7 @@
 # vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
 ---
 
-- name: "IPSec ike phase1 for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase1 for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -15,7 +15,7 @@
     - not item.key == 'encryption-algorithm'
     - not (item.key == 'disabled' and item.value|int != 1)
 
-- name: "IPSec ike phase1 for ikeid {{ ikeid }} enable"
+- name: "IPSec ike legacy tunnel - phase1 for ikeid {{ ikeid }} enable"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -28,7 +28,7 @@
   when:
     - item.key == 'disabled' and item.value|int != 1
 
-- name: "IPSec ike phase1 encryption-algorithm for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase1 encryption-algorithm for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -39,7 +39,7 @@
   with_dict:
     - "{{ ipsecphasevar.phase1['encryption-algorithm'] | default({}) }}"
 
-- name: "IPSec ike phase2 count ..."
+- name: "IPSec ike legacy tunnel - phase2 count ..."
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -51,7 +51,7 @@
     var: phase2_count
     verbosity: 1
 
-- name: "IPSec ike phase2 : check {{ uniqid }} ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 : check {{ uniqid }} ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -65,7 +65,7 @@
     var: phase2ikeiduniqid_count
     verbosity: 1
 
-- name: "IPSec ike phase2 set uniqid for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 set uniqid for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -78,7 +78,7 @@
   when: item.count == 0
   with_items: "{{ phase2ikeiduniqid_count.results }}"
 
-- name: "loop IPSec ike phase2 for ikeid {{ ikeid }}"
+- name: "loop IPSec ike legacy tunnel - phase2 for ikeid {{ ikeid }}"
   ansible.builtin.include_tasks: ipsecphase2.yml
   vars:
     uniqid: "{{ p2.key }}"
@@ -88,7 +88,7 @@
   loop_control:
     loop_var: p2
 
-- name: "IPSec ike phase2 search configured uniqid for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 search configured uniqid for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -96,7 +96,7 @@
     content: text
   register: phase2ikeiduniqid_all
 
-- name: "IPSec ike phase2 cleanup for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 cleanup for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
