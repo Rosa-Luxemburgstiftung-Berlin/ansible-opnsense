@@ -1,0 +1,14 @@
+---
+
+#  handle IPsec sections settings
+
+- name: IPsec section {{ __ipsec_section }} uuid {{ __uuid }}
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/IPsec/{{ __ipsec_section }}/{{ __ipsec_section_listname }}[@uuid='{{ __uuid }}']/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: restart ipsec
+  with_dict: "{{ __uuidsettings }}"
+
