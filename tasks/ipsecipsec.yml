@@ -1,0 +1,12 @@
+---
+
+#  handle IPsec sections
+
+- name: IPsec section {{ __ipsec_section }}
+  ansible.builtin.include_tasks: ipsecipsecsection.yml
+  vars:
+    __uuid: "{{ __ipsec_section_settings_elem.key }}"
+    __uuidsettings: "{{ (opn_IPsec_defaults[__ipsec_section][__ipsec_section_listname] | default({})) | combine(__ipsec_section_settings_elem.value) }}"  # noqa yaml[line-length]
+  with_dict: "{{ __ipsec_section_settings }}"
+  loop_control:
+    loop_var: __ipsec_section_settings_elem
