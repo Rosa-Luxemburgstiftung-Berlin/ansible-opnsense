@@ -71,6 +71,89 @@ opn_cron_jobs_defaults:
   who: root
   parameters:
 
+# Swanctl section name -> list section name
+opn_Swanctl_sections:
+  Connections: Connection
+  locals: local
+  remotes: remote
+  children: child
+  Pools: Pool
+  VTIs: VTI
+  SPDs: SPD
+# IPsec section name -> list section name
+opn_IPsec_sections:
+  keyPairs: keyPair
+  preSharedKeys: preSharedKey
+# Swanctl defaults
+opn_Swanctl_defaults:
+  Connections:
+    Connection:
+      enabled: 1
+      proposals: default
+      unique: 'no'
+      aggressive: 0
+      version: 0
+      mobike: 1
+      local_addrs:
+      local_port: # 500 is default if empty
+      remote_addrs:
+      remote_port: # 500 is default if empty
+      encap: 0
+      reauth_time:
+      rekey_time:
+      over_time:
+      dpd_delay:
+      dpd_timeout:
+      pools:
+      send_certreq: 1
+      send_cert:
+      keyingtries:
+      description:
+  locals:
+    local:
+      enabled: 1
+  remotes:
+    remote:
+      enabled: 1
+  children:
+    child:
+      enabled: 1
+  Pools:
+    Pool:
+      enabled: 1
+      name:
+      addrs:
+      dns:
+  VTIs:
+    VTI:
+      enabled: 1
+      reqid:
+      local:
+      remote:
+      tunnel_local:
+      tunnel_remote:
+      tunnel_local2:
+      tunnel_remote2:
+      description:
+  SPDs:
+    SPD:
+      enabled: 1
+      protocol: esp
+      reqid:
+      connection_child:
+      source:
+      destination:
+      description:
+# IPsec defaults
+opn_IPsec_defaults:
+  preSharedKeys:
+    preSharedKey:
+      ident:
+      remote_ident:
+      keyType: PSK
+      Key:
+      description:
+
 #######################
 # sync user from ldap #
 #######################
