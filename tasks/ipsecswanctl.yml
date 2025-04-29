@@ -1,0 +1,12 @@
+---
+
+#  handle Swanctl sections
+
+- name: Swanctl section {{ __swanctl_section }}
+  ansible.builtin.include_tasks: ipsecswanctlsection.yml
+  vars:
+    __uuid: "{{ __swanctl_section_settings_elem.key }}"
+    __uuidsettings: "{{ (opn_Swanctl_defaults[__swanctl_section][__swanctl_section_listname] | default({})) | combine(__swanctl_section_settings_elem.value) }}"  # noqa yaml[line-length]
+  with_dict: "{{ __swanctl_section_settings }}"
+  loop_control:
+    loop_var: __swanctl_section_settings_elem

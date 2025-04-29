@@ -1,0 +1,14 @@
+---
+
+#  handle Swanctl sections settings
+
+- name: Swanctl section {{ __swanctl_section }} uuid {{ __uuid }}
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/Swanctl/{{ __swanctl_section }}/{{ __swanctl_section_listname }}[@uuid='{{ __uuid }}']/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: restart ipsec
+  with_dict: "{{ __uuidsettings }}"
+
