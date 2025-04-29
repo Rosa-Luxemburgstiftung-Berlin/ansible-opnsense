@@ -160,4 +160,72 @@
   loop_control:
     loop_var: ikeids
 
+# new connection settings
+- name: IPsec general settings
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/IPsec/general/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: restart ipsec
+  with_dict: "{{ opn_IPsec['general'] }}"
+  when:
+    - opn_IPsec is defined and opn_IPsec
+    - opn_IPsec['general'] is defined and opn_IPsec['general']
+
+- name: IPsec charon settings
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/IPsec/charon/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: restart ipsec
+  with_dict: "{{ opn_IPsec['charon'] }}"
+  when:
+    - opn_IPsec is defined and opn_IPsec
+    - opn_IPsec['charon'] is defined and opn_IPsec['charon']
+    - not item.key == 'syslog'
+
+- name: IPsec charon syslog daemon settings
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/OPNsense/IPsec/charon/syslog/daemon/{{ item.key }}"
+    value: "{{ item.value }}"
+    pretty_print: true
+  notify: restart ipsec
+  with_dict: "{{ opn_IPsec['charon']['syslog']['daemon'] }}"
+  when:
+    - opn_IPsec is defined and opn_IPsec
+    - opn_IPsec['charon'] is defined and opn_IPsec['charon']
+    - opn_IPsec['charon']['syslog']['daemon'] and opn_IPsec['charon']['syslog']['daemon']
+
+- name: IPsec uuid sections ...
+  ansible.builtin.include_tasks: ipsecipsec.yml
+  vars:
+    __ipsec_section: "{{ __ipsec_section_loop.key }}"
+    __ipsec_section_listname: "{{ __ipsec_section_loop.value }}"
+    __ipsec_section_settings: "{{ opn_IPsec[__ipsec_section] }}"
+  with_dict: "{{ opn_IPsec_sections }}"
+  loop_control:
+    loop_var: __ipsec_section_loop
+  when:
+    - opn_IPsec is defined and opn_IPsec
+    - opn_IPsec[__ipsec_section] is defined and opn_IPsec[__ipsec_section]
+
+- name: Swanctl ...
+  ansible.builtin.include_tasks: ipsecswanctl.yml
+  vars:
+    __swanctl_section: "{{ __swanctl_section_loop.key }}"
+    __swanctl_section_listname: "{{ __swanctl_section_loop.value }}"
+    __swanctl_section_settings: "{{ opn_Swanctl[__swanctl_section] }}"
+  with_dict: "{{ opn_Swanctl_sections }}"
+  loop_control:
+    loop_var: __swanctl_section_loop
+  when:
+    - opn_Swanctl is defined and opn_Swanctl
+    - opn_Swanctl[__swanctl_section] is defined and opn_Swanctl[__swanctl_section]
+
 ...
