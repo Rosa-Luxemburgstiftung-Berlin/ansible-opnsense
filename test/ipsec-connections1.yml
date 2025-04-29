@@ -1,0 +1,38 @@
+---
+opn_ipsec:
+  enable: 1
+
+opn_IPsec:
+  general:
+    disablevpnrules: 1
+  preSharedKeys:
+    c793c879-7330-4ffa-bd37-41c1872e10f1:
+      ident: hq.vpn.example.org
+      remote_ident: remote.vpn.example.org
+      Key: Sup3rC@l1fragilistic3xpialidocious
+      description: you know it or not
+
+opn_Swanctl:
+  Connections:
+    e8f74a7d-38b4-4c22-8cde-655c4cd530f3:
+      proposals: default
+      local_addrs: 1.2.3.4
+      remote_addrs: 8.7.6.5
+      pools: radius,91a5b6cb-44e5-4808-8e90-febf1a910767
+      description: test swan con
+  Pools:
+    91a5b6cb-44e5-4808-8e90-febf1a910767:
+      enabled: 1
+      name: SwimmingPool
+      addrs: 10.11.12.0/24
+      dns: 1.1.1.1,8.8.8.8
+  VTIs:
+    a26941f2-ce91-46fe-b416-fd3ca218b9d8:
+      reqid: 123
+      tunnel_local: 10.10.10.10
+      tunnel_remote: 10.11.11.11
+  SPDs:
+    793e3e60-1744-4dd4-a772-e251e92d17aa:
+      reqid: 123
+      source: 1.2.3.4
+      description: test SPD

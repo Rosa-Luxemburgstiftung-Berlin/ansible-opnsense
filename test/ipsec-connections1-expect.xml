@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+  </system>
+  <OPNsense>
+    <IPsec version="1.0.3">
+      <general>
+        <enabled/>
+        <preferred_oldsa>0</preferred_oldsa>
+        <disablevpnrules>1</disablevpnrules>
+        <passthrough_networks/>
+      </general>
+      <charon>
+        <max_ikev1_exchanges/>
+        <threads>16</threads>
+        <ikesa_table_size>32</ikesa_table_size>
+        <ikesa_table_segments>4</ikesa_table_segments>
+        <init_limit_half_open>1000</init_limit_half_open>
+        <ignore_acquire_ts>1</ignore_acquire_ts>
+        <make_before_break/>
+        <retransmit_tries/>
+        <retransmit_timeout/>
+        <retransmit_base/>
+        <retransmit_jitter/>
+        <retransmit_limit/>
+        <syslog>
+          <daemon>
+            <ike_name>1</ike_name>
+            <log_level>0</log_level>
+            <app>1</app>
+            <asn>1</asn>
+            <cfg>1</cfg>
+            <chd>1</chd>
+            <dmn>1</dmn>
+            <enc>1</enc>
+            <esp>1</esp>
+            <ike>1</ike>
+            <imc>1</imc>
+            <imv>1</imv>
+            <job>1</job>
+            <knl>1</knl>
+            <lib>1</lib>
+            <mgr>1</mgr>
+            <net>1</net>
+            <pts>1</pts>
+            <tls>1</tls>
+            <tnc>1</tnc>
+          </daemon>
+        </syslog>
+      </charon>
+      <keyPairs/>
+      <preSharedKeys>
+        <preSharedKey uuid="c793c879-7330-4ffa-bd37-41c1872e10f1">
+          <ident>hq.vpn.example.org</ident>
+          <remote_ident>remote.vpn.example.org</remote_ident>
+          <keyType>PSK</keyType>
+          <Key>Sup3rC@l1fragilistic3xpialidocious</Key>
+          <description>you know it or not</description>
+        </preSharedKey>
+      </preSharedKeys>
+    </IPsec>
+    <Swanctl version="1.0.0">
+      <Connections>
+        <Connection uuid="e8f74a7d-38b4-4c22-8cde-655c4cd530f3">
+          <enabled>1</enabled>
+          <proposals>default</proposals>
+          <unique>no</unique>
+          <aggressive>0</aggressive>
+          <version>0</version>
+          <mobike>1</mobike>
+          <local_addrs>1.2.3.4</local_addrs>
+          <local_port/>
+          <remote_addrs>8.7.6.5</remote_addrs>
+          <remote_port/>
+          <encap>0</encap>
+          <reauth_time/>
+          <rekey_time/>
+          <over_time/>
+          <dpd_delay/>
+          <dpd_timeout/>
+          <pools>radius,91a5b6cb-44e5-4808-8e90-febf1a910767</pools>
+          <send_certreq>1</send_certreq>
+          <send_cert/>
+          <keyingtries/>
+          <description>test swan con</description>
+        </Connection>
+      </Connections>
+      <locals/>
+      <remotes/>
+      <children/>
+      <Pools>
+        <Pool uuid="91a5b6cb-44e5-4808-8e90-febf1a910767">
+          <enabled>1</enabled>
+          <name>SwimmingPool</name>
+          <addrs>10.11.12.0/24</addrs>
+          <dns>1.1.1.1,8.8.8.8</dns>
+        </Pool>
+      </Pools>
+      <VTIs>
+        <VTI uuid="a26941f2-ce91-46fe-b416-fd3ca218b9d8">
+          <enabled>1</enabled>
+          <reqid>123</reqid>
+          <local/>
+          <remote/>
+          <tunnel_local>10.10.10.10</tunnel_local>
+          <tunnel_remote>10.11.11.11</tunnel_remote>
+          <tunnel_local2/>
+          <tunnel_remote2/>
+          <description/>
+        </VTI>
+      </VTIs>
+      <SPDs>
+        <SPD uuid="793e3e60-1744-4dd4-a772-e251e92d17aa">
+          <enabled>1</enabled>
+          <protocol>esp</protocol>
+          <reqid>123</reqid>
+          <connection_child/>
+          <source>1.2.3.4</source>
+          <destination/>
+          <description>test SPD</description>
+        </SPD>
+      </SPDs>
+    </Swanctl>
+  </OPNsense>
+  <ipsec>
+    <enable>1</enable>
+  </ipsec>
+</opnsense>
