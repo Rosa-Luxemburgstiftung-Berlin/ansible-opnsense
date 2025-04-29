@@ -11,4 +11,3 @@
     pretty_print: true
   notify: restart ipsec
   with_dict: "{{ __uuidsettings }}"
-
