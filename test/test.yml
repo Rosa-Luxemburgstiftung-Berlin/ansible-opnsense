@@ -68,6 +68,7 @@
         - nut
         - user
         - group
+        - ca
       when:
         - test | default(_testtask) == _testtask
     - ansible.builtin.meta: flush_handlers
