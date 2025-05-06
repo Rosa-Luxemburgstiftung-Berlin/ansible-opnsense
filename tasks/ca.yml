@@ -127,6 +127,79 @@
 # certificates #
 ################
 
+- name: check if we have a old legacy xml with certificates without uuid attribute
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/cert[not(@uuid)]/refid
+    count: true
+  register: _configured_old_cert_count
+  when: opn_certs is defined and opn_certs
+
+- name: apply uuid to certificates without uuid attribute
+  when:
+    - opn_certs is defined and opn_certs
+    - _configured_old_cert_count.count | int > 0
+  block:
+
+    - name: read configured certificates without uuid attribute from saved cfg
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: /opnsense/cert[not(@uuid)]/refid
+        content: text
+      register: _configured_old_cert
+
+    - name: add uuid attribute to certificates without uuid attribute
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: "/opnsense/cert[refid/text()='{{ item.refid }}']"
+        attribute: uuid
+        value: "{{ item.uuid | default(item.refid | to_uuid) }}"
+      when:
+        - item.refid is defined
+        - item.refid in (_configured_old_cert.matches | map(attribute='refid'))
+      with_items:
+        - "{{ opn_certs | default([]) }}"
+
+- name: check if we have configured certificates with uuid in saved xml
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/cert[@uuid]/refid
+    count: true
+  register: _configured_cert_count
+  when: opn_certs is defined and opn_certs
+
+- name: get uuid for certificates from saved cfg
+  when:
+    - opn_certs is defined and opn_certs
+    - _configured_cert_count.count | int > 0
+  block:
+
+    - name: read configured certificates from saved cfg
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: /opnsense/cert[@uuid]/refid
+        content: text
+      register: _configured_cert
+
+    - name: read uuid for configured certificates from saved cfg
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: "/opnsense/cert[refid/text()='{{ item }}']"
+        content: attribute
+      register: _configured_cert_uuid
+      with_items: "{{ _configured_cert.matches | map(attribute='refid') }}"
+
+    - name: construct map of configured certificates with uuid
+      ansible.builtin.set_fact:
+        _configured_cert2uuid: "{{ (_configured_cert_uuid | default({})) | combine({item['item']: item['matches'][0]['cert']['uuid']}) }}"
+      with_items: "{{ _configured_cert_uuid.results }}"
+
 - name: certificates
   delegate_to: localhost
   community.general.xml:
