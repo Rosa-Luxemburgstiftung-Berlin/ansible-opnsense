@@ -1,0 +1,80 @@
+---
+# test if result are the same if we use lookup vs. direct value/b64_value definition
+
+opn_cas:
+  - refid: 27eb5c28c8b65
+    settings:
+      - key: descr
+        value: ca.zero-sys.net
+      - key: crt
+        b64_value: |-
+          -----BEGIN CERTIFICATE-----
+          MIIFPzCCBCegAwIBAgIUGorZKffuEKtpTdVR/01bT5RuohwwDQYJKoZIhvcNAQEN
+          BQAwgYAxCzAJBgNVBAYTAkRFMQ8wDQYDVQQIEwZCZXJsaW4xDzANBgNVBAcTBkJl
+          cmxpbjEVMBMGA1UEChMMemVyby1zeXMubmV0MRgwFgYDVQQDEw9jYS56ZXJvLXN5
+          cy5uZXQxHjAcBgkqhkiG9w0BCQEWD2NhQHplcm8tc3lzLm5ldDAeFw0yMzEyMTgx
+          MjQxNTlaFw00ODEyMTExMjQxNTlaMIGAMQswCQYDVQQGEwJERTEPMA0GA1UECBMG
+          QmVybGluMQ8wDQYDVQQHEwZCZXJsaW4xFTATBgNVBAoTDHplcm8tc3lzLm5ldDEY
+          MBYGA1UEAxMPY2EuemVyby1zeXMubmV0MR4wHAYJKoZIhvcNAQkBFg9jYUB6ZXJv
+          LXN5cy5uZXQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDbWBODUjdJ
+          KEoxXt28RTrB7ToVB7qjR5kbVjweoD0Yz628L2MqWN1mYamPnuhTMnLfuc2oEbCu
+          w4VDWvi/wwALrFzslGCCX3hdWODq/R59dwWgwXX5cpY0yDxTcm4Ekn4QMhUuJJa4
+          gcUQ0VHDabk7MOCsY7jyG4NUDMb5WE5rjbkVhUVMwfQaTJwZ2itdGnRi5oXZPJZo
+          ze3Bsq/zm/BE0o+3HMsJ2diaBDqVKRzcNWogJzww1pScOPCHIb+xgChA64v+tGOs
+          KWaq+lhssk8C/p0wA6xg4kanDdMq/17vq6qJA0dbC7Zwh7SR+zPaS/5Il8LnKfKU
+          9rfRryA5T263AgMBAAGjggGtMIIBqTAdBgNVHQ4EFgQUuZmtdWcWhdjywhYAm141
+          V1gTztQwgcAGA1UdIwSBuDCBtYAUuZmtdWcWhdjywhYAm141V1gTztShgYakgYMw
+          gYAxCzAJBgNVBAYTAkRFMQ8wDQYDVQQIEwZCZXJsaW4xDzANBgNVBAcTBkJlcmxp
+          bjEVMBMGA1UEChMMemVyby1zeXMubmV0MRgwFgYDVQQDEw9jYS56ZXJvLXN5cy5u
+          ZXQxHjAcBgkqhkiG9w0BCQEWD2NhQHplcm8tc3lzLm5ldIIUGorZKffuEKtpTdVR
+          /01bT5RuohwwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYwMQYJYIZI
+          AYb4QgEEBCQWImh0dHA6Ly9jcmwuY2EuemVyby1zeXMubmV0L2NybC5wZW0wMwYD
+          VR0fBCwwKjAooCagJIYiaHR0cDovL2NybC5jYS56ZXJvLXN5cy5uZXQvY3JsLnBl
+          bTA8BggrBgEFBQcBAQQwMC4wLAYIKwYBBQUHMAGGIGh0dHA6Ly9vY3NwLmNhLnpl
+          cm8tc3lzLm5ldDo4MDgxMA0GCSqGSIb3DQEBDQUAA4IBAQAQkxvy9ujTm+VQULEf
+          4ddB7uDkxBffSUDdWR5N4Mv1tG0JCWnY0d0rFBDDVw7G7SfqzCeo7xrTQNRGTgs9
+          3M1FQDt2TE4ebtrE4rYKMk/8dhI+GAriEExKjEotTmgRWJohMAYPI+6yqZAwzbIh
+          iNNkHNmevwJ+ba3UlEsgy8XR69CywuO1HO81i6XYfv9Uf69w7e9QNiN4dilzUK8+
+          1v9Nvrmq9tvfDvoN2qPJFRc9TDqrWQeVuSFl7WwZsjMD2dLGodtLp8y+xgVBljKD
+          58Qgt5S0CsKdghSPp9ttvxVof4bEr/FmPnVelAEim3YrBIzqzJ3uSkoNXyuG8zr2
+          0nhd
+          -----END CERTIFICATE-----
+
+opn_certs:
+  - refid: 5252c93071d75
+    settings:
+      - key: descr
+        value: nosense.zero-sys.net
+      - key: crt
+        b64_value: |-
+          -----BEGIN CERTIFICATE-----
+          MIIEhDCCA2ygAwIBAgIBAjANBgkqhkiG9w0BAQ0FADCBgDELMAkGA1UEBhMCREUx
+          DzANBgNVBAgTBkJlcmxpbjEPMA0GA1UEBxMGQmVybGluMRUwEwYDVQQKEwx6ZXJv
+          LXN5cy5uZXQxGDAWBgNVBAMTD2NhLnplcm8tc3lzLm5ldDEeMBwGCSqGSIb3DQEJ
+          ARYPY2FAemVyby1zeXMubmV0MB4XDTIzMTIxODEyNTkzNFoXDTI0MTIxNzEyNTkz
+          NFowdDELMAkGA1UEBhMCREUxDzANBgNVBAgTBkJlcmxpbjEVMBMGA1UEChMMemVy
+          by1zeXMubmV0MR0wGwYDVQQDExRub3NlbnNlLnplcm8tc3lzLm5ldDEeMBwGCSqG
+          SIb3DQEJARYPY2FAemVyby1zeXMubmV0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+          MIIBCgKCAQEAzV6p27YFRKXFE5QpI6+Bq+GzhEEqyGgHYH/wwLWojtKFs5bNJaGy
+          YDrWu+CAMBX0qFpl9DLmjgrCVDd6ZAUaRCPChg4xPnJBGzH8WXlrt+Tap6azITnC
+          RCgy545kt8C+Zu7kF3B4svassM6EKCtSMh1xUWSa/8hIjMQEPUpXvdskiC7MPcM/
+          T+1F3zlikhYO/ees9OGZc9MC5QRxqJvInFULOzz6q88XhFrQmKqWFSbdkf48MZ7L
+          ZrI2ajPU489Ktxh6DPq+qKJNx14S/VGcnFLHTvZS00On4VY0MFRu8Ma3H9haXxPU
+          MoSG1vNyS9w6hhNdeLQQ8O33oXcnyKYfEwIDAQABo4IBEjCCAQ4wDAYDVR0TAQH/
+          BAIwADALBgNVHQ8EBAMCBeAwHwYDVR0RBBgwFoIUbm9zZW5zZS56ZXJvLXN5cy5u
+          ZXQwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMDMGA1UdHwQsMCowKKAm
+          oCSGImh0dHA6Ly9jcmwuY2EuemVyby1zeXMubmV0L2NybC5wZW0wPAYIKwYBBQUH
+          AQEEMDAuMCwGCCsGAQUFBzABhiBodHRwOi8vb2NzcC5jYS56ZXJvLXN5cy5uZXQ6
+          ODA4MTAdBgNVHQ4EFgQUBq6CayTHV9L5P7gQTL6UtXZJZq0wHwYDVR0jBBgwFoAU
+          uZmtdWcWhdjywhYAm141V1gTztQwDQYJKoZIhvcNAQENBQADggEBADhYUUTL8/f5
+          ml97zGdU4Io2IWOopAg962p3t7JXi7UidMqEFOva9Xp5trP1H0HIvCJVqGArybYH
+          5ssukIlCrqKETTzJM2VWViEZoXiYyEBW/oTiygHHvyEnsyzFgR68vrXEoNQIX2c0
+          zJ3NgsUV1VLK3PO3BHjv56TwPoRWStpOQABdoB+vwMCHwwhfsnGECVpJ95H7UMPy
+          kNg/rq7HZbRQlKPZb4Q5DH9M+xv34n2S4QdZ16HSO4rwD/LtTMh28jREy3rDA7B9
+          g5IIUrxy4LD7OfzuqBNr+xi5tVQ36UgAf2bAyyXeef7yQMSXE27qDlKONVqi2gD+
+          lFYzdudfzYY=
+          -----END CERTIFICATE-----
+      - key: prv
+        value: "{{ lookup('file', 'nosense.zero-sys.net.key') | b64encode }}"
+      - key: caref
+        value: 27eb5c28c8b65
