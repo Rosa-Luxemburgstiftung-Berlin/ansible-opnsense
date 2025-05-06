@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+  </system>
+  <OPNsense>
+    <IPsec version="1.0.3">
+      <general>
+        <enabled/>
+        <preferred_oldsa>0</preferred_oldsa>
+        <disablevpnrules>0</disablevpnrules>
+        <passthrough_networks/>
+      </general>
+      <charon>
+        <max_ikev1_exchanges/>
+        <threads>16</threads>
+        <ikesa_table_size>32</ikesa_table_size>
+        <ikesa_table_segments>4</ikesa_table_segments>
+        <init_limit_half_open>1000</init_limit_half_open>
+        <ignore_acquire_ts>1</ignore_acquire_ts>
+        <make_before_break/>
+        <retransmit_tries/>
+        <retransmit_timeout/>
+        <retransmit_base/>
+        <retransmit_jitter/>
+        <retransmit_limit/>
+        <syslog>
+          <daemon>
+            <ike_name>1</ike_name>
+            <log_level>0</log_level>
+            <app>1</app>
+            <asn>1</asn>
+            <cfg>1</cfg>
+            <chd>1</chd>
+            <dmn>1</dmn>
+            <enc>1</enc>
+            <esp>1</esp>
+            <ike>1</ike>
+            <imc>1</imc>
+            <imv>1</imv>
+            <job>1</job>
+            <knl>1</knl>
+            <lib>1</lib>
+            <mgr>1</mgr>
+            <net>1</net>
+            <pts>1</pts>
+            <tls>1</tls>
+            <tnc>1</tnc>
+          </daemon>
+        </syslog>
+      </charon>
+      <keyPairs/>
+      <preSharedKeys/>
+    </IPsec>
+    <Swanctl version="1.0.0">
+      <Connections/>
+      <locals/>
+      <remotes/>
+      <children/>
+      <Pools/>
+      <VTIs/>
+      <SPDs/>
+    </Swanctl>
+  </OPNsense>
+  <ipsec>
+    <enable>1</enable>
+  </ipsec>
+</opnsense>

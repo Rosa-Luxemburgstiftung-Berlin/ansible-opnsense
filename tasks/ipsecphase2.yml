@@ -1,7 +1,7 @@
 # vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
 ---
 
-- name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -18,7 +18,7 @@
     - not item.key == 'hash-algorithm-options'
     - not (item.key == 'disabled' and item.value|int == 0)
 
-- name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }} enable"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} for ikeid {{ ikeid }} enable"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -31,7 +31,7 @@
   when:
     - item.key == 'disabled' and item.value|int == 0
 
-- name: "IPSec ike phase2 {{ uniqid }} localid for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} localid for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -42,7 +42,7 @@
   with_dict:
     - "{{ ipsecphasevar2[uniqid].localid | default({}) }}"
 
-- name: "IPSec ike phase2 {{ uniqid }} remoteid for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} remoteid for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -53,7 +53,7 @@
   with_dict:
     - "{{ ipsecphasevar2[uniqid].remoteid | default({}) }}"
 
-- name: "IPSec ike phase2 {{ uniqid }} count encryption-algorithm-options for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} count encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -66,7 +66,7 @@
     var: eao_count
     verbosity: 1
 
-- name: "IPSec ike phase2 {{ uniqid }} get defined encryption-algorithm-options for ikeid {{ ikeid }} from xml"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} get defined encryption-algorithm-options for ikeid {{ ikeid }} from xml"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -81,7 +81,7 @@
     verbosity: 1
   when: eao_matches is defined
 
-- name: "IPSec ike phase2 {{ uniqid }} get defined list of encryption-algorithm-options for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} get defined list of encryption-algorithm-options for ikeid {{ ikeid }}"
   ansible.builtin.set_fact:
     eao_list: "{{ eao_matches.matches | list | map(attribute='name') | list | flatten }}"
   when:
@@ -94,7 +94,7 @@
     verbosity: 1
   when: eao_list is defined
 
-- name: "IPSec ike phase2 {{ uniqid }} get encryption-algorithm-options for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} get encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -111,13 +111,13 @@
     verbosity: 1
   when: encalgopt is defined
 
-- name: "IPSec ike phase2 {{ uniqid }} check reset of encryption-algorithm-options for ikeid {{ ikeid }} (1)"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} check reset of encryption-algorithm-options for ikeid {{ ikeid }} (1)"
   ansible.builtin.set_fact:
     encalgopt_reset: true
   when:
     - eao_count.count != (ipsecphasevar2[uniqid]['encryption-algorithm-options'] | length)
 
-- name: "IPSec ike phase2 {{ uniqid }} check reset of encryption-algorithm-options for ikeid {{ ikeid }} (2)"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} check reset of encryption-algorithm-options for ikeid {{ ikeid }} (2)"
   ansible.builtin.set_fact:
     encalgopt_reset: true
   when:
@@ -131,7 +131,7 @@
     verbosity: 1
   when: encalgopt_reset is defined
 
-- name: "IPSec ike phase2 {{ uniqid }} reset encryption-algorithm-options for ikeid {{ ikeid }} ..."
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} reset encryption-algorithm-options for ikeid {{ ikeid }} ..."
   delegate_to: localhost
   # debugger: on_failed
   community.general.xml:
@@ -143,7 +143,7 @@
   when:
     - encalgopt_reset | default(false)
 
-- name: "IPSec ike phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }}"  # noqa jinja[spacing]
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }}"  # noqa jinja[spacing]
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -157,7 +157,7 @@
     pretty_print: true
   when: encalgopt_reset | default(false)
 
-- name: "IPSec ike phase2 {{ uniqid }} encryption-algorithm-options for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -169,7 +169,7 @@
     - "{{ ipsecphasevar2[uniqid]['encryption-algorithm-options'] | default([]) }}"
   when: item.keylen is defined
 
-- name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }} : get hash-algorithm-option count"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} for ikeid {{ ikeid }} : get hash-algorithm-option count"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -177,7 +177,7 @@
     count: true
   register: hashalgopt_count
 
-- name: "IPSec ike phase2 {{ uniqid }} for ikeid {{ ikeid }} : get hash-algorithm-option elements"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} for ikeid {{ ikeid }} : get hash-algorithm-option elements"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -224,7 +224,7 @@
     verbosity: 1
   when: change_hashalgopt is defined
 
-- name: "IPSec ike phase2 {{ uniqid }} reset hash-algorithm-options for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} reset hash-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
   # debugger: on_failed
   community.general.xml:
@@ -238,7 +238,7 @@
     - hashalgopt is defined
     - hashalgopt.matches is defined
 
-- name: "IPSec ike phase2 {{ uniqid }} hash-algorithm-options for ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} hash-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
