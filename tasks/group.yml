@@ -16,7 +16,7 @@
 
 - name: ensure required facts are available
   ansible.builtin.fail:
-    msg: opnsense group handling requires role ansible-opnsense-factse
+    msg: opnsense group handling requires role ansible-opnsense-facts
   when:
     - ansible_local.opnsense.core.product_version is not defined
     - opn_group is defined and opn_group
