@@ -2,6 +2,10 @@
 # ca / cert definitions
 # see test/ca-test*.yml for examples
 
+#######
+# CAs #
+#######
+
 - name: check if we have a old legacy xml with CAs without uuid attribute
   delegate_to: localhost
   community.general.xml:
@@ -98,7 +102,7 @@
     - "{{ opn_cas | default([]) }}"
   when: item.refid is defined
 
-- name: b64 ca fields
+- name: b64 CAs fields
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
@@ -118,6 +122,10 @@
     xpath: /opnsense/ca[not(node())]
     state: absent
   when: opn_cas | default([]) | length > 0
+
+################
+# certificates #
+################
 
 - name: certificates
   delegate_to: localhost
