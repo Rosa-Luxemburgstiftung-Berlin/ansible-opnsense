@@ -76,7 +76,7 @@
 
     - name: construct map of configured CAs with uuid
       ansible.builtin.set_fact:
-        _configured_ca2uuid: "{{ (_configured_ca_uuid | default({})) | combine({item['item']: item['matches'][0]['ca']['uuid']}) }}"
+        _configured_ca2uuid: "{{ (_configured_ca2uuid | default({})) | combine({item['item']: item['matches'][0]['ca']['uuid']}) }}"
       with_items: "{{ _configured_ca_uuid.results }}"
 
 - name: CAs - certificate authorities
@@ -197,14 +197,14 @@
 
     - name: construct map of configured certificates with uuid
       ansible.builtin.set_fact:
-        _configured_cert2uuid: "{{ (_configured_cert_uuid | default({})) | combine({item['item']: item['matches'][0]['cert']['uuid']}) }}"
+        _configured_cert2uuid: "{{ (_configured_cert2uuid | default({})) | combine({item['item']: item['matches'][0]['cert']['uuid']}) }}"
       with_items: "{{ _configured_cert_uuid.results }}"
 
 - name: certificates
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/cert[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
+    xpath: "/opnsense/cert[@uuid='{{ item.0.uuid | default(_configured_cert_uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -212,11 +212,22 @@
     - settings
   when: item.1.value is defined
 
+- name: certificates refid
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/cert[@uuid='{{ item.uuid | default(_configured_cert_uuid[item.refid]) | default(item.refid | to_uuid) }}']/refid"
+    value: "{{ item.refid }}"
+    pretty_print: true
+  with_items:
+    - "{{ opn_certs | default([]) }}"
+  when: item.refid is defined
+
 - name: b64 certificate fields
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/cert[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
+    xpath: "/opnsense/cert[@uuid='{{ item.0.uuid | default(_configured_cert_uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: true
   with_subelements:
