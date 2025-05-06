@@ -1,4 +1,6 @@
 ---
+# ca / cert definitions
+# see test/ca-test*.yml for examples
 
 - name: CAs - certificate authorities
   delegate_to: localhost
