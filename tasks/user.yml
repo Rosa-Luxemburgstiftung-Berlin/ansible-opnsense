@@ -28,7 +28,7 @@
 
 - name: ensure required facts are available
   ansible.builtin.fail:
-    msg: opnsense user handling requires role ansible-opnsense-factse
+    msg: opnsense user handling requires role ansible-opnsense-facts
   when:
     - ansible_local.opnsense.core.product_version is not defined
     - opn_user is defined and opn_user
