@@ -2,6 +2,42 @@
 # ca / cert definitions
 # see test/ca-test*.yml for examples
 
+- name: check if we have a old legacy xml with CAs without uuid attribute
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/ca[not(@uuid)]/refid
+    count: true
+  register: _configured_old_ca_count
+  when: opn_cas is defined and opn_cas
+
+- name: apply uuid to CAs without uuid attribute
+  when:
+    - opn_cas is defined and opn_cas
+    - _configured_old_ca_count.count | int > 0
+  block:
+
+    - name: read configured CAs without uuid attribute from saved cfg
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: /opnsense/ca[not(@uuid)]/refid
+        content: text
+      register: _configured_old_ca
+
+    - name: add uuid attribute to CAs without uuid attribute
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: "/opnsense/ca[refid/text()='{{ item.refid }}']"
+        attribute: uuid
+        value: "{{ item.uuid | default(item.refid | to_uuid) }}"
+      when:
+        - item.refid is defined
+        - item.refid in (_configured_old_ca.matches | map(attribute='refid'))
+      with_items:
+        - "{{ opn_cas | default([]) }}"
+
 - name: check if we have configured CAs with uuid in saved xml
   delegate_to: localhost
   community.general.xml:
@@ -9,9 +45,11 @@
     xpath: /opnsense/ca[@uuid]/refid
     count: true
   register: _configured_ca_count
+  when: opn_cas is defined and opn_cas
 
 - name: get uuid for CAs from saved cfg
   when:
+    - opn_cas is defined and opn_cas
     - _configured_ca_count.count | int > 0
   block:
 
