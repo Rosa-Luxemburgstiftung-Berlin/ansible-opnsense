@@ -2,11 +2,46 @@
 # ca / cert definitions
 # see test/ca-test*.yml for examples
 
+- name: check if we have configured CAs with uuid in saved xml
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: /opnsense/ca[@uuid]/refid
+    count: true
+  register: _configured_ca_count
+
+- name: get uuid for CAs from saved cfg
+  when:
+    - _configured_ca_count.count | int > 0
+  block:
+
+    - name: read configured CAs from saved cfg
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: /opnsense/ca[@uuid]/refid
+        content: text
+      register: _configured_ca
+
+    - name: read uuid for configured CAs from saved cfg
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: "/opnsense/ca[refid/text()='{{ item }}']"
+        content: attribute
+      register: _configured_ca_uuid
+      with_items: "{{ _configured_ca.matches | map(attribute='refid') }}"
+
+    - name: construct map of configured CAs with uuid
+      ansible.builtin.set_fact:
+        _configured_ca2uuid: "{{ (_configured_ca_uuid | default({})) | combine({item['item']: item['matches'][0]['ca']['uuid']}) }}"
+      with_items: "{{ _configured_ca_uuid.results }}"
+
 - name: CAs - certificate authorities
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/ca[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
+    xpath: "/opnsense/ca[@uuid='{{ item.0.uuid | default(_configured_ca2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -14,18 +49,28 @@
     - settings
   when: item.1.value is defined
 
+- name: CAs - certificate authorities refid
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/ca[@uuid='{{ item.uuid | default(_configured_ca2uuid[item.refid]) | default(item.refid | to_uuid) }}']/refid"
+    value: "{{ item.refid }}"
+    pretty_print: true
+  with_items:
+    - "{{ opn_cas | default([]) }}"
+  when: item.refid is defined
+
 - name: b64 ca fields
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/ca[refid/text()='{{ item.0.refid }}']/{{ item.1.key }}"
+    xpath: "/opnsense/ca[@uuid='{{ item.0.uuid | default(_configured_ca2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_cas | default([]) }}"
     - settings
   when: item.1.b64_value is defined
-
 
 # remove the default empty <ca/> node remains after configuring the first one
 - name: CAs - remove default empty node
