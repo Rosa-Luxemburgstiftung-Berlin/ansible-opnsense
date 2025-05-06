@@ -1,5 +1,45 @@
 ---
 # test if result are the same if we use lookup vs. direct value/b64_value definition
+
+opn_cas:
+  - refid: 27eb5c28c8b65
+    settings:
+      - key: descr
+        value: ca.zero-sys.net
+      - key: crt
+        b64_value: |-
+          -----BEGIN CERTIFICATE-----
+          MIIFPzCCBCegAwIBAgIUGorZKffuEKtpTdVR/01bT5RuohwwDQYJKoZIhvcNAQEN
+          BQAwgYAxCzAJBgNVBAYTAkRFMQ8wDQYDVQQIEwZCZXJsaW4xDzANBgNVBAcTBkJl
+          cmxpbjEVMBMGA1UEChMMemVyby1zeXMubmV0MRgwFgYDVQQDEw9jYS56ZXJvLXN5
+          cy5uZXQxHjAcBgkqhkiG9w0BCQEWD2NhQHplcm8tc3lzLm5ldDAeFw0yMzEyMTgx
+          MjQxNTlaFw00ODEyMTExMjQxNTlaMIGAMQswCQYDVQQGEwJERTEPMA0GA1UECBMG
+          QmVybGluMQ8wDQYDVQQHEwZCZXJsaW4xFTATBgNVBAoTDHplcm8tc3lzLm5ldDEY
+          MBYGA1UEAxMPY2EuemVyby1zeXMubmV0MR4wHAYJKoZIhvcNAQkBFg9jYUB6ZXJv
+          LXN5cy5uZXQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDbWBODUjdJ
+          KEoxXt28RTrB7ToVB7qjR5kbVjweoD0Yz628L2MqWN1mYamPnuhTMnLfuc2oEbCu
+          w4VDWvi/wwALrFzslGCCX3hdWODq/R59dwWgwXX5cpY0yDxTcm4Ekn4QMhUuJJa4
+          gcUQ0VHDabk7MOCsY7jyG4NUDMb5WE5rjbkVhUVMwfQaTJwZ2itdGnRi5oXZPJZo
+          ze3Bsq/zm/BE0o+3HMsJ2diaBDqVKRzcNWogJzww1pScOPCHIb+xgChA64v+tGOs
+          KWaq+lhssk8C/p0wA6xg4kanDdMq/17vq6qJA0dbC7Zwh7SR+zPaS/5Il8LnKfKU
+          9rfRryA5T263AgMBAAGjggGtMIIBqTAdBgNVHQ4EFgQUuZmtdWcWhdjywhYAm141
+          V1gTztQwgcAGA1UdIwSBuDCBtYAUuZmtdWcWhdjywhYAm141V1gTztShgYakgYMw
+          gYAxCzAJBgNVBAYTAkRFMQ8wDQYDVQQIEwZCZXJsaW4xDzANBgNVBAcTBkJlcmxp
+          bjEVMBMGA1UEChMMemVyby1zeXMubmV0MRgwFgYDVQQDEw9jYS56ZXJvLXN5cy5u
+          ZXQxHjAcBgkqhkiG9w0BCQEWD2NhQHplcm8tc3lzLm5ldIIUGorZKffuEKtpTdVR
+          /01bT5RuohwwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYwMQYJYIZI
+          AYb4QgEEBCQWImh0dHA6Ly9jcmwuY2EuemVyby1zeXMubmV0L2NybC5wZW0wMwYD
+          VR0fBCwwKjAooCagJIYiaHR0cDovL2NybC5jYS56ZXJvLXN5cy5uZXQvY3JsLnBl
+          bTA8BggrBgEFBQcBAQQwMC4wLAYIKwYBBQUHMAGGIGh0dHA6Ly9vY3NwLmNhLnpl
+          cm8tc3lzLm5ldDo4MDgxMA0GCSqGSIb3DQEBDQUAA4IBAQAQkxvy9ujTm+VQULEf
+          4ddB7uDkxBffSUDdWR5N4Mv1tG0JCWnY0d0rFBDDVw7G7SfqzCeo7xrTQNRGTgs9
+          3M1FQDt2TE4ebtrE4rYKMk/8dhI+GAriEExKjEotTmgRWJohMAYPI+6yqZAwzbIh
+          iNNkHNmevwJ+ba3UlEsgy8XR69CywuO1HO81i6XYfv9Uf69w7e9QNiN4dilzUK8+
+          1v9Nvrmq9tvfDvoN2qPJFRc9TDqrWQeVuSFl7WwZsjMD2dLGodtLp8y+xgVBljKD
+          58Qgt5S0CsKdghSPp9ttvxVof4bEr/FmPnVelAEim3YrBIzqzJ3uSkoNXyuG8zr2
+          0nhd
+          -----END CERTIFICATE-----
+
 opn_certs:
   - refid: 5252c93071d75
     settings:
