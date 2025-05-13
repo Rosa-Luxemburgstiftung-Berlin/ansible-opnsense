@@ -106,9 +106,13 @@
 
 # ipsec
 - name: restart ipsec  # noqa no-changed-when
-  ansible.builtin.command: configctl ipsec reload  # restart is available too
+  ansible.builtin.command: "{{ item }}"
   listen:
     - restart ipsec
+  with_items:
+    - configctl interface invoke registration
+    - pluginctl plugins_configure ipsec
+    - configctl ipsec reload  # restart is available too
   when:
     - config is defined
     - config.changed | bool
