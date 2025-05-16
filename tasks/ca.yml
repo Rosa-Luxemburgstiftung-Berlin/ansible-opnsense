@@ -204,7 +204,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/cert[@uuid='{{ item.0.uuid | default(_configured_cert_uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
+    xpath: "/opnsense/cert[@uuid='{{ item.0.uuid | default(_configured_cert2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ item.1.value }}"
     pretty_print: true
   with_subelements:
@@ -216,7 +216,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/cert[@uuid='{{ item.uuid | default(_configured_cert_uuid[item.refid]) | default(item.refid | to_uuid) }}']/refid"
+    xpath: "/opnsense/cert[@uuid='{{ item.uuid | default(_configured_cert2uuid[item.refid]) | default(item.refid | to_uuid) }}']/refid"
     value: "{{ item.refid }}"
     pretty_print: true
   with_items:
@@ -227,7 +227,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: "/opnsense/cert[@uuid='{{ item.0.uuid | default(_configured_cert_uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
+    xpath: "/opnsense/cert[@uuid='{{ item.0.uuid | default(_configured_cert2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: true
   with_subelements:
