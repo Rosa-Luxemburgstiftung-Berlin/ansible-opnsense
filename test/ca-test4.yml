@@ -1,0 +1,20 @@
+---
+
+# test preserver uuids from xml
+
+opn_cas:
+  - refid: 27eb5c28c8b65
+    settings:
+      - key: descr
+        value: ca.zero-sys.net test
+
+opn_certs:
+  - refid: 5252c93071d75
+    settings:
+      - key: descr
+        value: nosense.zero-sys.net test
+  - refid: 5b837999d38a5
+    uuid: 9b873d1c-4f72-493e-b235-41083b22c729
+    settings:
+      - key: descr
+        value: test1.zero-sys.net test
