@@ -20,6 +20,14 @@
     _listsort: "[{% for i in item.1.list %}'{{ i }}',{% endfor %}]"
   when: _listsortresult.failed | bool
 
+- name: check var _listsort
+  ansible.builtin.assert:
+    that:
+      - _listsort is not string
+      - _listsort is not mapping
+      - _listsort is iterable
+  when: _listsort is defined
+
 - name: set multivalue alias
   delegate_to: localhost
   community.general.xml:
