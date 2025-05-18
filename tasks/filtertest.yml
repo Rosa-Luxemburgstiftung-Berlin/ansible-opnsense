@@ -15,7 +15,9 @@
 
 - name: filter definitions from xml ...
   ansible.builtin.set_fact:
-    _foundcheckelements: "[ {% for e in _checkelementscount.results %}{% if e['count'] | int == 1 %}'{{ e['_checkelements'] }}',{% endif %}{% endfor %} ]"
+    _foundcheckelements: "{{ (_foundcheckelements3 | default([])) + [item._checkelements] }}"
+  with_items: "{{ _checkelementscount.results }}"
+  when: item.count | int > 0
 
 - name: check var _foundcheckelements
   ansible.builtin.assert:
