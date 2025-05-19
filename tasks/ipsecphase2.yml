@@ -143,18 +143,24 @@
   when:
     - encalgopt_reset | default(false)
 
-- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }}"  # noqa jinja[spacing]
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']"
-    add_children: "[
-      {% for eao in ipsecphasevar2[uniqid]['encryption-algorithm-options'] -%}
-        '<encryption-algorithm-option><name>{{ eao.name }}</name></encryption-algorithm-option>',
-      {%- endfor %}
-      ]"
-    input_type: xml
-    pretty_print: true
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }}"  # noqa key-order[task]
+  block:
+    - name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }} ... define"  # noqa jinja[spacing]
+      ansible.builtin.set_fact:
+        encalgopt_children: "[
+        {% for eao in ipsecphasevar2[uniqid]['encryption-algorithm-options'] -%}
+          '<encryption-algorithm-option><name>{{ eao.name }}</name></encryption-algorithm-option>',
+        {%- endfor %}
+        ]"
+    - name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }} ... apply"
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']"
+        add_children: "{{ encalgopt_children }}"
+        input_type: xml
+        pretty_print: true
+  when: encalgopt_reset | default(false)
 
 - name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} encryption-algorithm-options for ikeid {{ ikeid }}"
   delegate_to: localhost
