@@ -48,7 +48,7 @@
     - name: include default vars
       ansible.builtin.include_vars:
         file: ../defaults/main.yml
-    - name: "simple task test {{ _testtask }} ..."
+    - name: simple task test ...
       ansible.builtin.include_tasks: testsimpletask.yml
       loop_control:
         label: "{{ _testtask }}"
