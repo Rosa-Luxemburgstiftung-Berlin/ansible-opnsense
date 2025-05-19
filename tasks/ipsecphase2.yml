@@ -152,6 +152,12 @@
           '<encryption-algorithm-option><name>{{ eao.name }}</name></encryption-algorithm-option>',
         {%- endfor %}
         ]"
+    - name: check encalgopt_children
+      ansible.builtin.assert:
+        that:
+          - encalgopt_children is not string
+          - encalgopt_children is not mapping
+          - encalgopt_children is iterable
     - name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }} ... apply"
       delegate_to: localhost
       community.general.xml:
