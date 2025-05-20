@@ -14,7 +14,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/sysctl/item[tunable/text()='{{ item[0].tunable }}']/{{ item[1] }}"
-    value: "{{ item[0][item[1]] }}"
+    value: "{{ (item[0][item[1]] == None) | ternary(item[0][item[1]], (item[0][item[1]] | string)) }}"
     pretty_print: true
   when: item[1] in item[0].keys()
   with_nested:
