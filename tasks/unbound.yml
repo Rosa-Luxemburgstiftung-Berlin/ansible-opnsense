@@ -82,6 +82,6 @@
   with_items:
     - present
     - absent
-  when: _unbound_settings is changed or _unbound_settings_uuid is changed
+  when: (_unbound_settings is defined and _unbound_settings is changed) or (_unbound_settings_uuid is defined and _unbound_settings_uuid is changed)
 
 ...
