@@ -4,7 +4,7 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/OPNsense/ZabbixAgent/userparameters/userparameter[@uuid='{{ uuid }}']/id
+    xpath: "/opnsense/OPNsense/ZabbixAgent/userparameters/userparameter[@uuid='{{ uuid }}']/id"
     value: "{{ uuid }}"
     pretty_print: true
   notify: restart zabbix agent
@@ -13,8 +13,8 @@
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
-    xpath: /opnsense/OPNsense/ZabbixAgent/userparameters/userparameter[@uuid='{{ uuid }}']/{{ item.key }}
-    value: "{{ item.value }}"
+    xpath: "/opnsense/OPNsense/ZabbixAgent/userparameters/userparameter[@uuid='{{ uuid }}']/{{ item.key }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart zabbix agent
   with_dict:

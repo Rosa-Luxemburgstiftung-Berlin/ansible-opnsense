@@ -31,7 +31,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/ZabbixAgent/local/{{ item.key }}
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart zabbix agent
   with_dict: "{{ opn_zabbixagent.local | default({}) }}"
@@ -41,7 +41,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/ZabbixAgent/settings/main/{{ item.key }}
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart zabbix agent
   with_dict: "{{ opn_zabbixagent.settings.main | default({}) }}"
@@ -51,7 +51,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/ZabbixAgent/settings/tuning/{{ item.key }}
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart zabbix agent
   with_dict: "{{ opn_zabbixagent.settings.tuning | default({}) }}"
@@ -61,7 +61,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/ZabbixAgent/settings/features/{{ item.key }}
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart zabbix agent
   with_dict: "{{ opn_zabbixagent.settings.features | default({}) }}"
