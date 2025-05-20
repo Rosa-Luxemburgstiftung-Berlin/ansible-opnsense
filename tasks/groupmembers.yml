@@ -13,19 +13,29 @@
     count: true
   register: membercount
 
-- name: groups - get current members
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: "/opnsense/system/group[name/text()='{{ group.name }}']/member"
-    content: text
-  register: configured_members
+- name: groups - handle current members
   when: membercount.count > 0
+  block:
+    - name: groups - get current members
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: "/opnsense/system/group[name/text()='{{ group.name }}']/member"
+        content: text
+      register: configured_members
 
-- name: groups - map current members
-  ansible.builtin.set_fact:
-    configuredmemberlist: "{{ configured_members.matches | map(attribute='member') }}"
-  when: membercount.count > 0
+    - name: groups - map current members
+      ansible.builtin.set_fact:
+        configuredmemberlist: "{{ configured_members.matches | map(attribute='member') }}"
+
+    - name: debug configured_members
+      ansible.builtin.debug:
+        var: configured_members
+        verbosity: 1
+    - name: debug configuredmemberlist
+      ansible.builtin.debug:
+        var: configuredmemberlist
+        verbosity: 1
 
 - name: groups - get requested members
   ansible.builtin.set_fact:
@@ -37,14 +47,6 @@
         {% endfor %}
       ]"
 
-- name: debug configured_members
-  ansible.builtin.debug:
-    var: configured_members
-    verbosity: 1
-- name: debug configuredmemberlist
-  ansible.builtin.debug:
-    var: configuredmemberlist
-    verbosity: 1
 - name: debug requestedmemberlist
   ansible.builtin.debug:
     var: requestedmemberlist
