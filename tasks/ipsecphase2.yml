@@ -150,7 +150,7 @@
         encalgopt_children: []
     - name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }} ... define"  # noqa jinja[spacing]
       ansible.builtin.set_fact:
-        encalgopt_children: "{{ encalgopt_children + ['<encryption-algorithm-option><name>' ~ item.name ~ '</name></encryption-algorithm-option>'] }}" 
+        encalgopt_children: "{{ encalgopt_children + ['<encryption-algorithm-option><name>' ~ item.name ~ '</name></encryption-algorithm-option>'] }}"
       with_items: "{{ ipsecphasevar2[uniqid]['encryption-algorithm-options'] }}"
     - name: check encalgopt_children
       ansible.builtin.assert:
