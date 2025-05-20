@@ -6,7 +6,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/dhcpd/{{ item.0.if }}/{{ item.1.key }}
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   notify: restart dhcpd
   with_subelements:
@@ -125,7 +125,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/dhcpd/{{ item.0.if }}/numberoptions/item[number/text()='{{ item.1.number }}']/value"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   notify: restart dhcpd
   with_subelements:
@@ -138,7 +138,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/dhcpd/{{ item.0.if }}/staticmap[mac/text()='{{ item.0.mac }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   notify: restart dhcpd
   with_subelements:
