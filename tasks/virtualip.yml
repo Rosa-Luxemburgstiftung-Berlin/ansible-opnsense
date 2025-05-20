@@ -4,7 +4,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/virtualip/vip[vhid/text()='{{ item.1 }}']/{{ item.0.key }}"
-    value: "{{ item.0.value }}"
+    value: "{{ (item.0.value == None) | ternary(item.0.value, (item.0.value | string)) }}"
     pretty_print: true
   notify: reconfigure vips
   with_subelements:
@@ -16,7 +16,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/virtualip/vip[vhid/text()='{{ item.0.vhid }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   notify: reconfigure vips
   with_subelements:
@@ -28,7 +28,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/virtualip/vip[interface/text()='{{ item.0.interface }}' and subnet/text()='{{ item.0.subnet }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   notify: reconfigure vips
   with_subelements:
