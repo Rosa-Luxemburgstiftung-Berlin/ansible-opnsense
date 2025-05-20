@@ -8,14 +8,14 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/unboundplus/{{ unboundplussection }}/{{ item.key }}"
-    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
+    value: "{{ (item.value == None) | ternary('', (item.value | string)) }}"
     pretty_print: true
   register: _unbound_settings
   notify: "{{ (unboundplussection == 'dnsbl') | ternary('update dnsbl', 'reconfig unbound') }}"
   with_dict: "{{ (opn_unboundplus_uuid_sections_defaults[unboundplussection] | default({})) | combine(unboundplussectionsettings) }}"
   when:
     - unboundplussectionsettings is defined
-    - unboundplussection not in opn_unboundplus_uuid_sections.keys() or item.value is string
+    - unboundplussection not in opn_unboundplus_uuid_sections.keys() or item.value is string or item.value == None
 
 - name: unboundplus uuid settings for {{ unboundplussection }}
   ansible.builtin.include_tasks: unboundplusuuid.yml
