@@ -48,13 +48,7 @@
 
 - name: groups - get requested members
   ansible.builtin.set_fact:
-    requestedmemberlist: "[
-        {% for kvdict in group.settings %}
-          {% if kvdict.key == 'member' %}
-            '{{ kvdict.value }}',
-          {% endif %}
-        {% endfor %}
-      ]"
+    requestedmemberlist: "{{ group.settings | selectattr('key', 'equalto', 'member') | map(attribute='value') }}"
 
 - name: assert sane state of requestedmemberlist var ...
   ansible.builtin.assert:
@@ -83,7 +77,7 @@
     path: "{{ local_config_path }}"
     xpath: "/opnsense/system/group[name/text()='{{ group.name }}']"
     add_children:
-      - member: "{{ item }}"
+      - member: "{{ item | string }}"
     pretty_print: true
   with_items: "{{ requestedmemberlist }}"
   when: configuredmemberlist | default([]) != requestedmemberlist
