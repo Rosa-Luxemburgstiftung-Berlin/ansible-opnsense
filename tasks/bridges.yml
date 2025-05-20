@@ -4,7 +4,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/bridges/bridged[descr/text()='{{ item.0.descr }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_bridges }}"
