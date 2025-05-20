@@ -84,7 +84,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ca[@uuid='{{ item.0.uuid | default(_configured_ca2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_cas | default([]) }}"
@@ -205,7 +205,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/cert[@uuid='{{ item.0.uuid | default(_configured_cert2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_certs | default([]) }}"
