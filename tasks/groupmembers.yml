@@ -28,6 +28,15 @@
       ansible.builtin.set_fact:
         configuredmemberlist: "{{ configured_members.matches | map(attribute='member') }}"
 
+    - name: assert VARs related to configured members are sane ...
+      ansible.builtin.assert:
+        that:
+          - configured_members is not string
+          - configured_members is mapping
+          - configuredmemberlist is not string
+          - configuredmemberlist is not mapping
+          - configuredmemberlist is iterable
+
     - name: debug configured_members
       ansible.builtin.debug:
         var: configured_members
