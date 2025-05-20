@@ -82,6 +82,7 @@
   with_items:
     - present
     - absent
+  changed_when: false
   when: (_unbound_settings is defined and _unbound_settings is changed) or (_unbound_settings_uuid is defined and _unbound_settings_uuid is changed)
 
 ...
