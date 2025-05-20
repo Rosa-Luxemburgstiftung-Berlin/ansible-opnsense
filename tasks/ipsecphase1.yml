@@ -51,7 +51,7 @@
     var: phase2_count
     verbosity: 1
 
-- name: "IPSec ike legacy tunnel - phase2 : check {{ uniqid }} ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 : check uniqid for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
