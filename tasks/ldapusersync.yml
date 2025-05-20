@@ -170,7 +170,7 @@
 
 - name: append ldap users to opn users
   ansible.builtin.set_fact:
-    opn_user: "{{ opn_user | default([]) + opn_user_from_ldap }}"
+    opn_user: "{{ (opn_user | default([])) + (opn_user_from_ldap | default([])) }}"
   when:
     - opn_user_from_ldap is defined
     - opn_user_from_ldap | length > 0
