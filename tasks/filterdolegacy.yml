@@ -15,7 +15,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/filter/rule[descr/text()='{{ _filter.descr }}']/{{ _filtersettings.key }}"
-    value: "{% if _filtersettings.key in opn_sort_values.filter | default([]) %}{{ _filtersettings.value.split(',') | sort | join(',') }}{% else %}{{ _filtersettings.value }}{% endif %}"  # noqa yaml[line-length]
+    value: "{% if _filtersettings.key in opn_sort_values.filter | default([]) %}{{ _filtersettings.value.split(',') | sort | join(',') }}{% else %}{{ _filtersettings.value | string }}{% endif %}"  # noqa yaml[line-length]
     pretty_print: true
   with_items:
     - "{{ _filter.settings }}"
