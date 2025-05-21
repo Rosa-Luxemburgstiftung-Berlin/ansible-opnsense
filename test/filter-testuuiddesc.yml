@@ -1,0 +1,17 @@
+---
+
+test_name: check if updating by uuid and descr works
+
+opn_filter:
+  - descr: rule one
+    settings:
+      - key: category
+        value: BLOCK
+      - key: log
+        value: 0
+  - uuid: 82d2c290-d2c5-4059-a445-85c0895e1497
+    settings:
+      - key: category
+        value: BLOCK
+      - key: log
+        value: 0
