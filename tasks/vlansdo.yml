@@ -5,7 +5,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/vlans/vlan[tag/text()='{{ _vlan.tag }}']/{{ _vlansettings.key }}"
-    value: "{{ _vlansettings.value }}"
+    value: "{{ _vlansettings.value | string }}"
     pretty_print: true
   notify: reconfigure vlans
   with_items:
