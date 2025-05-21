@@ -21,6 +21,44 @@ Currently these are:
  * 24.10
  * 24.7
 
+## Supported Opnsense Features
+
+The ansible role covers the following features / settings:
+
+ * **fetch** fetch the xml config to local device
+ * **ldapusersync** [see wiki article](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/wiki/ldapsync) 
+ * **configd** create your own configd actions
+ * **dnsserver** configure the DNS settings for the opnsense device
+ * **dyndns** configure dyndns
+ * **user** configure users for the opnsense device
+ * **group** configure groups and membership
+ * **general** configure general settings like hostname, WebGUI settings, etc.
+ * **sysctl** configure sysctl tunables
+ * **authservers** configure authentication servers like LDAP, Active Directory, radius, ...
+ * **ca** configure trust settings (ca, certificates, ...)
+ * **openvpn** configure opnevpn service (instance and legacy server supported)
+ * **ipsec** configure IPsec service (connections and legacy tunnel supported)
+ * **wireguard** configute wireguard service
+ * **laggs** configure link aggregation / bonding
+ * **vlans** configure VLANs
+ * **interfaces** configure interfaces
+ * **bridges** configure bridges
+ * **virtualip** configure virtual IPs
+ * **alias** configure aliases
+ * **filter** configure firewall filter rules
+ * **nat** configure NAT rules
+ * **gateways** configure gateways
+ * **staticroutes** configure routes
+ * **hasync** configure HA settings
+ * **dhcpd** configure ISC DHCP server
+ * **unbound** configure unbound DNS server
+ * **syslog** configure syslog settings
+ * **monit** configure monit
+ * **haproxy** configure haproxy
+ * **cron** configure cron jobs
+ * **nut** configure nut UPS
+ * **zabbix** configure zabbix agent
+
 ## Requirements
 
 * OPNsense firewall with shell access
