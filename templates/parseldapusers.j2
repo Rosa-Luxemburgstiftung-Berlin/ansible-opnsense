@@ -1,0 +1,28 @@
+#jinja2: lstrip_blocks: True
+---
+# vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent
+
+{% if _ldbsearch.stdout_lines | length < 4 %}
+_opnldapusers: []
+{% else %}
+_opnldapusers:
+{% for line in _ldbsearch.stdout_lines %}
+  {% if line.startswith('# record ') %}
+  -   
+  {% elif (line | trim) == '' %}
+  # end of record
+  {% elif not (line.startswith('dn: ') or line.startswith('#')) %}
+    {% for uf, lf in opn_sync_users_ldap_fields.items() %}
+      {% if line.startswith(lf~': ') %}
+        {% set ns = namespace(ufval = line | replace(lf~': ', '')) %}
+        {% if uf in opn_sync_users_ldap_fields_jinja2regexreplace.keys() %}
+    {% for regs, regr in opn_sync_users_ldap_fields_jinja2regexreplace[uf].items() %}
+      {% set ns.ufval = ns.ufval | regex_replace(regs, regr) %}
+    {%  endfor %}
+        {% endif %}
+    {{ uf }}: {{ ns.ufval }}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% endif %}

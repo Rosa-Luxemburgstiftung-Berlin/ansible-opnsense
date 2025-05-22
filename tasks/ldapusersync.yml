@@ -40,35 +40,36 @@
     var: _ldbsearch
     verbosity: 1
 
-- name: parse ldbsearch result
-  ansible.builtin.set_fact:
-    _opnldapusers: |
-                    [
-                      {% for line in _ldbsearch.stdout_lines %}
-                        {% if line.startswith('# record ') %}
-                        {
-                        {% elif (line | trim) == '' %}
-                        },
-                        {% elif not (line.startswith('dn: ') or line.startswith('#')) %}
-                          {% for uf, lf in opn_sync_users_ldap_fields.items() %}
-                            {% if line.startswith(lf~': ') %}
-                              {% set ns = namespace(ufval = line | replace(lf~': ', '')) %}
-                              {% if uf in opn_sync_users_ldap_fields_jinja2regexreplace.keys() %}
-                                {% for regs, regr in opn_sync_users_ldap_fields_jinja2regexreplace[uf].items() %}
-                                  {% set ns.ufval = ns.ufval | regex_replace(regs, regr) %}
-                                {%  endfor %}
-                              {% endif %}
-                              "{{ uf }}": "{{ ns.ufval }}",
-                            {% endif %}
-                          {% endfor %}
-                        {% endif %}
-                      {% endfor %}
-                    ]
+- name: parse ldbsearch result to yaml
+  delegate_to: localhost
+  ansible.builtin.template:
+    src: parseldapusers.j2
+    dest: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/opnldapusers-{{ inventory_hostname }}.yml"
+    mode: '0600'
+  changed_when: false
+
+- name: read ldap users
+  ansible.builtin.include_vars:
+    file: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/opnldapusers-{{ inventory_hostname }}.yml"
+
+- name: remove tmp file
+  ansible.builtin.file:
+    path: "{{ lookup('config', 'DEFAULT_LOCAL_TMP') | dirname }}/opnldapusers-{{ inventory_hostname }}.yml"
+    state: absent
+  when: opn_sync_users_ldap_remove_tmp | default(false) | bool
+  changed_when: false
 
 - name: debug _opnldapusers
   ansible.builtin.debug:
     var: _opnldapusers
     verbosity: 1
+
+- name: assert sane state of _opnldapusers var
+  ansible.builtin.assert:
+    that:
+      - _opnldapusers is not string
+      - _opnldapusers is not mapping
+      - _opnldapusers is iterable
 
 - name: check if we have configured users in saved xml
   delegate_to: localhost
