@@ -1,3 +1,4 @@
+#jinja2: lstrip_blocks: True
 # vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
 ---
 
@@ -29,7 +30,7 @@ opn_user_from_ldap: []
         value: {{ ns.nextuid }}
 {% set ns.nextuid = ns.nextuid + 1 %}
 {% else %}
-{% set _ = ns.vanishedusers.remove(user.name) %}
+{% set ns.vanishedusers = ns.vanishedusers | difference([user.name]) %}
 {% endif %}
 {% for k, v in user.items() %}
 {% if k not in ['name', 'uuid'] %}
