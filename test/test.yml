@@ -71,6 +71,17 @@
         - ca
       when:
         - test | default(_testtask) == _testtask
+    - name: special task test ...
+      ansible.builtin.include_tasks: testsimpletask.yml
+      vars:
+        specialtest: true
+      loop_control:
+        label: "{{ _testtask }}"
+        loop_var: _testtask
+      with_items:
+        - ldapsyncsimulate
+      when:
+        - test | default(_testtask) == _testtask
     - ansible.builtin.meta: flush_handlers
     - name: report all tests
       ansible.builtin.debug:
