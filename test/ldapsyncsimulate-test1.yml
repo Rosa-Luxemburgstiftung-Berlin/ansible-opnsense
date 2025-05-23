@@ -1,0 +1,56 @@
+---
+
+ansible_local:
+  opnsense:
+    core:
+      product_version: 25.1
+
+opn_sync_users_from_ldap_remove_vanished: true
+
+opn_sync_users_ldap_fields:
+  name: sAMAccountName
+  descr: cn
+  email: mail
+  uuid: objectGUID
+  otp_seed: extensionAttribute15
+opn_sync_users_ldap_fields_jinja2regexreplace:
+  otp_seed:
+    '#@[-+_.a-zA-Z0-9]*=': ''
+    '&.*': ''
+
+# simulated ldap search
+_ldbsearch:
+  stdout_lines: [
+        "# record 1",
+        "dn: CN=Waits\\, Tom,OU=Music,DC=cool,DC=stuff",
+        "cn: Waits, Tom",
+        "extensionAttribute15: #@phone=123XYZVKQV74R4DPU93OJOVYXZ&,",
+        "mail: tom.waits@cool.stuff",
+        "objectGUID: 0cc1b81a-470c-4d59-961e-7cef0eea72e5",
+        "sAMAccountName: tom.waits",
+        "",
+        "# record 2",
+        "dn: CN=Cave\\, Nick,OU=Music,DC=cool,DC=stuff",
+        "cn: Cave, Nick",
+        "extensionAttribute15: #@nophone=AOHBG7QMOM2KARCS45FGHNC2WA&,se=MG74WZP42I7HABCXSJBAMEDMTY&,",
+        "mail: nick.cave@cool.stuff",
+        "objectGUID: a23141a7-a6f3-4a87-bc16-bc498564b669",
+        "sAMAccountName: nick.cave",
+        "",
+        "# record 3",
+        "dn: CN=Mould\\, Bob,OU=Music,DC=cool,DC=stuff",
+        "cn: Mould, Bob",
+        "extensionAttribute15: #@phone=123YK6VKQV74R4DPU93OJOVYVM&,",
+        "mail: bob.mould@cool.stuff",
+        "objectGUID: 2df842e5-7ed7-4b5d-b3be-f1991811f889",
+        "sAMAccountName: bob.mould",
+        "",
+        "# returned 3 records",
+        "# 3 entries",
+        "# 0 referrals"
+    ]
+
+# we must remove the PW of new user as it will be different on each run
+opn_unset:
+  - system/user[name="bob.mould"]/password
+...
