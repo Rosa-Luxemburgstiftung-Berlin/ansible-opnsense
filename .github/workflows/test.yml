@@ -19,7 +19,7 @@ jobs:
       - name: install requirements
         run: |
           python -m pip install --upgrade pip
-          pip install ansible lxml cryptography
+          pip install ansible lxml cryptography passlib
       - name: debug versions
         run: |
           echo "which python ..."
