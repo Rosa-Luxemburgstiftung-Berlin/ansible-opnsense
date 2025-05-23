@@ -161,6 +161,22 @@
     loop_var: ikeids
 
 # new connection settings
+- name: assert sane state of opn_IPsec var
+  ansible.builtin.assert:
+    that:
+      - opn_IPsec is not string
+      - opn_IPsec is iterable
+      - opn_IPsec is mapping
+  when: opn_IPsec is defined
+
+- name: assert sane state of opn_Swanctl var
+  ansible.builtin.assert:
+    that:
+      - opn_Swanctl is not string
+      - opn_Swanctl is iterable
+      - opn_Swanctl is mapping
+  when: opn_Swanctl is defined
+
 - name: IPsec general settings
   delegate_to: localhost
   community.general.xml:
