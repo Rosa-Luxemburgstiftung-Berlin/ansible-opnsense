@@ -17,7 +17,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/staticroutes/route[descr/text()='{{ item.0.descr }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   notify: configure routing
   with_subelements:

@@ -31,7 +31,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/Syslog/general/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   with_dict: "{{ opn_syslog.general | default({}) }}"
   when: opn_syslog is defined
@@ -41,7 +41,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/Syslog/destinations/destination[@uuid=\"{{ item.0.uuid }}\"]/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_syslog.destinations | default([]) }}"

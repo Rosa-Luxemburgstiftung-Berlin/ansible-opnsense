@@ -1,5 +1,8 @@
+#jinja2: lstrip_blocks: True
 # vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
 ---
+
+# template file needs to be in the task dir in order to be in the search path for the simulation test
 
 {% set ns = namespace() %}
 {% set ns.nextuid= ( _current_nextuid | int) %}
@@ -29,7 +32,7 @@ opn_user_from_ldap: []
         value: {{ ns.nextuid }}
 {% set ns.nextuid = ns.nextuid + 1 %}
 {% else %}
-{% set _ = ns.vanishedusers.remove(user.name) %}
+{% set ns.vanishedusers = ns.vanishedusers | difference([user.name]) %}
 {% endif %}
 {% for k, v in user.items() %}
 {% if k not in ['name', 'uuid'] %}
@@ -41,7 +44,9 @@ opn_user_from_ldap: []
 
 {% if opn_sync_users_from_ldap_remove_vanished and ns.vanishedusers %}
 opn_unset:
-{{ opn_unset | default([]) | to_nice_yaml(indent=2) | indent(2, true) }}
+{% if opn_unset is defined and (opn_unset | length > 0) %}
+{{ opn_unset | to_nice_yaml(indent=2) | indent(2, true) }}
+{% endif %}
 {% for user in ns.vanishedusers %}
   - system/user[name="{{ user }}"]
 {% endfor %}

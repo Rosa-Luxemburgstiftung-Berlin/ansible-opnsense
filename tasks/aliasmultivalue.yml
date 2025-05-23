@@ -9,16 +9,19 @@
   register: _configured_multivalue_alias
   ignore_errors: true  # do not fail if node not exists
 
-- name: check if multivalue list is sortable
-  ansible.builtin.set_fact:
-    _listsort: "{{ item.1.list | sort }}"
-  ignore_errors: true
-  register: _listsortresult
-
+# hackish way to ensure all values are strings
 - name: fix multivalue list for sorting
   ansible.builtin.set_fact:
-    _listsort: "[{% for i in item.1.list %}'{{ i }}',{% endfor %}]"
-  when: _listsortresult.failed | bool
+    _listsort: "{{ item.1.list | join('\n') | split('\n') }}"
+
+- name: check var _listsort
+  ansible.builtin.assert:
+    that:
+      - _listsort is not string
+      - _listsort is not mapping
+      - _listsort is iterable
+      - (_listsort | sort) is iterable  # ensure the list can be sorted
+  when: _listsort is defined
 
 - name: set multivalue alias
   delegate_to: localhost
@@ -29,6 +32,6 @@
     pretty_print: true
   notify: reconfigure aliases
   when:
-    - _configured_multivalue_alias.failed | bool or _configured_multivalue_alias.matches[0][item.1.key].split('\n') | sort != _listsort | sort
+    - (_configured_multivalue_alias.failed | bool) or (( _configured_multivalue_alias.matches[0][item.1.key].split('\n') | sort) != (_listsort | sort))
 
 ...
