@@ -2,6 +2,8 @@
 # vim: tabstop=2 expandtab shiftwidth=2 softtabstop=2 smartindent nu ft=yaml
 ---
 
+# template file needs to be in the task dir in order to be in the search path for the simulation test
+
 {% set ns = namespace() %}
 {% set ns.nextuid= ( _current_nextuid | int) %}
 {% set ns.vanishedusers = _current_user %}
