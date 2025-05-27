@@ -10,7 +10,7 @@ This is the [RLS](https://github.com/Rosa-Luxemburgstiftung-Berlin) detached for
 **As of Oct 5, 2023 this became the main repository, as the original was removed (see [#35](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/issues/35)).**  
 We like to thank [@rudibroekhuizen](https://github.com/rudibroekhuizen) and all other contributors from [@naturalis](https://github.com/naturalis) for their greate work and we are happy to use their contributions as a base for further development.
 
-## Supported Opnsesnse Versions
+## Supported Opnsense Versions
 
 Generally we try to support the current production and the last (legacy) version of the business and community edition.
 
@@ -36,9 +36,9 @@ The ansible role covers the following features / settings:
  * **sysctl** configure sysctl tunables
  * **authservers** configure authentication servers like LDAP, Active Directory, radius, ...
  * **ca** configure trust settings (ca, certificates, ...)
- * **openvpn** configure opnevpn service (instance and legacy server supported)
+ * **openvpn** configure openvpn service (instance and legacy server supported)
  * **ipsec** configure IPsec service (connections and legacy tunnel supported)
- * **wireguard** configute wireguard service
+ * **wireguard** configure wireguard service
  * **laggs** configure link aggregation / bonding
  * **vlans** configure VLANs
  * **interfaces** configure interfaces
@@ -67,7 +67,7 @@ The ansible role covers the following features / settings:
 
 ## Role Variables
 
-We try to provide some example variable definitions in the coresponding task and test (`test/*.yml`) files.
+We try to provide some example variable definitions in the corresponding task and test (`test/*.yml`) files.
 
 
 ## Dependencies
@@ -116,7 +116,7 @@ Become on play level is not needed for XML changes on localhost, only for tasks 
 
   * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-playbook
 
-### Other possible usefull ansible roles related to opnsense
+### Other possible useful ansible roles related to opnsense
 
   * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-facts
   * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-checkmk
