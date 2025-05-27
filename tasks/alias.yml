@@ -55,7 +55,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/Firewall/Alias/aliases/alias[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   notify: reconfigure aliases
   with_subelements:

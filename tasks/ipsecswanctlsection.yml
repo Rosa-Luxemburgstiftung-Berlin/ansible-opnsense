@@ -7,7 +7,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/Swanctl/{{ __swanctl_section }}/{{ __swanctl_section_listname }}[@uuid='{{ __uuid }}']/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart ipsec
   with_dict: "{{ __uuidsettings }}"

@@ -77,7 +77,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/system/group[@uuid='{{ item.0.uuid  | default(_configured_group2uuid[item.0.name]) | default(item.0.name | to_uuid) }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_group | default([]) }}"
@@ -93,7 +93,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/system/group[name/text()='{{ item.0.name }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_group }}"
