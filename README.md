@@ -11,7 +11,7 @@ This is the [RLS](https://github.com/Rosa-Luxemburgstiftung-Berlin) detached for
 **As of Oct 5, 2023 this became the main repository, as the original was removed (see [#35](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/issues/35)).**  
 We like to thank [@rudibroekhuizen](https://github.com/rudibroekhuizen) and all other contributors from [@naturalis](https://github.com/naturalis) for their greate work and we are happy to use their contributions as a base for further development.
 
-## Supported Opnsesnse Versions
+## Supported Opnsense Versions
 
 Generally we try to support the current production and the last (legacy) version of the business and community edition.
 
