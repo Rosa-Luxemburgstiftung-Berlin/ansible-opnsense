@@ -1,5 +1,6 @@
 [![ansible-lint](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/actions/workflows/lint.yml/badge.svg)](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/actions/workflows/lint.yml)
 [![ansible test](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/actions/workflows/test.yml/badge.svg)](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense/actions/workflows/test.yml)
+![Static Badge](https://img.shields.io/badge/ansible_12-ready-green?logo=ansible&labelColor=black)
 
 # ansible-opnsense
 
