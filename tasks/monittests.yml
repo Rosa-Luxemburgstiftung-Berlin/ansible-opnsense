@@ -4,7 +4,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/monit/test[@uuid='{{ uuid }}']/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   with_dict:
     - "{{ testcfg | default({}) }}"

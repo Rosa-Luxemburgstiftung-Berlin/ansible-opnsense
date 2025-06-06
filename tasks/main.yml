@@ -368,6 +368,7 @@
     - opnsense_synclocalaccounts.php
   when:
     - config is defined
+    - config.changed is defined
     - config.changed | bool
 
 - name: sync  # noqa no-handler no-changed-when
@@ -377,7 +378,10 @@
   #   pause: 3
   with_items:
     - configctl filter sync
-  when: config.changed
+  when:
+    - config is defined
+    - config.changed is defined
+    - config.changed | bool
   tags:
     - sync
     - copy
@@ -390,6 +394,9 @@
   with_items:
     - configctl service reload all
     - configctl webgui restart
-  when: config.changed
+  when:
+    - config is defined
+    - config.changed is defined
+    - config.changed | bool
   tags: reload
 ...
