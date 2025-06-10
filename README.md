@@ -37,9 +37,9 @@ The ansible role covers the following features / settings:
  * **sysctl** configure sysctl tunables
  * **authservers** configure authentication servers like LDAP, Active Directory, radius, ...
  * **ca** configure trust settings (ca, certificates, ...)
- * **openvpn** configure opnevpn service (instance and legacy server supported)
+ * **openvpn** configure openvpn service (instance and legacy server supported)
  * **ipsec** configure IPsec service (connections and legacy tunnel supported)
- * **wireguard** configute wireguard service
+ * **wireguard** configure wireguard service
  * **laggs** configure link aggregation / bonding
  * **vlans** configure VLANs
  * **interfaces** configure interfaces
@@ -68,7 +68,7 @@ The ansible role covers the following features / settings:
 
 ## Role Variables
 
-We try to provide some example variable definitions in the coresponding task and test (`test/*.yml`) files.
+We try to provide some example variable definitions in the corresponding task and test (`test/*.yml`) files.
 
 
 ## Dependencies
@@ -117,7 +117,7 @@ Become on play level is not needed for XML changes on localhost, only for tasks 
 
   * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-playbook
 
-### Other possible usefull ansible roles related to opnsense
+### Other possible useful ansible roles related to opnsense
 
   * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-facts
   * https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-opnsense-checkmk
