@@ -13,11 +13,11 @@
     xpath: /opnsense/ca[not(@uuid)]/refid
     count: true
   register: _configured_old_ca_count
-  when: opn_cas is defined and opn_cas
+  when: opn_cas | default([]) | length > 0
 
 - name: apply uuid to CAs without uuid attribute
   when:
-    - opn_cas is defined and opn_cas
+    - opn_cas | default([]) | length > 0
     - _configured_old_ca_count.count | int > 0
   block:
 
@@ -49,11 +49,11 @@
     xpath: /opnsense/ca[@uuid]/refid
     count: true
   register: _configured_ca_count
-  when: opn_cas is defined and opn_cas
+  when: opn_cas | default([]) | length > 0
 
 - name: get uuid for CAs from saved cfg
   when:
-    - opn_cas is defined and opn_cas
+    - opn_cas | default([]) | length > 0
     - _configured_ca_count.count | int > 0
   block:
 
@@ -84,7 +84,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ca[@uuid='{{ item.0.uuid | default(_configured_ca2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_cas | default([]) }}"
@@ -134,11 +134,11 @@
     xpath: /opnsense/cert[not(@uuid)]/refid
     count: true
   register: _configured_old_cert_count
-  when: opn_certs is defined and opn_certs
+  when: opn_certs | default([]) | length > 0
 
 - name: apply uuid to certificates without uuid attribute
   when:
-    - opn_certs is defined and opn_certs
+    - opn_certs | default([]) | length > 0
     - _configured_old_cert_count.count | int > 0
   block:
 
@@ -170,11 +170,11 @@
     xpath: /opnsense/cert[@uuid]/refid
     count: true
   register: _configured_cert_count
-  when: opn_certs is defined and opn_certs
+  when: opn_certs | default([]) | length > 0
 
 - name: get uuid for certificates from saved cfg
   when:
-    - opn_certs is defined and opn_certs
+    - opn_certs | default([]) | length > 0
     - _configured_cert_count.count | int > 0
   block:
 
@@ -205,7 +205,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/cert[@uuid='{{ item.0.uuid | default(_configured_cert2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_certs | default([]) }}"

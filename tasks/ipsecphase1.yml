@@ -6,7 +6,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase1[ikeid/text()='{{ ikeid }}']/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart ipsec
   with_dict:
@@ -33,7 +33,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase1[ikeid/text()='{{ ikeid }}']/encryption-algorithm/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart ipsec
   with_dict:
@@ -51,7 +51,7 @@
     var: phase2_count
     verbosity: 1
 
-- name: "IPSec ike legacy tunnel - phase2 : check {{ uniqid }} ikeid {{ ikeid }}"
+- name: "IPSec ike legacy tunnel - phase2 : check uniqid for ikeid {{ ikeid }}"
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"

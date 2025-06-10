@@ -5,7 +5,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   with_dict: "{{ opn_nat_settings | default([]) }}"
 
@@ -14,7 +14,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/nat/outbound/rule[descr/text()='{{ item.0.descr }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_nat | default([]) }}"
@@ -35,7 +35,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/nat/rule[descr/text()='{{ item.0.descr }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_nat_port_forward | default([]) }}"

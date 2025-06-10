@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <filter>
+    <rule uuid="9963ded8-d431-4315-9bcf-06d912b6b427">
+      <descr>rule one</descr>
+      <type>block</type>
+      <ipprotocol>inet46</ipprotocol>
+      <statetype>none</statetype>
+      <direction>in</direction>
+      <quick>1</quick>
+      <category>BLOCK</category>
+      <floating>yes</floating>
+      <log>0</log>
+      <source>
+        <address>BLOCKLIST_ALL</address>
+      </source>
+      <destination>
+        <any>1</any>
+      </destination>
+    </rule>
+    <rule uuid="82d2c290-d2c5-4059-a445-85c0895e1497">
+      <descr>rule 2</descr>
+      <type>reject</type>
+      <ipprotocol>inet46</ipprotocol>
+      <statetype>none</statetype>
+      <direction>out</direction>
+      <quick>1</quick>
+      <category>BLOCK</category>
+      <floating>yes</floating>
+      <log>0</log>
+      <source>
+        <any>1</any>
+      </source>
+      <destination>
+        <address>BLOCKLIST_ALL</address>
+      </destination>
+    </rule>
+  </filter>
+</opnsense>

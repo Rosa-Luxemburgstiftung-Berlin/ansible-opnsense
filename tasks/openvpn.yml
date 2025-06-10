@@ -153,8 +153,8 @@
       delegate_to: localhost
       community.general.xml:
         path: "{{ local_config_path }}"
-        xpath: /opnsense/openvpn/openvpn-server[vpnid/text()="{{ item.0.vpnid }}"]/{{ item.1.key }}
-        value: "{{ item.1.value }}"
+        xpath: "/opnsense/openvpn/openvpn-server[vpnid/text()='{{ item.0.vpnid }}']/{{ item.1.key }}"
+        value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
         pretty_print: true
       notify: restart openvpn
       with_subelements:
@@ -166,7 +166,7 @@
       delegate_to: localhost
       community.general.xml:
         path: "{{ local_config_path }}"
-        xpath: /opnsense/openvpn/openvpn-server[vpnid/text()="{{ item.0.vpnid }}"]/{{ item.1.key }}
+        xpath: "/opnsense/openvpn/openvpn-server[vpnid/text()='{{ item.0.vpnid }}']/{{ item.1.key }}"
         value: "{{ item.1.b64_value | b64encode }}"
         pretty_print: true
       notify: restart openvpn

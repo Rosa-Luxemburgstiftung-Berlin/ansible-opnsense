@@ -89,7 +89,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/system/user[@uuid='{{ item.0.uuid | default(_configured_user2uuid[item.0.name]) | default(item.0.name | to_uuid) }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_user | default([]) }}"
@@ -119,7 +119,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/system/user[name/text()='{{ item.0.name }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_user | default([]) }}"
@@ -160,7 +160,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/system/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   with_dict: "{{ opn_nextid }}"
   when:

@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+    <user uuid="0de1db79-1588-4996-972a-8c811b66b6cd">
+      <uid>0</uid>
+      <name>root</name>
+      <disabled>0</disabled>
+      <scope>system</scope>
+      <expires/>
+      <authorizedkeys>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFDQVFERFNqV2ZKMWFsVmtUaDl6a0JaaGNVdnFScTRvaU1QMkxBcVRrbnE0d09GbkdsZnl6SWVDc2JYdXdDcERQMU80YTdQY21ESDdpZ3hnYmhRU0pXSFUwSER6aTNZN2JNN0lDYXBhSExJVGJmaXJselJIVFZYdzlxakxBY1Z3My9sTmsyUW1LaFpWOHhMNGhBS0FVZVJpZFNvbXhMaW1rcllBaGVKaS9wRFA0cXp0R0ZpK2phY1lxU3R5MnNOelpzU0c3RGZSRmdzQ1VBTEN4Yk0xSzNITVNkT2c2RmdKMHZYY29ObFdObUg4RHlHREs3MlJGNHYzd1VQUzBMdm9VM01OQjBnZ3RUZEoxZVVpNVZNN2xCblQ3Vk94MHdQajRHWDRMdVliUGxpRlZlTmwrb0J4eFMza1hGNkZMekNKcTZkdzg2akVuM3lZS2Fnczl4WXFPZEprR3dQdnY2TEhYV1l1ckxPRC9LVmtLY1Rpd2RRL2llVEhTSzduR1pybXdWZmc3d29YcndXNmtSYTdYNWlpalliZmNVZ2ZOVEd0OXVZMkFOQzdPM3NXSGw0MDI1THVrbHJPTFlJMWFwdHhua1h3SjVMUUJaZXhHdjFhVnhjK1RCWXN1SVRvT0I5KzRmYWhuQTc4Z0ZzSjFGNW1qM25Ic3ExVzhpT2JieHZ1S1lsREJORXBTdzVjS0F4SStSNDlEbVFWcEJJMHRIbWVjblY3akdrZ01IVUFDOG9YdHkySnR2TWpoZHV3anU4dXRxdFZ0a1dReCtyZDcwckNic3QzM1E5MnhDOVI0b1owdmdMS3ZsZC9LMGkwRzdLRmdOV3Ivc0ptUkUrRlA2UXVUTlRaZllYMi9URVBYNzNjQUtHZng3WlZacEs0YVAxc2s3cUdId2xXUnpkY1liOHc9PQpzc2gtcnNhIEFBQUFCM056YUMxeWMyRUFBQUFEQVFBQkFBQUJBUURQQUJpZk11cW5vd1BwVW5YTDkrRVFlaS9tdVlLS2tJU1cwbFB0SFJRY0dXWTBRTVFvcWdHd2lYNHhsS0JuUE9OMTg4VUtQejJzczk1UmRoV1NjUHFFdEVwT1QwSUg4RkluSmpnRi9pRlFlaW5HMHFDdmZWbVBDak83M2JiQWJxUXA0NzN2aG9uUzIwaThmbW5LZ2N6SWN4LzIvbVMvQTZqNjlMSkFSZzMzU29lL3puMndkRlZ2RVF0dDhRQmhTUFJYTWhIcjZENCtyeWRpTFRCWHlYVnlCeXkrSUppYnJycDFsQ1FBbWVZdldlQzJUT2ZaMTA2WlByZWprVnhQTndjd3lOMy8vOFVxZDNNaGhkc1RTcEFTVG9zRGdSWEJqZGMzY2JYQUJxdWRKQmp2ZllMd1RsUVlQRklMbUtGMGUvQ0RDeE96TStqMW5NcUJiNm0wSWFvdgo=</authorizedkeys>
+      <ipsecpsk/>
+      <otp_seed/>
+    </user>
+    <user uuid="a1f03475-8f5f-47ab-8ff3-cf9fa8cd6e34">
+      <scope>user</scope>
+      <name>zerwes</name>
+      <descr>moi</descr>
+      <password>$2y$11$H6i8FqkSOTJQNcDUM8vcdufmKYEoQeMldIEizEyPtpsZCeEMfKW6O</password>
+      <uid>2000</uid>
+      <email>moi@doi.coi</email>
+    </user>
+    <user uuid="f4fb6740-9e00-5ac4-9581-f24b6ecfe71e">
+      <name>test</name>
+      <descr>new test user</descr>
+      <email>nou@doi.coi</email>
+    </user>
+    <user uuid="0cc1b81a-470c-4d59-961e-7cef0eea72e5">
+      <name>tom.waits</name>
+      <scope>user</scope>
+      <password>$2b$12$jCQCOel6gCWjp9oVtZU8U.zcQVgSju5w18MjOM1lD5nIBJP/Ghj/W</password>
+      <uid>2001</uid>
+      <descr>Waits, Tom</descr>
+      <otp_seed>123XYZVKQV74R4DPU93OJOVYXZ</otp_seed>
+      <email>tom.waits@cool.stuff</email>
+    </user>
+    <user uuid="a23141a7-a6f3-4a87-bc16-bc498564b669">
+      <name>nick.cave</name>
+      <scope>user</scope>
+      <password>$2b$12$Mnq76WDaSdZ1EWimsyqinuNLN0saeNajVqQzb.CpL3f7rmUw3cXHK</password>
+      <uid>2002</uid>
+      <descr>Cave, Nick</descr>
+      <otp_seed>AOHBG7QMOM2KARCS45FGHNC2WA</otp_seed>
+      <email>nick.cave@cool.stuff</email>
+    </user>
+    <user uuid="3f407a78-6875-4d5f-ba90-9706789f561b">
+      <name>bim.sherman</name>
+      <scope>user</scope>
+      <password>$2b$1ksajfhshjosjaofuihjaFjWehycyVtu93.pZNQ0fi</password>
+      <uid>2003</uid>
+      <descr>bim.sherman</descr>
+    </user>
+    <user uuid="">
+      <name>skunk.anansie</name>
+      <scope>user</scope>
+      <password>$2b$1ksajfhshjosjaofuihjaFjWehycyVtu93.pZNQ0fi</password>
+      <uid>2004</uid>
+      <descr>skunk.anansie</descr>
+    </user>
+  </system>
+</opnsense>

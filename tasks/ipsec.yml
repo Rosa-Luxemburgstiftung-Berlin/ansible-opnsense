@@ -127,7 +127,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart ipsec
   with_dict:
@@ -161,31 +161,47 @@
     loop_var: ikeids
 
 # new connection settings
+- name: assert sane state of opn_IPsec var
+  ansible.builtin.assert:
+    that:
+      - opn_IPsec is not string
+      - opn_IPsec is iterable
+      - opn_IPsec is mapping
+  when: opn_IPsec is defined
+
+- name: assert sane state of opn_Swanctl var
+  ansible.builtin.assert:
+    that:
+      - opn_Swanctl is not string
+      - opn_Swanctl is iterable
+      - opn_Swanctl is mapping
+  when: opn_Swanctl is defined
+
 - name: IPsec general settings
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/IPsec/general/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart ipsec
   with_dict: "{{ opn_IPsec['general'] }}"
   when:
-    - opn_IPsec is defined and opn_IPsec
-    - opn_IPsec['general'] is defined and opn_IPsec['general']
+    - opn_IPsec is defined and (opn_IPsec | length > 0)
+    - opn_IPsec['general'] is defined and (opn_IPsec['general'] | length > 0)
 
 - name: IPsec charon settings
   delegate_to: localhost
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/IPsec/charon/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart ipsec
   with_dict: "{{ opn_IPsec['charon'] }}"
   when:
-    - opn_IPsec is defined and opn_IPsec
-    - opn_IPsec['charon'] is defined and opn_IPsec['charon']
+    - opn_IPsec is defined and (opn_IPsec | length > 0)
+    - opn_IPsec['charon'] is defined and (opn_IPsec['charon'] | length > 0)
     - not item.key == 'syslog'
 
 - name: IPsec charon syslog daemon settings
@@ -193,14 +209,14 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/IPsec/charon/syslog/daemon/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart ipsec
   with_dict: "{{ opn_IPsec['charon']['syslog']['daemon'] }}"
   when:
-    - opn_IPsec is defined and opn_IPsec
-    - opn_IPsec['charon'] is defined and opn_IPsec['charon']
-    - opn_IPsec['charon']['syslog']['daemon'] and opn_IPsec['charon']['syslog']['daemon']
+    - opn_IPsec is defined and (opn_IPsec | length > 0)
+    - opn_IPsec['charon'] is defined and (opn_IPsec['charon'] | length > 0)
+    - opn_IPsec['charon']['syslog']['daemon'] is defined and (opn_IPsec['charon']['syslog']['daemon'] | length > 0)
 
 - name: IPsec uuid sections ...
   ansible.builtin.include_tasks: ipsecipsec.yml
@@ -212,8 +228,8 @@
   loop_control:
     loop_var: __ipsec_section_loop
   when:
-    - opn_IPsec is defined and opn_IPsec
-    - opn_IPsec[__ipsec_section] is defined and opn_IPsec[__ipsec_section]
+    - opn_IPsec is defined and (opn_IPsec | length > 0)
+    - opn_IPsec[__ipsec_section] is defined and (opn_IPsec[__ipsec_section] | length > 0)
 
 - name: Swanctl ...
   ansible.builtin.include_tasks: ipsecswanctl.yml
@@ -225,7 +241,7 @@
   loop_control:
     loop_var: __swanctl_section_loop
   when:
-    - opn_Swanctl is defined and opn_Swanctl
-    - opn_Swanctl[__swanctl_section] is defined and opn_Swanctl[__swanctl_section]
+    - opn_Swanctl is defined and (opn_Swanctl | length > 0)
+    - opn_Swanctl[__swanctl_section] is defined and (opn_Swanctl[__swanctl_section] | length > 0)
 
 ...

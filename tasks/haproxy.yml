@@ -96,7 +96,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: /opnsense/OPNsense/HAProxy/general/{{ item.key }}
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   with_dict: "{{ opn_haproxy_general }}"
   when: opn_haproxy_general is defined
@@ -106,7 +106,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/HAProxy/frontends/frontend[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_haproxy_frontends | default([]) }}"
@@ -117,7 +117,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/HAProxy/backends/backend[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_haproxy_backends | default([]) }}"
@@ -128,7 +128,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/HAProxy/servers/server[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_haproxy_servers | default([]) }}"
@@ -139,7 +139,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/HAProxy/healthchecks/healthcheck[@uuid='{{ item.0.uuid }}']/{{ item.1.key }}"
-    value: "{{ item.1.value }}"
+    value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
   with_subelements:
     - "{{ opn_haproxy_healthchecks | default([]) }}"

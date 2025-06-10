@@ -1,0 +1,13 @@
+---
+
+- name: parse ldap search
+  ansible.builtin.include_tasks:
+    file: ../../tasks/ldapusersyncdo.yml
+
+- name: deploy user
+  ansible.builtin.include_tasks:
+    file: ../../tasks/user.yml
+
+- name: unset
+  ansible.builtin.include_tasks:
+    file: ../../tasks/general.yml

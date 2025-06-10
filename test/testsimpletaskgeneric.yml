@@ -26,6 +26,12 @@
 - name: "import {{ _testtask }} task for {{ _test }}"
   ansible.builtin.include_tasks:
     file: "../tasks/{{ _testtask }}.yml"
+  when: not (specialtest | default(false) | bool)
+
+- name: "import special {{ _testtask }} task for {{ _test }}"
+  ansible.builtin.include_tasks:
+    file: "tasks/{{ _testtask }}.yml"
+  when: specialtest | default(false) | bool
 
 - name: "detect diff between result and expected state for {{ _test }}"
   ansible.builtin.command: "cmp -s '{{ local_config_path }}' '{{ _test }}-expect.xml'"

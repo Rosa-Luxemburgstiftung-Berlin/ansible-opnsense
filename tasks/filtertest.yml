@@ -15,7 +15,15 @@
 
 - name: filter definitions from xml ...
   ansible.builtin.set_fact:
-    _foundcheckelements: "[ {% for e in _checkelementscount.results %}{% if e['count'] | int == 1 %}'{{ e['_checkelements'] }}',{% endif %}{% endfor %} ]"
+    _foundcheckelements: "{{ _checkelementscount.results | selectattr('count', '>', 0) | map(attribute='_checkelements') | list }}"
+  with_items: "{{ _checkelementscount.results }}"
+
+- name: check var _foundcheckelements
+  ansible.builtin.assert:
+    that:
+      - _foundcheckelements is not string
+      - _foundcheckelements is not mapping
+      - _foundcheckelements is iterable
 
 - name: report duplicated elements ...
   ansible.builtin.fail:

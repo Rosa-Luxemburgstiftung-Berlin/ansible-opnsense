@@ -5,7 +5,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/OPNsense/OpenVPN/Overwrites/Overwrite[@uuid='{{ uuid }}']/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart openvpn
   when:

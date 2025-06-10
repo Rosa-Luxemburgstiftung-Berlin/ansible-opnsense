@@ -6,7 +6,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart ipsec
   with_dict:
@@ -36,7 +36,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/localid/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart ipsec
   with_dict:
@@ -47,7 +47,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/remoteid/{{ item.key }}"
-    value: "{{ item.value }}"
+    value: "{{ (item.value == None) | ternary(item.value, (item.value | string)) }}"
     pretty_print: true
   notify: restart ipsec
   with_dict:
@@ -143,18 +143,29 @@
   when:
     - encalgopt_reset | default(false)
 
-- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }}"  # noqa jinja[spacing]
-  delegate_to: localhost
-  community.general.xml:
-    path: "{{ local_config_path }}"
-    xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']"
-    add_children: "[
-      {% for eao in ipsecphasevar2[uniqid]['encryption-algorithm-options'] -%}
-        '<encryption-algorithm-option><name>{{ eao.name }}</name></encryption-algorithm-option>',
-      {%- endfor %}
-      ]"
-    input_type: xml
-    pretty_print: true
+- name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }}"  # noqa key-order[task]
+  block:
+    - name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }} ... init"
+      ansible.builtin.set_fact:
+        encalgopt_children: []
+    - name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }} ... define"  # noqa jinja[spacing]
+      ansible.builtin.set_fact:
+        encalgopt_children: "{{ encalgopt_children + ['<encryption-algorithm-option><name>' ~ item.name ~ '</name></encryption-algorithm-option>'] }}"
+      with_items: "{{ ipsecphasevar2[uniqid]['encryption-algorithm-options'] }}"
+    - name: check encalgopt_children
+      ansible.builtin.assert:
+        that:
+          - encalgopt_children is not string
+          - encalgopt_children is not mapping
+          - encalgopt_children is iterable
+    - name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} create encryption-algorithm-options for ikeid {{ ikeid }} ... apply"
+      delegate_to: localhost
+      community.general.xml:
+        path: "{{ local_config_path }}"
+        xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']"
+        add_children: "{{ encalgopt_children }}"
+        input_type: xml
+        pretty_print: true
   when: encalgopt_reset | default(false)
 
 - name: "IPSec ike legacy tunnel - phase2 {{ uniqid }} encryption-algorithm-options for ikeid {{ ikeid }}"
@@ -162,7 +173,7 @@
   community.general.xml:
     path: "{{ local_config_path }}"
     xpath: "/opnsense/ipsec/phase2[ikeid='{{ ikeid }}' and uniqid='{{ uniqid }}']/encryption-algorithm-option[name='{{ item.name }}']/keylen"
-    value: "{{ item.keylen }}"
+    value: "{{ item.keylen | string }}"
     pretty_print: true
   notify: restart ipsec
   with_items:
