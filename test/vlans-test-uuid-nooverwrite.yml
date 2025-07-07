@@ -8,6 +8,7 @@ opn_vlans:
         value: 110_USR
   - tag: 220
     vlan_parent_interface: lagg2
+    uuid: 5847f2ba-18e3-5405-97aa-991425034f8b
     settings:
       - key: descr
         value: 220_SRV
