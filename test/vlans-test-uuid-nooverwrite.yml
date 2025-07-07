@@ -12,3 +12,8 @@ opn_vlans:
     settings:
       - key: descr
         value: 220_SRV
+  - tag: 330
+    vlan_parent_interface: lagg3
+    settings:
+      - key: descr
+        value: 330_DMZ

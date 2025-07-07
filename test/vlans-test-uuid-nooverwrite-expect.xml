@@ -15,5 +15,11 @@
       <if>lagg2</if>
       <vlanif>lagg2_vlan220</vlanif>
     </vlan>
+    <vlan uuid="729d3731-5108-56b0-9f25-c814c6830cfb">
+      <tag>330</tag>
+      <descr>330_DMZ</descr>
+      <if>lagg3</if>
+      <vlanif>lagg3_vlan330</vlanif>
+    </vlan>
   </vlans>
 </opnsense>
