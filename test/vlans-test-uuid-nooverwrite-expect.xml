@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+  </system>
+  <vlans>
+    <vlan uuid="60383065-4adf-5652-ace0-936604cd8376">
+      <tag>110</tag>
+      <descr>110_USR</descr>
+      <if>lagg1</if>
+      <vlanif>lagg1_vlan110</vlanif>
+    </vlan>
+    <vlan uuid="5847f2ba-18e3-5405-97aa-991425034f8b">
+      <tag>220</tag>
+      <descr>220_SRV</descr>
+      <if>lagg2</if>
+      <vlanif>lagg2_vlan220</vlanif>
+    </vlan>
+    <vlan uuid="729d3731-5108-56b0-9f25-c814c6830cfb">
+      <tag>330</tag>
+      <descr>330_DMZ</descr>
+      <if>lagg3</if>
+      <vlanif>lagg3_vlan330</vlanif>
+    </vlan>
+  </vlans>
+</opnsense>

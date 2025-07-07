@@ -32,6 +32,15 @@
     pretty_print: true
   notify: reconfigure vlans
 
+- name: check if we have configured vlan with uuid in saved xml
+  delegate_to: localhost
+  community.general.xml:
+    path: "{{ local_config_path }}"
+    xpath: "/opnsense/vlans/vlan[@uuid][tag/text()='{{ _vlan.tag }}']"
+    count: true
+  register: _configured_vlan
+  when: _vlan.uuid is not defined
+
 - name: vlans - set uuid
   delegate_to: localhost
   community.general.xml:
@@ -40,6 +49,7 @@
     attribute: uuid
     value: "{{ _vlan.uuid | default(_vlan.tag | to_uuid) }}"
     pretty_print: true
+  when: (_vlan.uuid is defined) or (_configured_vlan.count | int == 0)
   notify: reconfigure vlans
 
 ...
