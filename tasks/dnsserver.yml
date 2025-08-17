@@ -6,6 +6,7 @@
     xpath: /opnsense/system/dnsserver
     count: true
   register: dnsservercount
+  when: dnsserver is defined
 
 - name: Get dnsservers set
   delegate_to: localhost
@@ -14,18 +15,26 @@
     xpath: /opnsense/system/dnsserver
     content: text
   register: configured_dnsserver
-  when: dnsservercount.count > 0
+  when:
+    - dnsserver is defined
+    - dnsservercount.count > 0
 
 - name: register fact change_dns
   ansible.builtin.set_fact:
     change_dns: true
   with_items: "{{ configured_dnsserver.matches }}"
-  when: dnsservercount.count > 0 and ((item.dnsserver not in dnsserver) or (dnsserver | length) != (configured_dnsserver.matches | length))
+  when:
+    - dnsserver is defined
+    - dnsservercount.count > 0
+    - (item.dnsserver not in dnsserver) or (dnsserver | length) != (configured_dnsserver.matches | length)
 
 - name: register fact change_dns
   ansible.builtin.set_fact:
     change_dns: true
-  when: dnsservercount.count == 0 and dnsserver | length > 0
+  when:
+    - dnsserver is defined
+    - dnsservercount.count == 0
+    - dnsserver | length > 0
 
 - name: Reset dnsservers
   delegate_to: localhost
@@ -34,7 +43,7 @@
     xpath: /opnsense/system/dnsserver
     state: absent
     pretty_print: true
-  when: change_dns | default(False)
+  when: change_dns | default(false)
 
 - name: Dnsservers
   delegate_to: localhost
@@ -44,18 +53,18 @@
     add_children:
       - dnsserver: "{{ item }}"
     pretty_print: true
-  when: change_dns | default(False)
+  when: change_dns | default(false)
   with_items:
     "{{ dnsserver }}"
 
 - name: register fact dnsallowoverride_state
   ansible.builtin.set_fact:
     dnsallowoverride_state: "present"
-  when: dnsallowoverride | default(True)
+  when: dnsallowoverride | default(true)
 - name: register fact dnsallowoverride_state
   ansible.builtin.set_fact:
     dnsallowoverride_state: "absent"
-  when: not (dnsallowoverride | default(True))
+  when: not (dnsallowoverride | default(true))
 
 - name: Set dnsallowoverride {{ dnsallowoverride_state }}
   delegate_to: localhost
@@ -72,7 +81,7 @@
     xpath: /opnsense/system/dnslocalhost
     value: "1"
     pretty_print: true
-  when: dnslocalhost | default(False)
+  when: dnslocalhost | default(false)
 
 - name: Do not use the local DNS service as a nameserver for this system
   delegate_to: localhost
@@ -81,5 +90,5 @@
     xpath: /opnsense/system/dnslocalhost
     state: absent
     pretty_print: true
-  when: not (dnslocalhost | default(False))
+  when: not (dnslocalhost | default(false))
 ...

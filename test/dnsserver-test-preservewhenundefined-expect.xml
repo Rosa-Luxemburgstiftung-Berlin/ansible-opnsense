@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<opnsense>
+  <system>
+    <dnsserver>9.9.9.9</dnsserver>
+    <dnsserver>86.54.11.13</dnsserver>
+    <dnsserver>86.54.11.213</dnsserver>
+    <dnsallowoverride/>
+  </system>
+</opnsense>
