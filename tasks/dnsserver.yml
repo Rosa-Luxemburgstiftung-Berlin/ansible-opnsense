@@ -6,6 +6,7 @@
     xpath: /opnsense/system/dnsserver
     count: true
   register: dnsservercount
+  when: dnsserver is defined
 
 - name: Get dnsservers set
   delegate_to: localhost
@@ -14,18 +15,26 @@
     xpath: /opnsense/system/dnsserver
     content: text
   register: configured_dnsserver
-  when: dnsservercount.count > 0
+  when:
+    - dnsserver is defined
+    - dnsservercount.count > 0
 
 - name: register fact change_dns
   ansible.builtin.set_fact:
     change_dns: true
   with_items: "{{ configured_dnsserver.matches }}"
-  when: dnsservercount.count > 0 and ((item.dnsserver not in dnsserver) or (dnsserver | length) != (configured_dnsserver.matches | length))
+  when:
+    - dnsserver is defined
+    - dnsservercount.count > 0
+    - (item.dnsserver not in dnsserver) or (dnsserver | length) != (configured_dnsserver.matches | length)
 
 - name: register fact change_dns
   ansible.builtin.set_fact:
     change_dns: true
-  when: dnsservercount.count == 0 and dnsserver | length > 0
+  when:
+    - dnsserver is defined
+    - dnsservercount.count == 0
+    - dnsserver | length > 0
 
 - name: Reset dnsservers
   delegate_to: localhost
