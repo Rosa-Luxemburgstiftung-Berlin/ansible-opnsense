@@ -7,7 +7,7 @@ on:
     - cron: "45 5 * * 2"
 
 jobs:
-  build:
+  test:
     name: ansible test
     runs-on: ubuntu-latest
     strategy:
