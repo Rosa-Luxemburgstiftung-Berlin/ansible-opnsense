@@ -17,11 +17,11 @@ jobs:
         ansible:
           - latest ansible
           - pinned ansible
-      include:
-        - ansible: latest ansible
-          pip3deps: ansible lxml cryptography passlib
-        - ansible: pinned ansible
-          pip3deps: ansible==11.9.0 ansible-core==2.18.8 lxml cryptography passlib
+        include:
+          - ansible: latest ansible
+            pip3deps: ansible lxml cryptography passlib
+          - ansible: pinned ansible
+            pip3deps: ansible==11.9.0 ansible-core==2.18.8 lxml cryptography passlib
     steps:
       - uses: actions/checkout@v4
       - name: set up python
