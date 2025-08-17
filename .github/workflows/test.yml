@@ -10,6 +10,18 @@ jobs:
   build:
     name: ansible test
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        ansible:
+          - latest ansible
+          - pinned ansible
+      include:
+        - ansible: latest ansible
+          pip3deps: ansible lxml cryptography passlib
+        - ansible: pinned ansible
+          pip3deps: ansible==11.9.0 ansible-core==2.18.8 lxml cryptography passlib
     steps:
       - uses: actions/checkout@v4
       - name: set up python
@@ -19,7 +31,7 @@ jobs:
       - name: install requirements
         run: |
           python -m pip install --upgrade pip
-          pip install ansible lxml cryptography passlib
+          pip install ${{ matrix.pip3deps }}
       - name: debug versions
         run: |
           echo "which python ..."
