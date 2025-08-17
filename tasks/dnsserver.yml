@@ -43,7 +43,7 @@
     xpath: /opnsense/system/dnsserver
     state: absent
     pretty_print: true
-  when: change_dns | default(False)
+  when: change_dns | default(false)
 
 - name: Dnsservers
   delegate_to: localhost
@@ -53,18 +53,18 @@
     add_children:
       - dnsserver: "{{ item }}"
     pretty_print: true
-  when: change_dns | default(False)
+  when: change_dns | default(false)
   with_items:
     "{{ dnsserver }}"
 
 - name: register fact dnsallowoverride_state
   ansible.builtin.set_fact:
     dnsallowoverride_state: "present"
-  when: dnsallowoverride | default(True)
+  when: dnsallowoverride | default(true)
 - name: register fact dnsallowoverride_state
   ansible.builtin.set_fact:
     dnsallowoverride_state: "absent"
-  when: not (dnsallowoverride | default(True))
+  when: not (dnsallowoverride | default(true))
 
 - name: Set dnsallowoverride {{ dnsallowoverride_state }}
   delegate_to: localhost
@@ -81,7 +81,7 @@
     xpath: /opnsense/system/dnslocalhost
     value: "1"
     pretty_print: true
-  when: dnslocalhost | default(False)
+  when: dnslocalhost | default(false)
 
 - name: Do not use the local DNS service as a nameserver for this system
   delegate_to: localhost
@@ -90,5 +90,5 @@
     xpath: /opnsense/system/dnslocalhost
     state: absent
     pretty_print: true
-  when: not (dnslocalhost | default(False))
+  when: not (dnslocalhost | default(false))
 ...
