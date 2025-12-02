@@ -19,6 +19,7 @@
   ansible.builtin.debug:
     var: _ldbsearch
     verbosity: 1
+  no_log: "{{ nolog_ldapusersync | default(true) }}"
 
 - name: parse ldap search users
   ansible.builtin.include_tasks: ldapusersyncdo.yml
