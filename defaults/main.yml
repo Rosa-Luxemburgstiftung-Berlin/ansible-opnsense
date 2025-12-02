@@ -203,6 +203,10 @@ opn_sync_users_ldap_fields_jinja2regexreplace: {}
 # ... | regex_replace('#@[-+_.a-zA-Z0-9]*=', '') | regex_replace('&.*', '')
 
 # ldap filter
+# userAccountControl: see https://learn.microsoft.com/troubleshoot/windows-server/active-directory/useraccountcontrol-manipulate-account-properties
+#   512:  NORMAL_ACCOUNT
+#   2:    ACCOUNTDISABLE
+#   32:   PASSWD_NOTREQD
 opn_sync_users_ldap_filter: '(&(objectCategory=organizationalPerson)(objectClass=User)(userAccountControl:1.2.840.113556.1.4.803:=512)(!(|(userAccountControl:1.2.840.113556.1.4.803:=2)(userAccountControl:1.2.840.113556.1.4.803:=32))))'  # noqa yaml[line-length]
 
 ...
