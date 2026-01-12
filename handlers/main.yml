@@ -8,7 +8,7 @@
 - name: service configd restart  # noqa no-changed-when command-instead-of-module
   ansible.builtin.command: service configd restart
 
-# ca / trust
+# ca / cert aka. trust
 - name: trust configure  # noqa no-changed-when command-instead-of-module
   ansible.builtin.command: configctl system trust configure
 
