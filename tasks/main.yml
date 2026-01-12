@@ -343,9 +343,9 @@
     src: "{{ local_config_path }}"
     dest: "{{ config_path }}"
     backup: true
-    owner: root
+    owner: wwwonly
     group: wheel
-    mode: "0644"
+    mode: "0640"
   register: config
   tags: copy
 
