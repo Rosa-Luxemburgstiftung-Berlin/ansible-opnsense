@@ -86,6 +86,7 @@
     xpath: "/opnsense/ca[@uuid='{{ item.0.uuid | default(_configured_ca2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
+  notify: trust configure
   with_subelements:
     - "{{ opn_cas | default([]) }}"
     - settings
@@ -98,6 +99,7 @@
     xpath: "/opnsense/ca[@uuid='{{ item.uuid | default(_configured_ca2uuid[item.refid]) | default(item.refid | to_uuid) }}']/refid"
     value: "{{ item.refid }}"
     pretty_print: true
+  notify: trust configure
   with_items:
     - "{{ opn_cas | default([]) }}"
   when: item.refid is defined
@@ -109,6 +111,7 @@
     xpath: "/opnsense/ca[@uuid='{{ item.0.uuid | default(_configured_ca2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: true
+  notify: trust configure
   with_subelements:
     - "{{ opn_cas | default([]) }}"
     - settings
