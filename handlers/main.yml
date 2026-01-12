@@ -8,6 +8,10 @@
 - name: service configd restart  # noqa no-changed-when command-instead-of-module
   ansible.builtin.command: service configd restart
 
+# ca / cert aka. trust
+- name: trust configure  # noqa no-changed-when command-instead-of-module
+  ansible.builtin.command: configctl system trust configure
+
 # alias handlers
 # see: src/opnsense/mvc/app/controllers/OPNsense/Firewall/Api/AliasController.php
 # api endpoint /api/firewall/alias/reconfigure
