@@ -210,6 +210,7 @@
     xpath: "/opnsense/cert[@uuid='{{ item.0.uuid | default(_configured_cert2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ (item.1.value == None) | ternary(item.1.value, (item.1.value | string)) }}"
     pretty_print: true
+  notify: trust configure
   with_subelements:
     - "{{ opn_certs | default([]) }}"
     - settings
@@ -222,6 +223,7 @@
     xpath: "/opnsense/cert[@uuid='{{ item.uuid | default(_configured_cert2uuid[item.refid]) | default(item.refid | to_uuid) }}']/refid"
     value: "{{ item.refid }}"
     pretty_print: true
+  notify: trust configure
   with_items:
     - "{{ opn_certs | default([]) }}"
   when: item.refid is defined
@@ -233,6 +235,7 @@
     xpath: "/opnsense/cert[@uuid='{{ item.0.uuid | default(_configured_cert2uuid[item.0.refid]) | default(item.0.refid | to_uuid) }}']/{{ item.1.key }}"
     value: "{{ item.1.b64_value | b64encode }}"
     pretty_print: true
+  notify: trust configure
   with_subelements:
     - "{{ opn_certs | default([]) }}"
     - settings
