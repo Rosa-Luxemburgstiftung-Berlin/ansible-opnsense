@@ -21,6 +21,7 @@ opn_unset_handlers:
   '^ipsec$': 'stop ipsec'
   '^system/user': 'local user sync'
   '^ca': 'trust configure'
+  '^cert': 'trust configure'
 
 # default values for opn_openvpn_instances
 opn_openvpn_instances_defaults:
