@@ -17,10 +17,10 @@ Generally we try to support the current production and the last (legacy) version
 
 Currently these are:
 
- * 25.4
- * 25.1
- * 24.10
- * 24.7
+ * 25.10 BE
+ * 25.4 BE
+ * 25.7 CE
+ * 25.1 CE
 
 ## Supported Opnsense Features
 
