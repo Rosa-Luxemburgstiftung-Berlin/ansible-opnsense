@@ -1,3 +1,4 @@
 .*.swp
 test/cfg/*.xml
 .ansible/
+*/__pycache__/
