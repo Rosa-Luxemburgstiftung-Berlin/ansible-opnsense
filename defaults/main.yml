@@ -22,6 +22,7 @@ opn_unset_handlers:
   '^system/user': 'local user sync'
   '^ca': 'trust configure'
   '^cert': 'trust configure'
+  '^system/dnslocalhost': 'dns reload'
 
 # default values for opn_openvpn_instances
 opn_openvpn_instances_defaults:
