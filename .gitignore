@@ -2,3 +2,4 @@
 test/cfg/*.xml
 .ansible/
 */__pycache__/
+test/filter_plugins/
