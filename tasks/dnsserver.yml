@@ -43,6 +43,7 @@
     xpath: /opnsense/system/dnsserver
     state: absent
     pretty_print: true
+  notify: dns reload
   when: change_dns | default(false)
 
 - name: Dnsservers
@@ -53,6 +54,7 @@
     add_children:
       - dnsserver: "{{ item }}"
     pretty_print: true
+  notify: dns reload
   when: change_dns | default(false)
   with_items:
     "{{ dnsserver }}"
@@ -81,6 +83,7 @@
     xpath: /opnsense/system/dnslocalhost
     value: "1"
     pretty_print: true
+  notify: dns reload
   when: dnslocalhost | default(false)
 
 - name: Do not use the local DNS service as a nameserver for this system
@@ -90,5 +93,6 @@
     xpath: /opnsense/system/dnslocalhost
     state: absent
     pretty_print: true
+  notify: dns reload
   when: not (dnslocalhost | default(false))
 ...

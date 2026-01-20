@@ -79,6 +79,7 @@
   ansible.builtin.command: configctl dns reload
   listen:
     - reconfig unbound
+    - dns reload
   when:
     - config is defined
     - config.changed | bool
