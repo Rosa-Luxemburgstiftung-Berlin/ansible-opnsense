@@ -32,6 +32,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install ${{ matrix.pip3deps }}
+          sudo apt install make
       - name: debug versions
         run: |
           echo "which python ..."
@@ -49,4 +50,5 @@ jobs:
       - name: run ansible test
         working-directory: ./test
         run: |
+          make
           ansible-playbook -e ansible_python_interpreter=$(which python) -v test.yml
