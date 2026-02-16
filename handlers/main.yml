@@ -9,8 +9,10 @@
   ansible.builtin.command: service configd restart
 
 # ca / cert aka. trust
-- name: trust configure  # noqa no-changed-when command-instead-of-module
+- name: configctl system trust configure  # noqa no-changed-when command-instead-of-module
   ansible.builtin.command: configctl system trust configure
+  listen:
+    - trust configure
 
 # alias handlers
 # see: src/opnsense/mvc/app/controllers/OPNsense/Firewall/Api/AliasController.php
@@ -114,6 +116,7 @@
   ansible.builtin.command: "{{ item }}"
   listen:
     - restart ipsec
+    - trust configure
   with_items:
     - configctl interface invoke registration
     - pluginctl plugins_configure ipsec
@@ -222,5 +225,11 @@
   when:
     - config is defined
     - config.changed | bool
+
+# restart webgui
+- name: restart webgui  # noqa no-changed-when
+  ansible.builtin.command: configctl webgui restart
+  listen:
+    - trust configure
 
 ...
