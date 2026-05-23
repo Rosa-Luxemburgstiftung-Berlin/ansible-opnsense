@@ -17,10 +17,10 @@ Generally we try to support the current production and the last (legacy) version
 
 Currently these are:
 
+ * 26.4 BE
  * 25.10 BE
- * 25.4 BE
+ * 26.1 CE
  * 25.7 CE
- * 25.1 CE
 
 ## Supported Opnsense Features
 
@@ -82,7 +82,7 @@ or
 
 ### optional
 
-    sudo apt install secure-delete php-cli php-xml ldb-tools samba-dsdb-modules python3-passlib # (optional)
+    sudo apt install secure-delete php-cli php-xml ldb-tools samba-dsdb-modules python3-passlib bcrypt # (optional)
 
 `php-cli` and `php-xml` are required for the xml re-encoding (recommended! set `opn_fix_xml_encoding: true`)
 
