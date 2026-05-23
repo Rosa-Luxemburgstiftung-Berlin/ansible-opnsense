@@ -27,7 +27,7 @@ opn_user_from_ldap: []
       - key: scope
         value: user
       - key: password
-        value: "{{ lookup('community.general.random_string', base64=true, length=50) | password_hash('bcrypt') }}"
+        value: "{{ lookup('community.general.random_string', base64=true, length=35) | truncate(35, True, '', 0) | password_hash('bcrypt') }}"
       - key: uid
         value: {{ ns.nextuid }}
 {% set ns.nextuid = ns.nextuid + 1 %}
