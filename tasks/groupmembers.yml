@@ -69,7 +69,7 @@
     xpath: "/opnsense/system/group[name/text()='{{ group.name }}']/member"
     state: absent
     pretty_print: true
-  when: configuredmemberlist | default([]) != requestedmemberlist
+  when: (configuredmemberlist | default([]) | map('string') | list) != (requestedmemberlist | map('string') | list)
 
 - name: groups - add users to groups
   delegate_to: localhost
@@ -80,6 +80,6 @@
       - member: "{{ item | string }}"
     pretty_print: true
   with_items: "{{ requestedmemberlist }}"
-  when: configuredmemberlist | default([]) != requestedmemberlist
+  when: (configuredmemberlist | default([]) | map('string') | list) != (requestedmemberlist | map('string') | list)
 
 ...
