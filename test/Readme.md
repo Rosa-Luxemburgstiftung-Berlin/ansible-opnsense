@@ -10,6 +10,10 @@ A check consists of:
   * a file for the initial xml to run agains `{{ task }}-test{{ testname_or_number }}.xml`
   * a file represendting the expected resulting xml `{{ task }}-test{{ testname_or_number }}-expect.xml`
 
+## Prepare
+
+`make prep`
+
 ## Run
 
 `ansible-playbook test.yml`

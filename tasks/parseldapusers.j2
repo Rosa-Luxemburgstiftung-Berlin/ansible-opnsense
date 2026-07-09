@@ -22,7 +22,7 @@ _opnldapusers:
       {% set ns.ufval = ns.ufval | regex_replace(regs, regr) %}
     {%  endfor %}
         {% endif %}
-    {{ uf }}: {{ ns.ufval }}
+    {{ uf }}: {{ ns.ufval | unicodehex }}
       {% endif %}
     {% endfor %}
   {% endif %}
