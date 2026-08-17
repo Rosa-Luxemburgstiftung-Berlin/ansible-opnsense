@@ -12,6 +12,13 @@
 #         value: 1
 #
 
+- name: ensure required facts are available
+  ansible.builtin.fail:
+    msg: opnsense staticroutes requires role ansible-opnsense-facts
+  when:
+    - opn_staticroutes is defined and opn_staticroutes
+    - ansible_local.opnsense.core.product_version is not defined
+
 - name: staticroutes check for deprecated disabled key
   ansible.builtin.assert:
     that:
