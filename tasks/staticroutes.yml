@@ -8,9 +8,20 @@
 #         value: 100.64.0.0/10
 #       - key: gateway
 #         value: GW2NOWHERE  # must be defined in opn_gateways
-#       - key: enabled
+#       - key: enabled  # since CE 26.1.11 / BE 26.4.2
 #         value: 1
 #
+
+- name: staticroutes check for deprecated disabled key
+  ansible.builtin.assert:
+    that:
+      - not item.1.key == 'disabled'
+    fail_msg: "opn_staticroutes : {{ item.1.key }} key is deprecated for {{ ansible_local.opnsense.core.product_version }}"
+  with_subelements:
+    - "{{ opn_staticroutes | default([]) }}"
+    - settings
+  when:
+    - ansible_local.opnsense.core.product_version is version_compare('26.1.11', '>=')
 
 - name: staticroutes
   delegate_to: localhost
