@@ -3,7 +3,7 @@
 # to add a new user , you must user something like:
 # opn_user:
 #   - name: ruth
-#     uuid: ... (optional, but starting from version 25.x recommedet)
+#     uuid: ... (optional, but starting from version 25.x recommended)
 #     settings:
 #       - key: uid
 #         value: 1000
