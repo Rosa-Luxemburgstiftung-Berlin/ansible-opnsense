@@ -8,8 +8,8 @@
 #         value: 100.64.0.0/10
 #       - key: gateway
 #         value: GW2NOWHERE  # must be defined in opn_gateways
-#       - key: disabled
-#         value: 0
+#       - key: enabled
+#         value: 1
 #
 
 - name: staticroutes
