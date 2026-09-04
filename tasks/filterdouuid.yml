@@ -17,6 +17,7 @@
     xpath: "/opnsense/filter/rule[@uuid='{{ _filter.uuid }}']/{{ _filtersettings.key }}"
     value: "{% if _filtersettings.key in opn_sort_values.filter | default([]) %}{{ _filtersettings.value.split(',') | sort | join(',') }}{% else %}{{ _filtersettings.value | string }}{% endif %}"  # noqa yaml[line-length]
     pretty_print: true
+  notify: reload filter
   with_items:
     - "{{ _filter.settings }}"
   loop_control:

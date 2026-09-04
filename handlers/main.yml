@@ -29,6 +29,7 @@
   ansible.builtin.command: configctl filter reload skip_alias
   listen:
     - reconfigure aliases
+    - reload filter
   when:
     - config is defined
     - config.changed | bool
