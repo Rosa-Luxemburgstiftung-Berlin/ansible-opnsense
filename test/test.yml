@@ -11,6 +11,9 @@
     - name: trust configure
       debug:
         msg: fake handler - trust configure
+    - name: reload filter
+      debug:
+        msg: fake handler - reload filter
     - name: reconfigure aliases
       debug:
         msg: fake handler - reconfigure aliases
