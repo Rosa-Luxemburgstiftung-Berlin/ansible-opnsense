@@ -23,6 +23,8 @@ opn_unset_handlers:
   '^ca': 'trust configure'
   '^cert': 'trust configure'
   '^system/dnslocalhost': 'dns reload'
+  '^filter/rule': 'reload filter'
+  '^OPNsense/Firewall/Alias/aliases/alias': 'reconfigure aliases'
 
 # default values for opn_openvpn_instances
 opn_openvpn_instances_defaults:
